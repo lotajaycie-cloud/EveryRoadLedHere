@@ -26,6 +26,7 @@
     --bg-rsvp:url("images/rsvp.jpg");
   }
   *{box-sizing:border-box; margin:0; padding:0;}
+  html, body{max-width:100%; overflow-x:hidden;}
   html{scroll-behavior:smooth;}
   body{
     font-family:'Jost', sans-serif;
@@ -880,16 +881,25 @@
 
   /* -- right: continuous 3D reel -- */
   .album-stage{position:relative; min-width:0;}
-  .carousel{
-    position:relative; perspective:1500px; perspective-origin:50% 50%;
-    /* soft fade at both edges so tiles slide in and out of view */
-    -webkit-mask-image:linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
-            mask-image:linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
+  /* iOS Safari flattens transform-style:preserve-3d inside an overflow:auto
+     container, and a CSS mask on the same subtree breaks it outright — which
+     is why the reel rendered flat (or not at all) on iPhone. Each tile now
+     carries its own perspective() in its transform, so no 3D context is
+     inherited from a parent, and the edge fade is drawn as overlays instead
+     of a mask. */
+  .carousel{position:relative;}
+  .carousel::before,
+  .carousel::after{
+    content:""; position:absolute; top:0; bottom:0; width:9%; z-index:6;
+    pointer-events:none;
   }
+  .carousel::before{left:0;  background:linear-gradient(to right, var(--ivory), rgba(251,247,240,0));}
+  .carousel::after {right:0; background:linear-gradient(to left,  var(--ivory), rgba(251,247,240,0));}
   .carousel-track{
     display:flex; gap:18px; overflow-x:auto; overflow-y:hidden;
-    padding:18px 0 22px; transform-style:preserve-3d;
+    padding:18px 0 22px;
     align-items:center; touch-action:pan-y;
+    -webkit-overflow-scrolling:touch;
     scrollbar-width:none; -ms-overflow-style:none;
     cursor:grab;
   }
@@ -1498,7 +1508,7 @@
 
 <button class="back-to-top" id="backToTop" aria-label="Back to top">&#8593;</button>
 <button class="music-toggle" id="musicToggle" aria-label="Toggle background music"><span class="music-icon">&#9834;</span></button>
-<audio id="bgMusic" loop preload="auto"></audio>
+<audio id="bgMusic" loop preload="auto" playsinline webkit-playsinline></audio>
 
 <script>
   /* =========================================================
@@ -1508,18 +1518,24 @@
     // Venue coordinates for the directions/travel-time feature.
     // Get real coordinates: open Google Maps, right-click the venue pin,
     // click the lat/lng shown at the top of the menu to copy it.
+    /* Map links are built from `query`, not the coordinates — a place-name
+       search resolves to the correct pin, whereas a wrong lat/lng silently
+       sends guests somewhere else. The coordinates are used ONLY for the
+       rough "x km away" estimate, so being approximate is fine.
+       (They previously read 14.5995/120.9842 — that is Manila, which is why
+       the directions link pointed to the wrong place.) */
     venues: {
       ceremony: {
         name: 'Our Lady of Guadalupe Chapel',
-        lat: 14.5995,   // TODO: replace with the real ceremony latitude
-        lng: 120.9842,  // TODO: replace with the real ceremony longitude
-        query: 'Our Lady of Guadalupe Chapel' // fallback text search for Google Maps
+        lat: 14.1042,   // approximate — Club Punta Fuego, Nasugbu
+        lng: 120.6178,
+        query: 'Our Lady of Guadalupe Chapel, Club Punta Fuego, Nasugbu, Batangas'
       },
       reception: {
         name: 'Lower Beach Club',
-        lat: 14.5995,   // TODO: replace with the real reception latitude
-        lng: 120.9842,  // TODO: replace with the real reception longitude
-        query: 'Lower Beach Club'
+        lat: 14.1042,   // approximate — Club Punta Fuego, Nasugbu
+        lng: 120.6178,
+        query: 'Club Punta Fuego Reception, Nasugbu, Batangas'
       }
     },
     // Assumed average driving speed (km/h) used ONLY for the quick on-page
@@ -1600,28 +1616,22 @@
 
     function gateAudio(){ return document.getElementById('bgMusic'); }
 
-    /* On click: satisfy the browser's gesture requirement with a brief muted
-       play, then immediately stop and rewind to the very start. The element is
-       now unlocked and buffered, parked at 0:00 and ready to begin instantly —
-       no download and, crucially, no seek later on (seeking a playing element
-       stalls it, which is what made the entrance feel so late). */
+    /* Mobile Safari, two hard rules:
+         · .volume is read-only on iOS — only .muted actually silences audio.
+         · a play() that does not originate from a user gesture is refused, and
+           pausing an element can re-lock it.
+       So: start the track muted inside the click and never stop it. It keeps
+       running silently through the flap and push-in, which both satisfies the
+       gesture rule for good and buffers the file. */
     function primeAudio(){
       if(!CONFIG.musicUrl) return;
       var a = gateAudio();
       if(!a) return;
       if(!a.src){ a.src = CONFIG.musicUrl; }
-      a.muted = true;
-      a.volume = 0.55;
+      a.muted = true;                 // the part iOS honours
+      a.volume = 0.55;                // desktop only; ignored on iOS
       var p = a.play();
-      if(p && p.then){
-        p.then(function(){
-          setTimeout(function(){
-            a.pause();
-            try { a.currentTime = 0; } catch(err){}
-            a.muted = false;
-          }, 60);
-        }).catch(function(){ a.muted = false; });
-      }
+      if(p && p.catch) p.catch(function(){});
     }
 
     function cueMusic(){
@@ -1632,17 +1642,28 @@
         if(typeof startMusic === 'function'){ startMusic(); }
         return;
       }
-      a.muted = false;
-      a.volume = 0.55;
       function flag(){
         var b = document.getElementById('musicToggle');
         if(b) b.classList.add('playing');
         document.body.classList.add('music-on');
       }
+
       if(a.paused){
-        var p = a.play();                 // resumes from 0:00, already buffered
+        // priming was refused — fall back to a direct start
+        a.muted = false; a.volume = 0.55;
+        var p = a.play();
         if(p && p.then) p.then(flag).catch(function(){}); else flag();
-      } else { flag(); }
+        return;
+      }
+
+      /* Already running silently. Rewind into the head of the file — a
+         backward seek inside data we have just buffered, so it is quick — then
+         unmute. Unmuting is instantaneous and needs no gesture, which is what
+         makes this work on iPhone while the timing stays identical to desktop. */
+      try { a.currentTime = 0; } catch(err){}
+      a.muted = false;
+      a.volume = 0.55;
+      flag();
     }
 
     function openInvite(){
@@ -1909,11 +1930,11 @@
     var result = box.querySelector('.dir-result');
     if(!venue || !btn) return;
 
+    // Always route by place name. Coordinates are approximate and only feed
+    // the distance estimate below.
     var mapsUrl = 'https://www.google.com/maps/dir/?api=1&destination=' +
-      encodeURIComponent(venue.lat + ',' + venue.lng) +
-      '&destination_place_id=&travelmode=driving';
-    var mapsUrlByName = 'https://www.google.com/maps/dir/?api=1&destination=' +
       encodeURIComponent(venue.query) + '&travelmode=driving';
+    var mapsUrlByName = mapsUrl;
 
     btn.addEventListener('click', function(){
       btn.disabled = true;
@@ -2082,7 +2103,11 @@
         var abs  = Math.abs(norm);
         var el   = tiles[k];
 
-        el.style.transform = 'translateZ(' + (-abs * 150).toFixed(1) + 'px) ' +
+        // perspective() lives in the tile's own transform so the effect does
+        // not depend on a 3D context from the scrolling parent — Safari drops
+        // that context and the reel renders flat.
+        el.style.transform = 'perspective(1500px) ' +
+                             'translateZ(' + (-abs * 150).toFixed(1) + 'px) ' +
                              'rotateY(' + (-norm * 34).toFixed(2) + 'deg) ' +
                              'scale(' + (1 - abs * 0.15).toFixed(3) + ')';
         el.style.opacity = (1 - abs * 0.34).toFixed(3);
@@ -2102,7 +2127,7 @@
         if(s && s.al !== activeAlbum) setActive(s.al);
       }
       // the centred frame simply squares up to the viewer — no zoom
-      centerTile.style.transform = 'translateZ(0px) rotateY(0deg) scale(1)';
+      centerTile.style.transform = 'perspective(1500px) translateZ(0px) rotateY(0deg) scale(1)';
       centerTile.style.opacity = '1';
       centerTile.style.zIndex = '120';
     }
@@ -2452,8 +2477,9 @@
     audio.volume = 0.55;
 
     btn.addEventListener('click', function(){
-      if(audio.paused){
+      if(audio.paused || audio.muted){
         if(!audio.src){ audio.src = CONFIG.musicUrl; }
+        audio.muted = false;
         audio.play().then(function(){
           btn.classList.add('playing');
           document.body.classList.add('music-on');
