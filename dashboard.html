@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSVP Dashboard | JC &amp; MJ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --burgundy:#6d1834;
+    --burgundy-dark:#4a1024;
+    --olive:#707c4c;
+    --champagne:#f3ead9;
+    --ivory:#fbf7f0;
+    --ink:#2c2420;
+    --ok:#4a7a4f;
+    --no:#a34a3f;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:'Montserrat',sans-serif; background:var(--ivory); color:var(--ink);}
+  h1,h2{font-family:'Playfair Display',serif;}
+
+  /* ---- Passcode gate ---- */
+  #gate{
+    position:fixed; inset:0; background:linear-gradient(160deg, var(--burgundy), var(--burgundy-dark));
+    display:flex; align-items:center; justify-content:center; z-index:50; color:#fff;
+  }
+  #gate .box{text-align:center; max-width:320px; width:100%; padding:0 20px;}
+  #gate h1{font-size:24px; margin-bottom:6px;}
+  #gate p{font-size:13px; opacity:.75; margin-bottom:22px;}
+  #gate input{
+    width:100%; padding:12px 14px; border-radius:3px; border:none; font-size:15px; text-align:center;
+    letter-spacing:3px; margin-bottom:14px;
+  }
+  #gate button{
+    width:100%; padding:12px; border-radius:3px; border:none; background:var(--olive); color:#fff;
+    letter-spacing:1.5px; text-transform:uppercase; font-size:12px; cursor:pointer;
+  }
+  #gate .err{color:#f3c8c0; font-size:12px; margin-top:10px; min-height:16px;}
+
+  /* ---- Dashboard ---- */
+  #app{display:none; max-width:1080px; margin:0 auto; padding:36px 24px 80px;}
+  header{display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px; margin-bottom:30px;}
+  header h1{font-size:28px; color:var(--burgundy); margin:0 0 4px;}
+  header p{margin:0; font-size:13px; color:#7a7168;}
+  .actions{display:flex; gap:10px; flex-wrap:wrap;}
+  .btn{
+    padding:10px 18px; border-radius:4px; border:1px solid rgba(109,24,52,.25); background:#fff;
+    color:var(--burgundy); font-size:12.5px; letter-spacing:.5px; cursor:pointer; transition:background .2s;
+  }
+  .btn:hover{background:var(--champagne);}
+  .btn.primary{background:var(--burgundy); color:#fff; border-color:var(--burgundy);}
+  .btn.primary:hover{background:var(--burgundy-dark);}
+
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:30px;}
+  .stat{background:#fff; border:1px solid rgba(109,24,52,.1); border-radius:6px; padding:20px 18px;}
+  .stat .n{font-family:'Playfair Display',serif; font-size:32px; color:var(--burgundy); line-height:1;}
+  .stat .l{font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:#8a8074; margin-top:8px;}
+
+  .toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; gap:12px; flex-wrap:wrap;}
+  .toolbar input{
+    padding:10px 14px; border:1px solid rgba(109,24,52,.2); border-radius:4px; font-size:13px;
+    min-width:220px; background:#fff;
+  }
+
+  table{width:100%; border-collapse:collapse; background:#fff; border-radius:6px; overflow:hidden; box-shadow:0 4px 18px rgba(0,0,0,.04);}
+  th, td{padding:12px 14px; text-align:left; font-size:13.5px; border-bottom:1px solid rgba(0,0,0,.06);}
+  th{
+    background:var(--champagne); color:var(--burgundy); font-size:11px; letter-spacing:1px; text-transform:uppercase;
+    cursor:pointer; user-select:none;
+  }
+  th:hover{background:#ecdfc9;}
+  tr:hover td{background:rgba(112,124,76,.05);}
+  .pill{padding:3px 10px; border-radius:20px; font-size:11px; letter-spacing:.5px; display:inline-block;}
+  .pill.yes{background:rgba(74,122,79,.12); color:var(--ok);}
+  .pill.no{background:rgba(163,74,63,.12); color:var(--no);}
+  .empty, .loading, .error{text-align:center; padding:60px 20px; color:#8a8074; font-size:14px;}
+  .error{color:var(--no);}
+  footer{text-align:center; margin-top:40px; font-size:11px; color:#a89f93;}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="box">
+    <h1>RSVP Dashboard</h1>
+    <p>Enter your passcode to view responses</p>
+    <input type="password" id="passInput" placeholder="Passcode" autocomplete="off">
+    <button id="passBtn">Unlock</button>
+    <div class="err" id="passErr"></div>
+  </div>
+</div>
+
+<div id="app">
+  <header>
+    <div>
+      <h1>RSVP Dashboard</h1>
+      <p>JC &amp; MJ &middot; December 8, 2026</p>
+    </div>
+    <div class="actions">
+      <button class="btn" id="refreshBtn">Refresh</button>
+      <button class="btn" id="exportBtn">Export CSV</button>
+      <button class="btn primary" id="lockBtn">Lock</button>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="n" id="statTotal">0</div><div class="l">Responses</div></div>
+    <div class="stat"><div class="n" id="statYes">0</div><div class="l">Attending</div></div>
+    <div class="stat"><div class="n" id="statNo">0</div><div class="l">Declined</div></div>
+    <div class="stat"><div class="n" id="statGuests">0</div><div class="l">Total Guests</div></div>
+  </div>
+
+  <div class="toolbar">
+    <input type="text" id="searchInput" placeholder="Search by name or message…">
+    <span id="sourceNote" style="font-size:12px; color:#8a8074;"></span>
+  </div>
+
+  <div id="tableWrap">
+    <div class="loading">Loading responses…</div>
+  </div>
+
+  <footer>Passcode-gated for casual privacy only — this runs entirely client-side, so treat it as a light deterrent, not real security.</footer>
+</div>
+
+<script>
+  /* =========================================================
+     CONFIG — must match the values in wedding_site.html
+     ========================================================= */
+  var CONFIG = {
+    // Same Apps Script Web App URL used by the RSVP form.
+    rsvpEndpoint: '', // e.g. 'https://script.google.com/macros/s/XXXXXXX/exec'
+
+    // Must match DASHBOARD_KEY in google-apps-script.gs.txt.
+    dashboardKey: 'change-this-secret-key',
+
+    // Local passcode to view this page (client-side only — see the note
+    // in the footer). Change this to something only you know.
+    passcode: 'jcmj2026'
+  };
+
+  var allRows = [];
+  var sortState = {col:'timestamp', dir:'desc'};
+
+  /* ---- Passcode gate ---- */
+  document.getElementById('passBtn').addEventListener('click', tryUnlock);
+  document.getElementById('passInput').addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ tryUnlock(); }
+  });
+  function tryUnlock(){
+    var val = document.getElementById('passInput').value;
+    if(val === CONFIG.passcode){
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      loadData();
+    } else {
+      document.getElementById('passErr').textContent = 'Incorrect passcode.';
+    }
+  }
+  document.getElementById('lockBtn').addEventListener('click', function(){
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('gate').style.display = 'flex';
+    document.getElementById('passInput').value = '';
+  });
+
+  /* ---- Data loading ---- */
+  function loadData(){
+    var wrap = document.getElementById('tableWrap');
+    var sourceNote = document.getElementById('sourceNote');
+    wrap.innerHTML = '<div class="loading">Loading responses…</div>';
+
+    if(CONFIG.rsvpEndpoint){
+      sourceNote.textContent = 'Source: Google Sheet (live)';
+      var url = CONFIG.rsvpEndpoint + '?key=' + encodeURIComponent(CONFIG.dashboardKey);
+      fetch(url).then(function(r){ return r.json(); }).then(function(data){
+        if(data && data.error){
+          wrap.innerHTML = '<div class="error">Unauthorized — check that dashboardKey matches DASHBOARD_KEY in your Apps Script.</div>';
+          return;
+        }
+        allRows = (data || []).map(normalizeRow);
+        render();
+      }).catch(function(){
+        wrap.innerHTML = '<div class="error">Could not reach the RSVP endpoint. Falling back to locally-saved test entries.</div>';
+        loadLocal();
+      });
+    } else {
+      sourceNote.textContent = 'Source: local browser storage (demo mode — set rsvpEndpoint for the real backend)';
+      loadLocal();
+    }
+  }
+  function loadLocal(){
+    var list = [];
+    try { list = JSON.parse(localStorage.getItem('jcmj_rsvps') || '[]'); } catch(e){ list = []; }
+    allRows = list.map(normalizeRow);
+    render();
+  }
+  function normalizeRow(r){
+    return {
+      timestamp: r.timestamp || '',
+      name: r.name || '(no name)',
+      attending: r.attending || '',
+      guests: Number(r.guests) || 0,
+      message: r.message || ''
+    };
+  }
+
+  document.getElementById('refreshBtn').addEventListener('click', loadData);
+
+  /* ---- Render ---- */
+  function render(){
+    var q = (document.getElementById('searchInput').value || '').toLowerCase();
+    var rows = allRows.filter(function(r){
+      return !q || r.name.toLowerCase().indexOf(q) > -1 || r.message.toLowerCase().indexOf(q) > -1;
+    });
+
+    rows.sort(function(a,b){
+      var av = a[sortState.col], bv = b[sortState.col];
+      if(av < bv) return sortState.dir === 'asc' ? -1 : 1;
+      if(av > bv) return sortState.dir === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    var yes = allRows.filter(function(r){ return /accept|yes|attend/i.test(r.attending) && !/decline/i.test(r.attending); });
+    var no = allRows.filter(function(r){ return /decline|no/i.test(r.attending); });
+    var totalGuests = yes.reduce(function(sum,r){ return sum + (r.guests || 0); }, 0);
+
+    document.getElementById('statTotal').textContent = allRows.length;
+    document.getElementById('statYes').textContent = yes.length;
+    document.getElementById('statNo').textContent = no.length;
+    document.getElementById('statGuests').textContent = totalGuests;
+
+    var wrap = document.getElementById('tableWrap');
+    if(!rows.length){
+      wrap.innerHTML = '<div class="empty">No RSVP responses yet.</div>';
+      return;
+    }
+
+    var html = '<table><thead><tr>' +
+      th('timestamp','When') + th('name','Name') + th('attending','Status') + th('guests','Guests') + th('message','Message') +
+      '</tr></thead><tbody>';
+    rows.forEach(function(r){
+      var isYes = /accept|yes|attend/i.test(r.attending) && !/decline/i.test(r.attending);
+      var when = r.timestamp ? new Date(r.timestamp).toLocaleString() : '—';
+      html += '<tr>' +
+        '<td>' + esc(when) + '</td>' +
+        '<td>' + esc(r.name) + '</td>' +
+        '<td><span class="pill ' + (isYes ? 'yes' : 'no') + '">' + esc(r.attending || '—') + '</span></td>' +
+        '<td>' + esc(r.guests) + '</td>' +
+        '<td>' + esc(r.message || '—') + '</td>' +
+        '</tr>';
+    });
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+
+    document.querySelectorAll('th[data-col]').forEach(function(el){
+      el.addEventListener('click', function(){
+        var col = el.getAttribute('data-col');
+        if(sortState.col === col){ sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc'; }
+        else { sortState.col = col; sortState.dir = 'asc'; }
+        render();
+      });
+    });
+  }
+  function th(col, label){
+    var arrow = sortState.col === col ? (sortState.dir === 'asc' ? ' ↑' : ' ↓') : '';
+    return '<th data-col="' + col + '">' + label + arrow + '</th>';
+  }
+  function esc(v){
+    return String(v).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  document.getElementById('searchInput').addEventListener('input', render);
+
+  /* ---- CSV export ---- */
+  document.getElementById('exportBtn').addEventListener('click', function(){
+    var cols = ['timestamp','name','attending','guests','message'];
+    var lines = [cols.join(',')];
+    allRows.forEach(function(r){
+      lines.push(cols.map(function(c){
+        var v = String(r[c] == null ? '' : r[c]).replace(/"/g,'""');
+        return '"' + v + '"';
+      }).join(','));
+    });
+    var blob = new Blob([lines.join('\n')], {type:'text/csv'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'jcmj-rsvps.csv';
+    a.click();
+  });
+</script>
+</body>
+</html>
