@@ -667,7 +667,11 @@
   .reveal{opacity:0; transform:translateY(36px); transition:opacity .9s cubic-bezier(.16,.84,.44,1), transform .9s cubic-bezier(.16,.84,.44,1);}
   .reveal.in-view{opacity:1; transform:none;}
   @media(prefers-reduced-motion:reduce){
-    .reveal{opacity:1; transform:none; transition:none;}
+    /* Reduce Motion should remove *movement*, not all richness. Drop the
+       36px slide (that's the vestibular part) but keep a gentle fade, so the
+       page still reads as layered rather than appearing all at once. */
+    .reveal{opacity:0; transform:none; transition:opacity .7s ease;}
+    .reveal.in-view{opacity:1;}
     .petal{animation:none; display:none;}
   }
 
@@ -1062,7 +1066,6 @@
     /* carousel: near-full-width cards, easier thumbing */
     .g-tile{width:74vw; max-width:330px;}
     .carousel-track{gap:12px; padding:14px 0 18px;}
-    .carousel{perspective:1100px;}
 
     /* chapter timeline list */
     .album-tabs{padding-left:24px;}
@@ -1097,6 +1100,72 @@
   .faq-link .arw{font-size:14px; line-height:1; transition:transform .25s ease;}
   .faq-link:hover .arw{transform:translateX(3px);}
   .faq-item.open .faq-a{max-height:340px;}
+
+
+  /* ===================================================================
+     DEPTH — everything below is motion-independent, so it survives
+     Reduce Motion and renders identically on iOS, Android and desktop.
+     =================================================================== */
+
+  /* 1. backdrop-filter fallback.
+     Nine surfaces (cards, RSVP panel, lightbox chrome) got their sense of
+     depth from a blur. Firefox Android and older WebViews don't support it,
+     which left them as flat washed rectangles. Where blur is unavailable we
+     fall back to a denser, gradient-lit panel that still reads as raised. */
+  @supports not ((backdrop-filter: blur(6px)) or (-webkit-backdrop-filter: blur(6px))){
+    .float-card{
+      background:linear-gradient(155deg, rgba(38,18,26,.80), rgba(24,12,18,.88));
+      border-color:rgba(255,255,255,.26);
+      box-shadow:0 18px 44px rgba(0,0,0,.42);
+    }
+    .rsvp-form, .thankyou{
+      background:linear-gradient(155deg, rgba(34,36,22,.86), rgba(22,24,14,.92));
+      border-color:rgba(255,255,255,.24);
+    }
+    .venues-attire .dresscode-note{background:rgba(28,12,19,.88);}
+    .lb-btn, .lb-zoom{background:rgba(30,22,20,.88);}
+    .lb-count{background:rgba(0,0,0,.62);}
+    .countdown div{background:rgba(255,255,255,.20);}
+  }
+
+  /* 2. Vignette on the photo sections.
+     A flat wash over a photograph looks like a filter; a vignette reads as
+     depth. Pure box-shadow, so it costs nothing and works everywhere. */
+  .photo-section{box-shadow:inset 0 0 160px rgba(18,8,12,.45);}
+
+  /* 3. Layered shadows.
+     A single soft shadow looks painted on. Two — one tight contact shadow,
+     one wide ambient — is what actually reads as "lifted off the page". */
+  .g-tile{
+    box-shadow:0 2px 6px rgba(74,16,36,.18), 0 14px 30px rgba(74,16,36,.20);
+  }
+  .g-tile.is-center{
+    box-shadow:0 4px 10px rgba(74,16,36,.24), 0 26px 54px rgba(74,16,36,.30);
+  }
+  .fund-card, .venue-block{
+    box-shadow:0 1px 3px rgba(74,16,36,.10), 0 10px 26px rgba(74,16,36,.10);
+  }
+  .fund-card:hover{
+    box-shadow:0 2px 6px rgba(74,16,36,.16), 0 20px 40px rgba(74,16,36,.16);
+  }
+  .tab-icon, .tl-dot{
+    box-shadow:0 0 0 5px var(--ivory), 0 4px 10px rgba(74,16,36,.16);
+  }
+  .album-tab.active .tab-icon{
+    box-shadow:0 0 0 5px var(--ivory), 0 8px 20px rgba(109,24,52,.22);
+  }
+  .story-frame, .video-frame{
+    box-shadow:0 2px 8px rgba(74,16,36,.12), 0 22px 48px rgba(74,16,36,.16);
+  }
+
+  /* 4. Keep the reel's 3D honest on phones.
+     A shallower perspective on a narrow screen exaggerates the rotation into
+     a smear; this pairs a tighter viewing distance with a gentler angle. */
+  @media(max-width:600px){
+    .photo-section{box-shadow:inset 0 0 90px rgba(18,8,12,.42);}
+    .g-tile{box-shadow:0 2px 6px rgba(74,16,36,.20), 0 12px 26px rgba(74,16,36,.22);}
+    .g-tile.is-center{box-shadow:0 4px 10px rgba(74,16,36,.26), 0 20px 44px rgba(74,16,36,.32);}
+  }
 
 </style>
 </head>
@@ -2089,6 +2158,14 @@
       var span = vw * 0.42;
       var best = -1, bestDist = Infinity;
 
+      // Scale the 3D to the viewport. A fixed 1500px perspective that looks
+      // right on a laptop flattens on a phone, because the tiles occupy a far
+      // larger share of the screen; pull the viewpoint in and ease the angle.
+      var narrow = vw < 620;
+      var persp  = narrow ? 900 : 1500;
+      var maxRot = narrow ? 26  : 34;
+      var maxZ   = narrow ? 110 : 150;
+
       for(var k = 0; k < tiles.length; k++){
         var d = mids[k] - mid;                       // signed distance from centre
         if(d < -vw || d > vw){                       // offscreen: park it
@@ -2106,9 +2183,9 @@
         // perspective() lives in the tile's own transform so the effect does
         // not depend on a 3D context from the scrolling parent — Safari drops
         // that context and the reel renders flat.
-        el.style.transform = 'perspective(1500px) ' +
-                             'translateZ(' + (-abs * 150).toFixed(1) + 'px) ' +
-                             'rotateY(' + (-norm * 34).toFixed(2) + 'deg) ' +
+        el.style.transform = 'perspective(' + persp + 'px) ' +
+                             'translateZ(' + (-abs * maxZ).toFixed(1) + 'px) ' +
+                             'rotateY(' + (-norm * maxRot).toFixed(2) + 'deg) ' +
                              'scale(' + (1 - abs * 0.15).toFixed(3) + ')';
         el.style.opacity = (1 - abs * 0.34).toFixed(3);
         el.style.zIndex  = String(100 - Math.round(abs * 50));
@@ -2127,7 +2204,7 @@
         if(s && s.al !== activeAlbum) setActive(s.al);
       }
       // the centred frame simply squares up to the viewer — no zoom
-      centerTile.style.transform = 'perspective(1500px) translateZ(0px) rotateY(0deg) scale(1)';
+      centerTile.style.transform = 'perspective(' + persp + 'px) translateZ(0px) rotateY(0deg) scale(1)';
       centerTile.style.opacity = '1';
       centerTile.style.zIndex = '120';
     }
