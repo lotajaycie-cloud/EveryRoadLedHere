@@ -428,8 +428,10 @@
   /* The board was inset at 70% of the card. Filling the width and trimming
      the frame to a hairline puts roughly half as much picture again on screen,
      which is what the enlarge tap was previously there to provide. */
-  .look-back{transform:none; padding:5px 5px 6px; display:flex; flex-direction:column; justify-content:center;}
-  .look-back img{width:100%; height:auto; display:block; flex:0 0 auto; object-fit:contain; border-radius:2px;}
+  /* Nothing on this face but the board, so it fills the leaf edge to edge and
+     centres in whatever height the front face sets. */
+  .look-back{transform:none; padding:4px; display:flex; align-items:center; justify-content:center;}
+  .look-back img{width:100%; height:auto; display:block; object-fit:contain; border-radius:2px;}
   .look-back .cap{
     display:flex; justify-content:space-between; align-items:baseline;
     padding-top:10px; border-top:1px solid var(--champagne); margin-top:8px;
@@ -477,7 +479,7 @@
     .look-front .pal-chip{height:42px; margin-bottom:6px;}
     .look-front .pal-row{margin-bottom:18px; padding-bottom:16px; gap:5px;}
     .look-front .pal-name{font-size:7.5px; letter-spacing:.2px;}   /* let the copy set the height */
-    .look-back{padding:4px 4px 5px;}
+    .look-back{padding:3px;}
   }
   @media(prefers-reduced-motion:reduce){
     /* swap the flip for a cross-fade — rotation is the vestibular part */
@@ -507,6 +509,8 @@
   .rsvp .section-title{color:#fff;}
   .rsvp .eyebrow{color:var(--champagne);}
   .rsvp .section-sub{color:rgba(255,255,255,.88);}
+  /* the deadline is the one thing in that sentence a guest must retain */
+  .rsvp .section-sub strong{color:#fff; font-weight:400; letter-spacing:.2px;}
   .rsvp .divider{background:linear-gradient(to right, transparent, var(--champagne), transparent);}
   .rsvp .divider::after{background:var(--champagne); box-shadow:0 0 0 5px rgba(26,28,16,.8);}
   /* ===== RSVP guest code gate ===== */
@@ -1565,6 +1569,21 @@
   }
 
 
+  /* ---- the outfit boards, as large as the screen allows ----
+     Asked for half again. On a laptop the cards have the room and it lands.
+     On a phone the card already spans the container, so the extra comes from
+     letting it run to both edges and from cropping the last of the white out
+     of the photographs themselves; past that the screen is the limit. */
+  @media(max-width:820px){
+    .look-grid{
+      width:100vw; margin-left:calc(50% - 50vw);
+      gap:14px;
+    }
+    .look-card{border-radius:0;}
+    .look-front{padding:24px clamp(18px,5vw,26px);}
+    .look-back{padding:2px;}
+  }
+
   /* ══════════════════════════════════════════════════════════════════════
      SECTION SPACING ON A PHONE
      Desktop padding worn on a small screen makes every section feel like it
@@ -2020,7 +2039,7 @@
       <div class="tl-item">
         <div class="tl-spacer"></div>
         <div class="tl-dot"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="8.6"/><circle cx="20" cy="20" r="5.2"/><path d="M6.4 7.5 v6.2 a2.6 2.6 0 0 0 2.6 2.6 a2.6 2.6 0 0 0 2.6 -2.6 V7.5"/><path d="M9 16.3 V32.5"/><path d="M32.6 7.5 c-2.2 1.6 -2.8 4 -2.8 6.3 c0 1.6 .8 2.6 2.2 2.8"/><path d="M32.6 16.6 V32.5"/></svg></div>
-        <div class="tl-card"><span class="tl-time">6:30 PM</span><h4>Reception &amp; Dinner</h4><p>Dinner is served beneath<br>the evening sky.</p></div>
+        <div class="tl-card"><span class="tl-time">6:30 PM</span><h4>Reception &amp; Dinner</h4><p>Dinner is served beneath the evening sky.</p></div>
       </div>
       <div class="tl-item">
         <div class="tl-card"><span class="tl-time">9:00 PM</span><h4>Dancing &amp; Celebration</h4><p>The mobile bar opens and<br>the dance floor comes alive.</p></div>
@@ -2140,7 +2159,7 @@
         </g>
       </svg>
     </div>
-    <p class="tl-note">Exact timing may shift slightly on the day. We will keep the program cards updated closer to the date.</p>
+    <p class="tl-note">Exact timing may shift slightly on the day.<br>We will keep the program cards updated closer to the date.</p>
   </div>
 </section>
 
@@ -2225,11 +2244,11 @@
             <div class="look-kicker">Formal &middot; sage &amp; taupes</div>
             <h3>Gentlemen</h3>
             <p>Light and muted shades are what we love most. Think of the softer sages, sands and taupes shown here. Wear yours as a formal suit, or as a long sleeve shirt with trousers. Both look right on the day.</p>
-            <div class="look-cue">Tap to turn the page &rarr;</div>
+            <div class="look-cue">Tap to view sample looks &rarr;</div>
           </div>
           <div class="look-face look-back">
             <img src="images/attire-men.jpg" alt="Six sample menswear looks in sage, olive, cream and taupe linen">
-            <div class="cap"><b>Sample looks for men</b><i>Tap to turn back</i></div>
+            
           </div>
         </div>
       </button>
@@ -2248,11 +2267,11 @@
             <div class="look-kicker">Floor length &middot; sage &amp; mauves</div>
             <h3>Ladies</h3>
             <p>Light and muted shades are preferred. Soft roses, dusty mauves and pale sages rather than anything deep or bright. Floor length, and the silhouette is entirely yours.</p>
-            <div class="look-cue">Tap to turn the page &rarr;</div>
+            <div class="look-cue">Tap to view sample looks &rarr;</div>
           </div>
           <div class="look-face look-back">
             <img src="images/attire-women.jpg" alt="Seven sample floor length gowns in mauve, rose, olive and sage">
-            <div class="cap"><b>Sample looks for women</b><i>Tap to turn back</i></div>
+            
           </div>
         </div>
       </button>
@@ -2277,9 +2296,9 @@
     <div class="eyebrow">Kindly Reply</div>
     <h2 class="section-title">RSVP</h2>
     <div class="divider"></div>
-    <p class="section-sub">Please let us know if you'll be joining us by filling out the form below.</p>
+    <p class="section-sub">Please fill out the form below by <strong>October 15, 2026</strong><br>to let us know if you'll be joining us.</p>
     <div class="rsvp-gate" id="rsvpGate">
-      <p class="gate-lead">Your invitation carries a guest code. Enter it below to open your RSVP.</p>
+      <p class="gate-lead">Your invitation carries a guest code.<br>Enter it below to open your RSVP.</p>
       <form id="gateForm" novalidate>
         <div class="field">
           <label for="guestcode">Guest Code</label>
@@ -2490,7 +2509,7 @@
     <div class="eyebrow">Good to Know</div>
     <h2 class="section-title">Frequently Asked Questions</h2>
     <div class="faq-list">
-      <div class="faq-item open">
+      <div class="faq-item">
         <div class="faq-q"><span>What should I wear?</span><span class="plus">+</span></div>
         <div class="faq-a"><p>Formal, in light and muted shades. Ladies in floor length dresses in soft roses, dusty mauves and pale sages. Gentlemen in sages, sands and taupes, as a suit or a long sleeve shirt with trousers. Please avoid champagne, which is reserved for the bride.</p><a class="faq-link" href="#attire">See the full dress code <span class="arw" aria-hidden="true">&rarr;</span></a></div>
       </div>
@@ -3580,19 +3599,58 @@
       document.documentElement.style.setProperty('--beat', BEAT_MS + 'ms');
     }
     var last = 0, rafId = null, halted = false, paused = false;
+
+    /* ---- swipe settles on a photograph ----
+       A free drag leaves the reel wherever the finger stopped, half a picture
+       either side of centre. Releasing now eases to the nearest photograph, or
+       to the next one along if the swipe was decisive: past a third of a tile,
+       or quick enough to read as a flick. The easing is exponential rather
+       than a fixed duration, so a short settle is not slower than a long one. */
+    var snapTo = null;
+
+    function tileAt(centre){
+      var best = 0, bestD = Infinity;
+      for(var k = 0; k < mids.length; k++){
+        var d = Math.abs(mids[k] - centre);
+        if(d < bestD){ bestD = d; best = k; }
+      }
+      return best;
+    }
+
+    function settle(dir){
+      if(!mids.length || !loopW) return;
+      var vw = carEl.clientWidth || trackEl.clientWidth;
+      var k  = tileAt(pos + vw / 2);
+      if(dir) k = Math.min(mids.length - 1, Math.max(0, k + dir));
+      snapTo = mids[k] - vw / 2;
+    }
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    /* Returns the shift it applied, so anything holding a position in the same
+       space (the swipe target) can be moved by the same amount. */
     function wrap(){
-      if(loopW <= 0) return;
-      if(pos >= loopW * 1.5)      pos -= loopW;
-      else if(pos < loopW * 0.5)  pos += loopW;
+      if(loopW <= 0) return 0;
+      if(pos >= loopW * 1.5){      pos -= loopW; return -loopW; }
+      if(pos < loopW * 0.5){       pos += loopW; return  loopW; }
+      return 0;
     }
 
     function frame(ts){
       if(!last) last = ts;
       var dt = Math.min(64, ts - last);        // clamp after a background tab
       last = ts;
-      if(!halted && !paused && !dragging && !reduce){
+      if(snapTo !== null && !dragging){
+        var gap = snapTo - pos;
+        if(Math.abs(gap) < 0.6){
+          pos = snapTo; snapTo = null;
+        } else {
+          // frame-rate independent easing: same feel at 60Hz and 120Hz
+          pos += gap * (1 - Math.pow(0.0022, dt / 1000));
+        }
+        snapTo !== null ? (snapTo += wrap()) : wrap();
+        applyPos();
+        checkScrollHonoured();
+      } else if(!halted && !paused && !dragging && !reduce){
         pos += dt * PX_PER_MS;               // accumulate in full precision
         wrap();
         applyPos();
@@ -3627,6 +3685,7 @@
       if(!mids.length) measure();
       // hard set: no smooth-scroll easing, so the chapter appears at once
       trackEl.style.scrollBehavior = 'auto';
+      snapTo = null;
       pos = mids[t] - (carEl.clientWidth || trackEl.clientWidth) / 2;
       wrap();
       applyPos();
@@ -3646,24 +3705,38 @@
       if(e.button && e.button !== 0) return;      // left button / touch only
       dragging = true; moved = 0; dragId = e.pointerId;
       dragX = e.clientX; dragStart = pos;
+      snapTo = null;                                // a new gesture wins
+      dragT0 = (e.timeStamp || Date.now()); dragDX = 0;
       trackEl.classList.add('dragging');
     });
 
     function onDragMove(e){
       if(!dragging || (dragId !== null && e.pointerId !== dragId)) return;
       var dx = e.clientX - dragX;
+      dragDX = dx;
       moved = Math.max(moved, Math.abs(dx));
       if(moved > 4 && e.cancelable) e.preventDefault();
       pos = dragStart - dx;
       wrap();
       applyPos();
     }
-    function endDrag(){
+    function endDrag(e){
       if(!dragging) return;
       dragging = false; dragId = null;
       trackEl.classList.remove('dragging');
+
+      var pitch = (mids.length > 1) ? (mids[1] - mids[0]) : 300;
+      var ms    = Math.max(1, ((e && e.timeStamp) || Date.now()) - dragT0);
+      var speed = Math.abs(dragDX) / ms;            // px per ms
+      var far   = Math.abs(dragDX) > pitch * 0.33;
+      var flick = speed > 0.45 && Math.abs(dragDX) > 14;
+
+      if(moved > 4 && (far || flick)) settle(dragDX < 0 ? 1 : -1);
+      else if(moved > 4)              settle(0);
+
       nudge();
     }
+    var dragT0 = 0, dragDX = 0;
     window.addEventListener('pointermove', onDragMove, {passive:false});
     window.addEventListener('pointerup', endDrag);
     window.addEventListener('pointercancel', endDrag);
