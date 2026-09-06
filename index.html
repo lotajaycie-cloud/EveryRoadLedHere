@@ -1418,6 +1418,14 @@
   }
   body.gate-active{height:100dvh;}
 
+
+  /* Nine nav links only just clear the brand between the burger breakpoint
+     and a roomy desktop, so the gap eases in that band rather than wrapping. */
+  @media(min-width:821px) and (max-width:1040px){
+    .navlinks{gap:19px;}
+    .navlinks a{letter-spacing:1.1px;}
+  }
+
   /* Tap targets. 44px is Apple's floor and Android's is 48dp; the gate
      button and the code field are the two new ones that must clear it. */
   #guestcode{min-height:48px;}
@@ -1473,6 +1481,7 @@
       <li><a href="#details">Venues</a></li>
       <li><a href="#attire">Attire</a></li>
       <li><a href="#rsvp">RSVP</a></li>
+      <li><a href="#gifts">Gifts</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ul>
     <button class="navtoggle" id="navtoggle" aria-label="Menu"><span></span><span></span><span></span></button>
