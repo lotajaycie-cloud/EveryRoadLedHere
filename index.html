@@ -2687,84 +2687,35 @@
       setTimeout(function(){              // push-in starts while the flap is still travelling
         gate.classList.add('zooming');
       }, 820);
-      /* ══ LOCKED TIMING — APPROVED. ═════════════════════════════════════
-         The four beats and the gaps between them are exactly as signed off:
+      /* ══ LOCKED TIMING — APPROVED. DO NOT CHANGE. ══════════════════════
+         Signed off after several rounds of tuning. Only revisit if the
+         couple explicitly asks for it.
 
-            0  music starts
-         +800  veil begins its fade to white      (was 1150 after the tap)
-        +1730  site swaps in beneath the white    (was 2080)
-        +2200  white releases, clouds part        (was 2550)
+          350  music cue     <- the value that was dialled in
+         1150  veil begins its fade to white
+         2080  site swaps in beneath the white
+         2550  white releases, clouds part
 
-         What changed is only what they are measured from. They used to run
-         from the tap, on the assumption that the track would be ready 350ms
-         later. It is a 4.6MB file: on a home connection it is, and on a phone
-         on mobile data it is nowhere near — measured at 1558ms on a throttled
-         connection, by which point the veil had already bloomed and the first
-         line arrived over the countdown instead of into the fade. That is the
-         timing being off.
-
-         So the beats now hang off the music rather than the tap. The moment
-         the track can actually play becomes zero, and everything follows at
-         the same distances it always did. On a fast connection the audio is
-         ready almost at once and the entrance is identical to before, 350ms
-         to the cue. On a slow one the whole sequence waits a beat longer and
-         stays in step, which is the part that was signed off.
+         Why 350 works: the track opens with roughly 1.05s of quiet, so
+         cueing it here means the lead-in runs out just after the veil
+         starts and the first line arrives into the fade. Move this and the
+         entrance falls out of step with the visuals.
          ═════════════════════════════════════════════════════════════════ */
-      var ENTRANCE_CAP = 3000;    // never hold the envelope longer than this
-
-      function runEntrance(){
-        /* Re-anchor the audio clock to this instant so cueMusic starts the
-           track at its beginning rather than skipping in to catch up: we have
-           deliberately waited for it, so there is nothing to catch up on. */
-        openedAt = performance.now() - CUE_AT;
-        cueMusic();
-
-        setTimeout(function(){            // white bloom rises
-          spawnSparks();
-          veil.classList.add('bloom');
-        }, 800);
-        setTimeout(function(){            // swap to the site at peak white
-          gate.classList.add('opened');
-          gate.style.display = 'none';
-          document.body.classList.remove('gate-active');
-          document.body.classList.add('opened');
-        }, 1730);
-        setTimeout(function(){            // hold on total white, then part the clouds
-          veil.classList.remove('bloom');
-          veil.classList.add('clear');
-        }, 2200);
-      }
-
-      /* Wait for the track to be genuinely playable, then start. readyState 2
-         means there is data at the current position; below that a play would
-         stall and the music would arrive late however it was scheduled. */
-      (function whenAudioReady(){
-        var a = gateAudio();
-        var fired = false;
-        function go(){
-          if(fired) return;
-          fired = true;
-          if(a){
-            a.removeEventListener('canplay', go);
-            a.removeEventListener('playing', go);
-            a.removeEventListener('loadeddata', go);
-          }
-          /* 350ms is a floor, not a target. If the track is ready sooner the
-             entrance still waits for it, so the flap and the burst keep the
-             pacing they were tuned with; if it is ready later, everything
-             shifts together and the offsets hold. */
-          var elapsed = performance.now() - openedAt;
-          setTimeout(runEntrance, Math.max(0, CUE_AT - elapsed));
-        }
-        if(!a || !CONFIG.musicUrl){ go(); return; }
-        if(a.readyState >= 2){ go(); return; }
-
-        a.addEventListener('canplay', go);
-        a.addEventListener('playing', go);
-        a.addEventListener('loadeddata', go);
-        setTimeout(go, ENTRANCE_CAP);     // never leave the guest waiting
-      })();
-
+      setTimeout(cueMusic, 350);
+      setTimeout(function(){              // white bloom rises while the push-in continues
+        spawnSparks();
+        veil.classList.add('bloom');
+      }, 1150);
+      setTimeout(function(){              // swap to the site at peak white
+        gate.classList.add('opened');
+        gate.style.display = 'none';
+        document.body.classList.remove('gate-active');
+        document.body.classList.add('opened');
+      }, 2080);
+      setTimeout(function(){              // hold on total white, then part the clouds
+        veil.classList.remove('bloom');
+        veil.classList.add('clear');
+      }, 2550);
       setTimeout(function(){
         if(sparkWrap){ sparkWrap.innerHTML = ''; }
       }, 4200);
