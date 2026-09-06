@@ -595,6 +595,43 @@
   .fund-sketch .smoke{opacity:.65;}
   .fund-sketch .heart, .fund-sketch .dot{fill:var(--burgundy); stroke:none;}
 
+
+  /* ---- the house comes alive: smoke from the flue, birds across the sky ----
+     Same register as the balloon's drift, but more visible because the house
+     otherwise sat completely still next to it. Every keyframe is translate and
+     opacity only: a scale or rotate on an SVG child needs transform-box to be
+     supported for its origin to land correctly, and iOS Safari has been
+     unreliable there. Translation needs no origin at all. */
+  .fund-sketch .puff{
+    opacity:0;
+    animation:fundSmoke 4.2s linear infinite;
+  }
+  .fund-sketch .puff.p2{animation-delay:1.4s;}
+  .fund-sketch .puff.p3{animation-delay:2.8s;}
+  @keyframes fundSmoke{
+    0%  {opacity:0;   transform:translate(0, 3px);}
+    14% {opacity:.75;}
+    62% {opacity:.42;}
+    100%{opacity:0;   transform:translate(-9px, -30px);}
+  }
+
+  /* the flock carries the birds across; each bird beats within it */
+  .fund-sketch .flock{animation:fundFlock 13s linear infinite;}
+  .fund-sketch .flock-b{animation-duration:17s; animation-delay:3s;}
+  @keyframes fundFlock{
+    0%  {opacity:0;   transform:translate(16px, 7px);}
+    10% {opacity:.7;}
+    82% {opacity:.6;}
+    100%{opacity:0;   transform:translate(-155px, -20px);}
+  }
+  .fund-sketch .bird{animation:fundFlap .8s ease-in-out infinite;}
+  .fund-sketch .bird.b2{animation-duration:.72s; animation-delay:.16s;}
+  .fund-sketch .bird.b3{animation-duration:.88s; animation-delay:.34s;}
+  @keyframes fundFlap{
+    0%,100%{transform:translateY(0);}
+    50%    {transform:translateY(-2.4px);}
+  }
+
   /* the balloon lifts a little on its own, and a little more on hover */
   @keyframes fundDrift{
     0%,100%{transform:translateY(0);}
@@ -607,6 +644,12 @@
   .fund-card:hover .fund-sketch .float{animation-duration:4.5s;}
   @media(prefers-reduced-motion:reduce){
     .fund-sketch .float{animation:none;}
+    /* hold a single curl and one flock in place rather than leaving the sky
+       and the chimney empty, which would look like a drawing with bits missing */
+    .fund-sketch .puff, .fund-sketch .flock, .fund-sketch .bird{animation:none;}
+    .fund-sketch .puff{opacity:0;}
+    .fund-sketch .puff.p2{opacity:.62;}
+    .fund-sketch .flock{opacity:.6;}
   }
 
 .fund-num{
@@ -2032,9 +2075,22 @@
                 <path d="M157 126 c-.5 -7 3.5 -11 7.5 -11 c4 0 8 4 7.5 11"/>
                 <path class="faint" d="M175 126 c-.4 -5 2.6 -8 5.5 -8 c3 0 6 3 5.5 8"/>
                 <path class="faint" d="M26 126 c-.3 -4 2 -6.5 4.5 -6.5 c2.5 0 4.8 2.5 4.5 6.5"/>
-                <path class="smoke" d="M139 48 c0 -5 6 -4.5 6 -9.5 s-5 -4 -5 -8.5"/>
-                <path class="faint" d="M172 44 q4 -4 8 0 M180 44 q4 -4 8 0"/>
-                <path class="faint" d="M32 62 q3.5 -3.5 7 0 M39 62 q3.5 -3.5 7 0"/>
+                <!-- chimney smoke: three curls leaving the flue in turn -->
+                <g class="smokestack">
+                  <path class="puff p1" d="M139 46 c0 -4 5 -3.4 5 -7.4 s-4 -3.4 -4 -6.8"/>
+                  <path class="puff p2" d="M139 46 c0 -5 6 -4.4 6 -9 s-5 -3.8 -5 -7.8"/>
+                  <path class="puff p3" d="M139 46 c0 -6 7 -5 7 -10.4 s-6 -4.4 -6 -8.8"/>
+                </g>
+                <!-- two flocks crossing the sky, each bird on its own beat -->
+                <g class="flock flock-a">
+                  <path class="bird b1" d="M170 44 q4.2 -4.2 8.4 0"/>
+                  <path class="bird b2" d="M181 48 q3.6 -3.6 7.2 0"/>
+                  <path class="bird b3" d="M190 40 q3.2 -3.2 6.4 0"/>
+                </g>
+                <g class="flock flock-b">
+                  <path class="bird b1" d="M120 28 q3.8 -3.8 7.6 0"/>
+                  <path class="bird b2" d="M131 33 q3.2 -3.2 6.4 0"/>
+                </g>
               </g>
             </svg>
           </div>
