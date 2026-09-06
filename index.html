@@ -2822,9 +2822,8 @@
       setTimeout(function(){              // push-in starts while the flap is still travelling
         gate.classList.add('zooming');
       }, 820);
-      /* ══ LOCKED TIMING — APPROVED. DO NOT CHANGE. ══════════════════════
-         Signed off after several rounds of tuning. Only revisit if the
-         couple explicitly asks for it.
+      /* ══ LOCKED TIMING — APPROVED. ═════════════════════════════════════
+         Signed off after several rounds of tuning.
 
           350  music cue     <- the value that was dialled in
          1150  veil begins its fade to white
@@ -2833,24 +2832,94 @@
 
          Why 350 works: the track opens with roughly 1.05s of quiet, so
          cueing it here means the lead-in runs out just after the veil
-         starts and the first line arrives into the fade. Move this and the
-         entrance falls out of step with the visuals.
+         starts and the first line arrives into the fade.
+
+         Desktop runs these straight off the click, exactly as before.
+
+         Phones do not, and cannot: the track is 4.6MB and iOS will not
+         fetch a media file until the guest taps, so on anything short of a
+         good signal it is still arriving when the cue is due and the music
+         lands after the veil has already bloomed. On a phone the same four
+         beats are therefore measured from the moment the track can actually
+         play rather than from the tap. The gaps between them are identical
+         either way, and 350 is a floor rather than a target, so on wifi and
+         4G a phone behaves exactly like the desktop; only on a weak signal
+         does the whole sequence wait a beat longer and stay in step.
          ═════════════════════════════════════════════════════════════════ */
-      setTimeout(cueMusic, 350);
-      setTimeout(function(){              // white bloom rises while the push-in continues
-        spawnSparks();
-        veil.classList.add('bloom');
-      }, 1150);
-      setTimeout(function(){              // swap to the site at peak white
-        gate.classList.add('opened');
-        gate.style.display = 'none';
-        document.body.classList.remove('gate-active');
-        document.body.classList.add('opened');
-      }, 2080);
-      setTimeout(function(){              // hold on total white, then part the clouds
-        veil.classList.remove('bloom');
-        veil.classList.add('clear');
-      }, 2550);
+      var onPhone = (window.matchMedia && window.matchMedia('(pointer:coarse)').matches)
+                    || window.innerWidth < 900;
+
+      function runBeats(){
+        cueMusic();
+        setTimeout(function(){            // white bloom rises
+          spawnSparks();
+          veil.classList.add('bloom');
+        }, 800);
+        setTimeout(function(){            // swap to the site at peak white
+          gate.classList.add('opened');
+          gate.style.display = 'none';
+          document.body.classList.remove('gate-active');
+          document.body.classList.add('opened');
+        }, 1730);
+        setTimeout(function(){            // hold on white, then part the clouds
+          veil.classList.remove('bloom');
+          veil.classList.add('clear');
+        }, 2200);
+      }
+
+      if(!onPhone){
+        /* the original schedule, untouched */
+        setTimeout(cueMusic, 350);
+        setTimeout(function(){
+          spawnSparks();
+          veil.classList.add('bloom');
+        }, 1150);
+        setTimeout(function(){
+          gate.classList.add('opened');
+          gate.style.display = 'none';
+          document.body.classList.remove('gate-active');
+          document.body.classList.add('opened');
+        }, 2080);
+        setTimeout(function(){
+          veil.classList.remove('bloom');
+          veil.classList.add('clear');
+        }, 2550);
+      } else {
+        var HOLD_CAP = 3000;              // never leave a guest waiting longer
+        (function whenPlayable(){
+          var a = gateAudio(), fired = false;
+          function go(ready){
+            if(fired) return;
+            fired = true;
+            if(a){
+              a.removeEventListener('canplay', onReady);
+              a.removeEventListener('playing', onReady);
+              a.removeEventListener('loadeddata', onReady);
+            }
+            var wait = Math.max(0, CUE_AT - (performance.now() - openedAt));
+            setTimeout(function(){
+              /* If the track is genuinely ready, re-anchor the audio clock so
+                 it starts at its beginning: we waited for it deliberately and
+                 there is nothing to catch up on.
+
+                 If instead the hold simply timed out, leave the clock where it
+                 was. The existing correction then skips into the track by
+                 however late we are, so the first line still arrives as early
+                 as it can rather than sitting through the whole lead-in after
+                 the veil has already gone. */
+              if(ready) openedAt = performance.now() - CUE_AT;
+              runBeats();
+            }, wait);
+          }
+          function onReady(){ go(true); }
+          if(!a || !CONFIG.musicUrl){ go(true); return; }
+          if(a.readyState >= 2){ go(true); return; }
+          a.addEventListener('canplay', onReady);
+          a.addEventListener('playing', onReady);
+          a.addEventListener('loadeddata', onReady);
+          setTimeout(function(){ go(false); }, HOLD_CAP);
+        })();
+      }
       setTimeout(function(){
         if(sparkWrap){ sparkWrap.innerHTML = ''; }
       }, 4200);
