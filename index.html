@@ -429,7 +429,7 @@
     display:flex; justify-content:space-between; align-items:baseline;
     padding-top:10px; border-top:1px solid var(--champagne); margin-top:8px;
   }
-  .look-back .cap b{font-family:'Cormorant Garamond',serif; font-weight:300; font-size:19px; color:var(--burgundy);}
+  .look-back .cap b{font-family:'Jost', sans-serif; font-weight:300; font-size:12px; letter-spacing:2.2px; text-transform:uppercase; color:var(--burgundy);}
   .look-back .cap i{font-style:normal; font-size:10.5px; letter-spacing:2.4px; text-transform:uppercase; color:var(--olive);}
 
 
@@ -1603,48 +1603,60 @@
     .venue-time{font-size:22px;}
   }
 
-  /* ---- pointing at the chapter that comes next ----
-     The icons alone say nothing about being tappable. Rather than a general
-     hint, the chapter after the one playing carries a slow beat and a small
-     note, so the invitation is attached to a specific thing to press. The
-     chapter being shown does not beat, because it has already been chosen. */
-  .tab-hint{display:none;}
+  /* ---- three of them, running the length of the day ----
+     Line weights match the gift plates so the two sets read as one hand. */
+  .tl-dogs{max-width:340px; margin:30px auto 4px;}
+  .tl-dogs svg{width:100%; height:auto; display:block; overflow:visible;}
+  .tl-dogs g{fill:none; stroke-linecap:round; stroke-linejoin:round;}
+  .tl-dogs .ink path, .tl-dogs .ink ellipse, .tl-dogs .ink circle{
+    stroke:var(--burgundy); stroke-width:1.45;
+  }
+  .tl-dogs .leaf path{stroke:var(--olive); stroke-width:1.3;}
+  .tl-dogs .leaf .ground{opacity:.5;}
+  .tl-dogs .solid{fill:var(--burgundy); stroke:none;}
+  .tl-dogs .ear{fill:var(--burgundy); fill-opacity:.22; stroke:var(--burgundy);}
+  .tl-dogs .collar{opacity:.55;}
+  @media(max-width:600px){ .tl-dogs{max-width:280px; margin-top:24px;} }
 
+  /* ---- the chosen chapter carries the weight ----
+     Filled olive with the drawing knocked out in white and a raised edge, so
+     it reads as pressed in rather than merely outlined; the other four sit
+     back, pale and quiet. The beat is on the chosen one, which is what says
+     "this is the chapter you are watching" while the reel plays. */
   @media(max-width:860px){
-    .album-tab{position:relative;}
-    .album-tabs{padding-bottom:26px;}      /* room for the note to sit under */
-
-    .album-tab.next .tab-hint{
-      display:block;
-      position:absolute; top:100%; left:50%;
-      transform:translateX(-50%);
-      margin-top:3px; white-space:nowrap;
-      font-family:'Jost', sans-serif; font-weight:300;
-      font-size:9px; letter-spacing:2.2px; text-transform:uppercase;
-      color:var(--burgundy); opacity:.85;
-      animation:hintFade .6s ease both;
+    .album-tab .tab-icon{
+      transition:background .35s ease, border-color .35s ease, opacity .35s ease, transform .35s ease;
     }
-    @keyframes hintFade{ from{opacity:0; transform:translate(-50%, -3px);}
-                         to  {opacity:.85; transform:translate(-50%, 0);} }
+    .album-tab:not(.active) .tab-icon{
+      opacity:.5;
+      background:linear-gradient(145deg, #fff, var(--champagne));
+      border-color:var(--blush);
+    }
+    .album-tab:not(.active) .tab-icon svg *{stroke:var(--olive-light);}
+    .album-tab:not(.active) .tab-icon svg .solid{fill:var(--olive-light); stroke:none;}
 
-    /* a slow beat, closer to breathing than blinking */
-    .album-tab.next .tab-icon{
+    .album-tab.active .tab-icon{
+      opacity:1;
+      background:linear-gradient(155deg, var(--olive-light) 0%, var(--olive) 62%, #5d683f 100%);
+      border-color:var(--olive);
+      /* the emboss: a lit top edge, a shaded underside, then the page ring */
+      box-shadow:
+        inset 0 1.5px 0 rgba(255,255,255,.55),
+        inset 0 -2.5px 5px rgba(30,38,18,.35),
+        0 0 0 5px var(--ivory),
+        0 6px 14px rgba(74,16,36,.22);
       animation:albumBeat 3.4s ease-in-out infinite;
-      border-color:var(--burgundy);
     }
+    .album-tab.active .tab-icon svg *{stroke:#fff;}
+    .album-tab.active .tab-icon svg .solid{fill:#fff; stroke:none;}
+
+    /* only the scale beats: the shadow carries the emboss and must hold still */
     @keyframes albumBeat{
-      0%, 100%{ transform:scale(1);
-                box-shadow:0 0 0 5px var(--ivory), 0 3px 9px rgba(74,16,36,.16); }
-      48%     { transform:scale(1.11);
-                box-shadow:0 0 0 5px var(--ivory), 0 0 0 8px rgba(109,24,52,.10), 0 7px 18px rgba(109,24,52,.28); }
+      0%, 100%{transform:scale(1);}
+      48%     {transform:scale(1.1);}
     }
-
-    /* the chosen one is still, and sits above the beat if they are neighbours */
-    .album-tab.active .tab-icon{animation:none; z-index:2;}
-
     @media(prefers-reduced-motion:reduce){
-      .album-tab.next .tab-icon{animation:none; box-shadow:0 0 0 5px var(--ivory), 0 0 0 8px rgba(109,24,52,.12);}
-      .album-tab.next .tab-hint{animation:none;}
+      .album-tab.active .tab-icon{animation:none;}
     }
   }
 
@@ -1691,7 +1703,7 @@
     .album-line{
       display:block;
       font-size:16px;
-      margin:8px auto 4px;
+      margin:16px auto 4px;
       max-width:19em;
       min-height:2.8em;
     }
@@ -2007,6 +2019,96 @@
         <div class="tl-dot"><svg viewBox="0 0 40 40"><path d="M16 27.4 V10.6 l12 -2.6 v16.2"/><ellipse cx="12.8" cy="27.8" rx="3.4" ry="2.8"/><ellipse cx="24.8" cy="24.4" rx="3.4" ry="2.8"/><path d="M16 15.4 l12 -2.6"/><path d="M32.6 29.2 l.9 2.1 l2.1 .9 l-2.1 .9 l-.9 2.1 l-.9 -2.1 l-2.1 -.9 l2.1 -.9 z" class="solid"/></svg></div>
         <div class="tl-spacer"></div>
       </div>
+    </div>
+    <div class="tl-dogs" aria-hidden="true">
+      <!-- Three of them from directly overhead, running the length of the day.
+           SMIL rather than CSS keyframes, for the same reason as the gift
+           plates: WebKit is unreliable animating CSS transforms on SVG
+           children. Translation only, so no transform-box is needed. -->
+      <svg viewBox="0 0 300 120" role="presentation" focusable="false">
+        <g class="leaf">
+          <path class="ground" d="M8 106 q62 -8 130 0 t150 -2"/>
+      <path d="M20 60 h15"><animate attributeName="opacity" values="0;.75;0" dur="1.05s" begin="0s" repeatCount="indefinite"/></path>
+      <path d="M14 68 h10"><animate attributeName="opacity" values="0;.75;0" dur="1.05s" begin="0.16s" repeatCount="indefinite"/></path>
+      <path d="M92 30 h14"><animate attributeName="opacity" values="0;.75;0" dur="1.05s" begin="0.42s" repeatCount="indefinite"/></path>
+      <path d="M86 38 h9"><animate attributeName="opacity" values="0;.75;0" dur="1.05s" begin="0.58s" repeatCount="indefinite"/></path>
+      <path d="M146 90 h13"><animate attributeName="opacity" values="0;.75;0" dur="1.05s" begin="0.24s" repeatCount="indefinite"/></path>
+      <path d="M140 98 h8"><animate attributeName="opacity" values="0;.75;0" dur="1.05s" begin="0.4s" repeatCount="indefinite"/></path>
+        </g>
+        <g class="ink">
+      <g transform="translate(78,64) scale(1.0) rotate(-7)">
+        <g>
+          <animateTransform attributeName="transform" type="translate"
+            values="0 0; 1.4 -2.4; 0 0" dur="0.52s" begin="0s" repeatCount="indefinite"/>
+          <path d="M6 -8.6 c3 -3 5 -4.5 7.5 -5.4"/><circle class="solid" cx="14.4" cy="-14.6" r="1.45"/>
+          <path d="M6 8.6 c3 3.4 4.6 5.2 6.6 6.4"/><circle class="solid" cx="13.6" cy="15.6" r="1.45"/>
+          <path d="M-7 -8.6 c-3.4 -2.6 -5.6 -3.6 -8.4 -4"/><circle class="solid" cx="-16.4" cy="-12.8" r="1.45"/>
+          <path d="M-7 8.6 c-3 3 -5 4.4 -7.4 5.2"/><circle class="solid" cx="-15.4" cy="14" r="1.45"/>
+          <g>
+            <animateTransform attributeName="transform" type="translate"
+              values="0 0; -1 -1.6; 0 0" dur="0.37s" begin="0s" repeatCount="indefinite"/>
+            <path d="M-14 -1 c-7 -2.5 -11 -7 -9.5 -12.5 c.5 -1.9 2 -3 3.4 -2.6"/>
+          </g>
+          <ellipse cx="0" cy="0" rx="14" ry="9.6"/>
+        <path class="collar" d="M9.4 -7.6 c1.6 2.4 1.6 12.8 0 15.2"/>
+          <path class="ear" d="M18.6 -6.2 c-1.4 -3.4 -.4 -6 1.8 -6.2 c1.9 -.2 3 1.9 2.4 4.4 c-.4 1.7 -1.6 2.8 -2.8 3 z"/>
+          <path class="ear" d="M18.6 6.2 c-1.4 3.4 -.4 6 1.8 6.2 c1.9 .2 3 -1.9 2.4 -4.4 c-.4 -1.7 -1.6 -2.8 -2.8 -3 z"/>
+          <circle cx="21" cy="0" r="7.1"/>
+          <path d="M26.6 -3.4 c4.4 .4 6.8 1.6 6.8 3.4 c0 1.8 -2.4 3 -6.8 3.4"/>
+          <circle class="solid" cx="33.6" cy="0" r="1.6"/>
+          <circle class="solid" cx="23.6" cy="-3.4" r=".9"/>
+          <circle class="solid" cx="23.6" cy="3.4" r=".9"/>
+        </g>
+      </g>
+      <g transform="translate(156,38) scale(0.84) rotate(5)">
+        <g>
+          <animateTransform attributeName="transform" type="translate"
+            values="0 0; 1.4 -2.4; 0 0" dur="0.46s" begin="0.19s" repeatCount="indefinite"/>
+          <path d="M6 -8.6 c3 -3 5 -4.5 7.5 -5.4"/><circle class="solid" cx="14.4" cy="-14.6" r="1.45"/>
+          <path d="M6 8.6 c3 3.4 4.6 5.2 6.6 6.4"/><circle class="solid" cx="13.6" cy="15.6" r="1.45"/>
+          <path d="M-7 -8.6 c-3.4 -2.6 -5.6 -3.6 -8.4 -4"/><circle class="solid" cx="-16.4" cy="-12.8" r="1.45"/>
+          <path d="M-7 8.6 c-3 3 -5 4.4 -7.4 5.2"/><circle class="solid" cx="-15.4" cy="14" r="1.45"/>
+          <g>
+            <animateTransform attributeName="transform" type="translate"
+              values="0 0; -1 -1.6; 0 0" dur="0.33s" begin="0.19s" repeatCount="indefinite"/>
+            <path d="M-14 -1 c-7 -2.5 -11 -7 -9.5 -12.5 c.5 -1.9 2 -3 3.4 -2.6"/>
+          </g>
+          <ellipse cx="0" cy="0" rx="14" ry="9.6"/>
+          <path class="ear" d="M18.6 -6.2 c-1.4 -3.4 -.4 -6 1.8 -6.2 c1.9 -.2 3 1.9 2.4 4.4 c-.4 1.7 -1.6 2.8 -2.8 3 z"/>
+          <path class="ear" d="M18.6 6.2 c-1.4 3.4 -.4 6 1.8 6.2 c1.9 .2 3 -1.9 2.4 -4.4 c-.4 -1.7 -1.6 -2.8 -2.8 -3 z"/>
+          <circle cx="21" cy="0" r="7.1"/>
+          <path d="M26.6 -3.4 c4.4 .4 6.8 1.6 6.8 3.4 c0 1.8 -2.4 3 -6.8 3.4"/>
+          <circle class="solid" cx="33.6" cy="0" r="1.6"/>
+          <circle class="solid" cx="23.6" cy="-3.4" r=".9"/>
+          <circle class="solid" cx="23.6" cy="3.4" r=".9"/>
+        </g>
+      </g>
+      <g transform="translate(218,88) scale(0.92) rotate(-3)">
+        <g>
+          <animateTransform attributeName="transform" type="translate"
+            values="0 0; 1.4 -2.4; 0 0" dur="0.5s" begin="0.33s" repeatCount="indefinite"/>
+          <path d="M6 -8.6 c3 -3 5 -4.5 7.5 -5.4"/><circle class="solid" cx="14.4" cy="-14.6" r="1.45"/>
+          <path d="M6 8.6 c3 3.4 4.6 5.2 6.6 6.4"/><circle class="solid" cx="13.6" cy="15.6" r="1.45"/>
+          <path d="M-7 -8.6 c-3.4 -2.6 -5.6 -3.6 -8.4 -4"/><circle class="solid" cx="-16.4" cy="-12.8" r="1.45"/>
+          <path d="M-7 8.6 c-3 3 -5 4.4 -7.4 5.2"/><circle class="solid" cx="-15.4" cy="14" r="1.45"/>
+          <g>
+            <animateTransform attributeName="transform" type="translate"
+              values="0 0; -1 -1.6; 0 0" dur="0.36s" begin="0.33s" repeatCount="indefinite"/>
+            <path d="M-14 -1 c-7 -2.5 -11 -7 -9.5 -12.5 c.5 -1.9 2 -3 3.4 -2.6"/>
+          </g>
+          <ellipse cx="0" cy="0" rx="14" ry="9.6"/>
+        <path class="collar" d="M9.4 -7.6 c1.6 2.4 1.6 12.8 0 15.2"/>
+          <path class="ear" d="M18.6 -6.2 c-1.4 -3.4 -.4 -6 1.8 -6.2 c1.9 -.2 3 1.9 2.4 4.4 c-.4 1.7 -1.6 2.8 -2.8 3 z"/>
+          <path class="ear" d="M18.6 6.2 c-1.4 3.4 -.4 6 1.8 6.2 c1.9 .2 3 -1.9 2.4 -4.4 c-.4 -1.7 -1.6 -2.8 -2.8 -3 z"/>
+          <circle cx="21" cy="0" r="7.1"/>
+          <path d="M26.6 -3.4 c4.4 .4 6.8 1.6 6.8 3.4 c0 1.8 -2.4 3 -6.8 3.4"/>
+          <circle class="solid" cx="33.6" cy="0" r="1.6"/>
+          <circle class="solid" cx="23.6" cy="-3.4" r=".9"/>
+          <circle class="solid" cx="23.6" cy="3.4" r=".9"/>
+        </g>
+      </g>
+        </g>
+      </svg>
     </div>
     <p class="tl-note">Exact timing may shift slightly on the day. We will keep the program cards updated closer to the date.</p>
   </div>
@@ -2754,7 +2856,7 @@
     if(!window.matchMedia) return;
     var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     function apply(){
-      var svgs = document.querySelectorAll('.fund-sketch svg');
+      var svgs = document.querySelectorAll('.fund-sketch svg, .tl-dogs svg');
       for(var i = 0; i < svgs.length; i++){
         var s = svgs[i];
         if(mq.matches){ if(s.pauseAnimations) s.pauseAnimations(); }
@@ -3291,18 +3393,9 @@
       activeAlbum = al;
       if(lineEl) lineEl.textContent = al.line || '';
 
-      /* Whichever chapter is playing, the one after it is the invitation.
-         It carries the beat and the note; the chapter already being shown
-         does not, because it has been chosen. Wraps round at the end so the
-         fifth chapter points back at the first. */
-      var at = -1;
-      for(var q = 0; q < ALBUMS.length; q++){ if(ALBUMS[q].id === al.id){ at = q; break; } }
-      var nextId = (at >= 0) ? ALBUMS[(at + 1) % ALBUMS.length].id : null;
-
       Array.prototype.forEach.call(tabsEl.children, function(b){
         var on = b.dataset.album === al.id;
         b.classList.toggle('active', on);
-        b.classList.toggle('next', b.dataset.album === nextId);
         b.setAttribute('aria-selected', on ? 'true' : 'false');
       });
     }
@@ -3318,8 +3411,7 @@
         b.innerHTML =
           '<span class="tab-icon" aria-hidden="true">' + (ICONS[al.id] || '') + '</span>' +
           '<span class="tab-num">' + al.num + '</span>' +
-          '<span class="tab-line"></span>' +
-          '<span class="tab-hint" aria-hidden="true">Click to view</span>';
+          '<span class="tab-line"></span>';
         b.querySelector('.tab-line').textContent = al.line;
         b.addEventListener('click', function(){
           jumpTo(al);            // lands instantly, then keeps drifting
