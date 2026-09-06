@@ -314,16 +314,146 @@
   }
   .dir-result .dir-note{opacity:.7; font-size:12px;}
 
-  /* Palette / Dress code */
+  /* ===== Dress code / What to Wear ===== */
   .palette{background:var(--champagne);}
-  .swatches{display:flex; justify-content:center; gap:22px; flex-wrap:wrap; margin-bottom:50px;}
-  .swatch{text-align:center;}
-  .swatch .chip{width:64px; height:64px; border-radius:50%; margin:0 auto 10px; box-shadow:0 4px 14px rgba(0,0,0,.12); border:3px solid #fff;}
-  .swatch span{display:block; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:#5c534c;}
-  .dresscode-note{max-width:680px; margin:0 auto; text-align:center; background:#fff; padding:36px 40px; border-radius:4px; border:1px solid rgba(109,24,52,.1);}
-  .dresscode-note h3{color:var(--burgundy); margin-bottom:14px; font-size:22px;}
-  .dresscode-note p{color:#5c534c; font-size:15px;}
-  .avoid{margin-top:18px; font-size:13px; color:var(--burgundy); font-style:italic; font-family:'Cormorant Garamond', serif; font-weight:600;}
+  .attire-lead{
+    max-width:600px; margin:0 auto 58px; text-align:center;
+    color:#5c534c; font-size:16px; line-height:1.75;
+  }
+  .attire-sub{
+    display:flex; align-items:center; justify-content:center; gap:16px; margin:-8px 0 24px;
+  }
+  .attire-sub span.rule{height:1px; width:56px; background:var(--blush);}
+  .attire-sub span.txt{
+    font-family:'Cormorant Garamond',serif; font-style:italic;
+    font-size:21px; color:var(--olive);
+  }
+
+  /* palettes */
+  .pal-pair{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:clamp(28px,4vw,52px); max-width:1000px; margin:0 auto 72px;
+  }
+  .pal-label{
+    font-size:10.5px; letter-spacing:2.8px; text-transform:uppercase;
+    color:var(--olive); margin-bottom:16px;
+  }
+  .pal-row{display:grid; grid-template-columns:repeat(5,1fr); gap:8px;}
+  .pal-chip{
+    height:88px; border-radius:3px; margin-bottom:9px;
+    box-shadow:0 1px 3px rgba(74,16,36,.10), 0 6px 16px rgba(74,16,36,.10);
+    transition:transform .3s cubic-bezier(.2,.8,.2,1);
+  }
+  .pal-swatch:hover .pal-chip{transform:translateY(-3px);}
+  .pal-name{
+    font-size:9.5px; letter-spacing:.9px; text-transform:uppercase;
+    line-height:1.5; color:#5c534c;
+  }
+  .pal-hex{font-size:9.5px; color:#9a9084; letter-spacing:.4px;}
+
+  /* flip cards — tap to see sample looks */
+  .look-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:clamp(20px,3vw,32px); max-width:1000px; margin:0 auto;
+  }
+  .look-card{
+    perspective:1600px; cursor:pointer; background:none; border:none;
+    padding:0; font-family:inherit; text-align:left; width:100%;
+  }
+  .look-inner{
+    position:relative; width:100%; aspect-ratio:4/3;
+    transform-style:preserve-3d; -webkit-transform-style:preserve-3d;
+    transition:transform .8s cubic-bezier(.3,.9,.3,1);
+  }
+  .look-card.flipped .look-inner{transform:rotateY(180deg);}
+  .look-face{
+    position:absolute; inset:0; border-radius:4px; overflow:hidden;
+    background:#fff; border:1px solid var(--blush);
+    backface-visibility:hidden; -webkit-backface-visibility:hidden;
+    box-shadow:0 2px 6px rgba(74,16,36,.10), 0 14px 32px rgba(74,16,36,.12);
+  }
+  .look-front{
+    display:flex; flex-direction:column; justify-content:center;
+    padding:clamp(26px,3.4vw,42px);
+  }
+  .look-front .ghost{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:contain; opacity:.15; filter:grayscale(.15); pointer-events:none;
+  }
+  .look-kicker{
+    position:relative; font-size:10.5px; letter-spacing:2.8px; text-transform:uppercase;
+    color:var(--olive); margin-bottom:13px;
+  }
+  .look-front h3{
+    position:relative; font-family:'Cormorant Garamond',serif; font-weight:400;
+    font-size:clamp(28px,3.4vw,40px); color:var(--burgundy); margin-bottom:16px; line-height:1.15;
+  }
+  .look-front p{
+    position:relative; font-size:14.5px; line-height:1.8; color:#5c534c; margin:0;
+  }
+  .look-cue{
+    position:relative; margin-top:24px; font-size:10.5px; letter-spacing:2.6px;
+    text-transform:uppercase; color:var(--olive-light);
+  }
+  .look-back{transform:rotateY(180deg); padding:16px 16px 12px; display:flex; flex-direction:column;}
+  .look-back img{width:100%; flex:1; min-height:0; object-fit:contain; display:block;}
+  .look-back .cap{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding-top:10px; border-top:1px solid var(--champagne); margin-top:8px;
+  }
+  .look-back .cap b{font-family:'Cormorant Garamond',serif; font-weight:400; font-size:19px; color:var(--burgundy);}
+  .look-back .cap i{font-style:normal; font-size:10.5px; letter-spacing:2.4px; text-transform:uppercase; color:var(--olive);}
+
+  /* fabric / footwear / accents */
+  .attire-notes{
+    max-width:1000px; margin:72px auto 0; background:#fff;
+    border:1px solid var(--blush); border-radius:4px; padding:clamp(28px,4vw,48px);
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:clamp(26px,3.4vw,40px);
+  }
+  .attire-notes h4{
+    font-size:10.5px; letter-spacing:2.8px; text-transform:uppercase;
+    color:var(--olive); margin-bottom:12px; font-weight:400;
+  }
+  .attire-notes p{font-size:14.5px; line-height:1.8; color:#5c534c; margin:0;}
+
+  /* do / avoid */
+  .attire-rules{
+    max-width:1000px; margin:44px auto 0;
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:clamp(24px,3vw,36px);
+  }
+  .attire-rules > div{padding-top:18px;}
+  .rule-do{border-top:2px solid var(--olive);}
+  .rule-no{border-top:2px solid var(--blush);}
+  .attire-rules h4{
+    font-family:'Cormorant Garamond',serif; font-weight:400; font-size:25px;
+    color:var(--burgundy); margin-bottom:10px;
+  }
+  .attire-rules ul{list-style:none; margin:0; padding:0; font-size:14.5px; line-height:2.05; color:#5c534c;}
+  .attire-bar{
+    display:flex; justify-content:center; margin:60px auto 0; max-width:1000px;
+  }
+  .attire-bar span{width:34px; height:6px;}
+  .avoid{
+    max-width:680px; margin:34px auto 0; text-align:center;
+    font-size:13.5px; color:var(--burgundy); font-style:italic;
+    font-family:'Cormorant Garamond', serif; font-weight:600;
+  }
+  @media(max-width:560px){
+    .pal-row{grid-template-columns:repeat(5,1fr); gap:5px;}
+    .pal-chip{height:60px;}
+    .pal-name{font-size:8.5px; letter-spacing:.4px;}
+    .pal-hex{display:none;}
+    .look-inner{aspect-ratio:3/4;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    /* swap the flip for a cross-fade — rotation is the vestibular part */
+    .look-inner{transition:none;}
+    .look-card.flipped .look-inner{transform:none;}
+    .look-face{transition:opacity .45s ease;}
+    .look-back{transform:none; opacity:0;}
+    .look-card.flipped .look-front{opacity:0;}
+    .look-card.flipped .look-back{opacity:1;}
+  }
 
   /* Wedding Party */
 
@@ -470,10 +600,6 @@
     }
     .navlinks.open{display:flex;}
     .navtoggle{display:flex;}
-  }
-  @media(max-width:520px){
-    .swatches{gap:14px;}
-    .swatch .chip{width:52px; height:52px;}
   }
 
   /* ===== Entrance gate — full-bleed 3D sage envelope ===== */
@@ -783,8 +909,6 @@
   /* ===== Card / interaction polish ===== */
   .card{transition:transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s ease, border-color .4s ease;}
   .card:hover{transform:translateY(-6px); border-color:rgba(255,255,255,.4); box-shadow:0 20px 40px rgba(0,0,0,.18);}
-  .swatch .chip{transition:transform .3s ease;}
-  .swatch:hover .chip{transform:scale(1.1) translateY(-2px);}
   .story-frame{overflow:hidden;}
   .story-frame img{transition:transform .7s cubic-bezier(.2,.8,.2,1);}
   .story-frame:hover img{transform:scale(1.045);}
@@ -1076,7 +1200,6 @@
     .fund-card{padding:26px 22px;}
     .rsvp-form{padding:30px 22px;}
     .thankyou{padding:32px 24px;}
-    .letter, .dresscode-note{padding:28px 22px;}
   }
   @media(max-width:420px){
     .g-tile{width:80vw;}
@@ -1122,7 +1245,6 @@
       background:linear-gradient(155deg, rgba(34,36,22,.86), rgba(22,24,14,.92));
       border-color:rgba(255,255,255,.24);
     }
-    .venues-attire .dresscode-note{background:rgba(28,12,19,.88);}
     .lb-btn, .lb-zoom{background:rgba(30,22,20,.88);}
     .lb-count{background:rgba(0,0,0,.62);}
     .countdown div{background:rgba(255,255,255,.20);}
@@ -1431,22 +1553,150 @@
 
 <section class="palette" id="attire">
   <div class="container">
-    <div class="eyebrow">Dress Code</div>
-    <h2 class="section-title">Soft Romantics &amp; Earthy Greens</h2>
-    <div class="divider"></div>
-    <div class="swatches">
-      <div class="swatch"><div class="chip" style="background:#6d1834"></div><span>Burgundy</span></div>
-      <div class="swatch"><div class="chip" style="background:#707c4c"></div><span>Olive</span></div>
-      <div class="swatch"><div class="chip" style="background:#d9b3ae"></div><span>Blush</span></div>
-      <div class="swatch"><div class="chip" style="background:#c9a98f"></div><span>Mauve</span></div>
-      <div class="swatch"><div class="chip" style="background:#f3ead9"></div><span>Ivory / Neutral</span></div>
-      <div class="swatch"><div class="chip" style="background:#1c1c1c"></div><span>Black (formal suits)</span></div>
+    <div class="eyebrow">Formal &middot; Beach Garden Wedding</div>
+    <h2 class="section-title">What to Wear</h2>
+    <div class="attire-sub">
+      <span class="rule"></span>
+      <span class="txt">a guide for our guests</span>
+      <span class="rule"></span>
     </div>
-    <div class="dresscode-note">
-      <h3>Formal Attire</h3>
-      <p>We'd love to see our guests in soft romantic tones — think blush, mauve, dusty rose, olive and other earthy greens, and warm neutrals. Gentlemen look wonderful in black suits.</p>
-      <p class="avoid">With love, we kindly ask guests to avoid wearing champagne, as it's reserved for the bride.</p>
+    <p class="attire-lead">Formal attire for a beach garden wedding &mdash; sea air, lawn underfoot. Gentlemen in the sage and taupe range, ladies across the sage and mauves. Light, muted shades are preferred &mdash; pick any below.</p>
+
+    <div class="pal-pair">
+      <div>
+        <div class="pal-label">For the men &mdash; sage &amp; taupes</div>
+        <div class="pal-row">
+          <div class="pal-swatch">
+            <div class="pal-chip" style="background:#5E7355"></div>
+            <div class="pal-name">Forest Green</div>
+            <div class="pal-hex">#5E7355</div>
+          </div>
+          <div class="pal-swatch">
+            <div class="pal-chip" style="background:#A8B5A2"></div>
+            <div class="pal-name">Sage Green</div>
+            <div class="pal-hex">#A8B5A2</div>
+          </div>
+          <div class="pal-swatch">
+            <div class="pal-chip" style="background:#8F9F8C"></div>
+            <div class="pal-name">Olive Mist</div>
+            <div class="pal-hex">#8F9F8C</div>
+          </div>
+          <div class="pal-swatch">
+            <div class="pal-chip" style="background:#C9B8A6"></div>
+            <div class="pal-name">Warm Sand</div>
+            <div class="pal-hex">#C9B8A6</div>
+          </div>
+          <div class="pal-swatch">
+            <div class="pal-chip" style="background:#8B7F74"></div>
+            <div class="pal-name">Earthy Taupe</div>
+            <div class="pal-hex">#8B7F74</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="pal-label">For the women &mdash; sage &amp; mauves</div>
+        <div class="pal-row">
+          <div class="pal-swatch">
+            <div class="pal-chip" style="background:#F8D0D3"></div>
+            <div class="pal-name">Ophelia Rose</div>
+            <div class="pal-hex">#F8D0D3</div>
+          </div>
+          <div class="pal-swatch">
+            <div class="pal-chip" style="background:#B7959B"></div>
+            <div class="pal-name">Smoky Pink</div>
+            <div class="pal-hex">#B7959B</div>
+          </div>
+          <div class="pal-swatch">
+            <div class="pal-chip" style="background:#A5738A"></div>
+            <div class="pal-name">Dusty Orchid</div>
+            <div class="pal-hex">#A5738A</div>
+          </div>
+          <div class="pal-swatch">
+            <div class="pal-chip" style="background:#C0C9B4"></div>
+            <div class="pal-name">Muted Sage</div>
+            <div class="pal-hex">#C0C9B4</div>
+          </div>
+          <div class="pal-swatch">
+            <div class="pal-chip" style="background:#A7AE74"></div>
+            <div class="pal-name">Light Olive</div>
+            <div class="pal-hex">#A7AE74</div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <div class="look-grid">
+      <button type="button" class="look-card" aria-pressed="false">
+        <div class="look-inner">
+          <div class="look-face look-front">
+            <img class="ghost" src="images/attire-men.jpg" alt="" aria-hidden="true">
+            <div class="look-kicker">Formal, in the palette above</div>
+            <h3>The Men</h3>
+            <p>Light and muted shades are what we love most &mdash; the softer sages, sands and taupes above. Wear yours as a formal suit or a long-sleeve shirt and trousers; both look right on the day.</p>
+            <div class="look-cue">Tap for sample looks &rarr;</div>
+          </div>
+          <div class="look-face look-back">
+            <img src="images/attire-men.jpg" alt="Six sample menswear looks in sage, olive, cream and taupe linen">
+            <div class="cap"><b>The Men &mdash; sample looks</b><i>&larr; Back</i></div>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="look-card" aria-pressed="false">
+        <div class="look-inner">
+          <div class="look-face look-front">
+            <img class="ghost" src="images/attire-women.jpg" alt="" aria-hidden="true">
+            <div class="look-kicker">Floor length, in the palette above</div>
+            <h3>The Women</h3>
+            <p>Light and muted shades are preferred &mdash; soft roses, dusty mauves and pale sages rather than anything deep or bright. Floor length, and the silhouette is entirely yours.</p>
+            <div class="look-cue">Tap for sample looks &rarr;</div>
+          </div>
+          <div class="look-face look-back">
+            <img src="images/attire-women.jpg" alt="Seven sample floor-length gowns in mauve, rose, olive and sage">
+            <div class="cap"><b>The Women &mdash; sample looks</b><i>&larr; Back</i></div>
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <div class="attire-notes">
+      <div>
+        <h4>Fabric</h4>
+        <p>A warm beach garden afternoon into a cool evening. Linen, cotton blends, chiffon and crepe. Light wool suits work. Bring a wrap or a jacket for after sunset.</p>
+      </div>
+      <div>
+        <h4>Footwear</h4>
+        <p>The ceremony and cocktail hour are on lawn. Block heels, wedges or flats for the ladies. Leather or suede soles for the men &mdash; no trainers.</p>
+      </div>
+      <div>
+        <h4>Accents</h4>
+        <p>Light Olive is the tie-in between the two palettes. One accent per outfit is plenty: a tie, a sash, a clutch, a boutonni&egrave;re.</p>
+      </div>
+    </div>
+
+    <div class="attire-rules">
+      <div class="rule-do">
+        <h4>Please do</h4>
+        <ul>
+          <li>Pick one palette shade and build around it</li>
+          <li>Mix tones within your palette</li>
+          <li>Layer for the evening</li>
+        </ul>
+      </div>
+      <div class="rule-no">
+        <h4>Please avoid</h4>
+        <ul>
+          <li>White, ivory or cream head to toe</li>
+          <li>All black</li>
+          <li>Bright saturated colours outside the palettes</li>
+          <li>Stiletto heels on the lawn</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="avoid">With love, we kindly ask guests to avoid wearing champagne, as it&rsquo;s reserved for the bride.</p>
+
+    <div class="attire-bar"><span style="background:#F8D0D3"></span><span style="background:#B7959B"></span><span style="background:#A5738A"></span><span style="background:#C0C9B4"></span><span style="background:#A7AE74"></span><span style="background:#A8B5A2"></span><span style="background:#8F9F8C"></span><span style="background:#C9B8A6"></span></div>
   </div>
 </section>
 
@@ -2069,6 +2319,20 @@
         }
         y0 = x0 = null;
       }, {passive:true});
+    });
+  })();
+
+  /* ---------- Dress code: tap a card to see sample looks ---------- */
+  (function(){
+    document.querySelectorAll('.look-card').forEach(function(card){
+      function toggle(){
+        var on = card.classList.toggle('flipped');
+        card.setAttribute('aria-pressed', on ? 'true' : 'false');
+      }
+      card.addEventListener('click', toggle);
+      card.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+      });
     });
   })();
 
