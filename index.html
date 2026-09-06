@@ -2019,14 +2019,14 @@
         gate.classList.add('zooming');
       }, 820);
       /* ── TIMING ────────────────────────────────────────────────────────
-         1150 music cue      (moved +0.5s from 650; now fires together with
-                              the veil, so the track's ~1.05s lead-in runs
-                              across the fade and the first line lands as the
-                              screen reaches white)
+          150 music cue      (0.5s EARLIER than the original 650, so the
+                              track's ~1.05s lead-in has already run by the
+                              time the veil starts and the first line arrives
+                              as the fade gets under way)
          1150 veil bloom starts
          2080 site swaps in beneath the white
          2550 white releases and the clouds part                            */
-      setTimeout(cueMusic, 1150);
+      setTimeout(cueMusic, 150);
       setTimeout(function(){              // white bloom rises while the push-in continues
         spawnSparks();
         veil.classList.add('bloom');
