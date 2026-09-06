@@ -220,7 +220,7 @@
   .reveal-inner{padding:26px 28px; margin-bottom:18px;}
   .reveal-inner p{margin-bottom:16px; color:rgba(255,255,255,.93); font-size:16px; line-height:1.75;}
   .reveal-inner p:last-child{margin-bottom:0;}
-  .reveal-inner .script{color:var(--blush);}
+  .reveal-inner .script{color:var(--burgundy); font-weight:500;}   /* size deliberately unchanged: it sits mid-sentence and any change reflows the line */
   .reveal-inner .sign{margin-top:24px; color:var(--blush);}
   .story-sig{
     display:block; margin-top:22px; font-family:'Cormorant Garamond',serif; font-style:italic;
@@ -345,18 +345,23 @@
     gap:clamp(18px,2.4vw,28px); max-width:1180px; margin:0 auto;
   }
   .look-card{
-    perspective:1400px;
-    -webkit-perspective:1400px; cursor:pointer; background:none; border:none;
+    /* clips the turning leaf: rotating about the left edge swings the far edge
+       toward the viewer, which makes it grow past the card and spill its text
+       onto the section behind. A real page disappears into the gutter, so
+       cutting it at the card edge is both the fix and the right look. */
+    overflow:hidden;
+    border-radius:4px; cursor:pointer; background:none; border:none;
     padding:0; font-family:inherit; text-align:left; width:100%;
   }
   .look-inner{
     position:relative; width:100%;
+    /* the perspective lives here now, applying to the two faces directly */
+    perspective:1400px; -webkit-perspective:1400px;
     /* a faint crease down the spine, so the turn has something to hinge on */
     background:linear-gradient(90deg, rgba(74,16,36,.10) 0 1px, transparent 1px 100%);
     display:grid;                     /* both faces share one cell, so the
                                          card sizes to the taller of the two
                                          and nothing can spill or overlap */
-    transform-style:preserve-3d; -webkit-transform-style:preserve-3d;
     transition:transform .8s cubic-bezier(.3,.9,.3,1);
   }
   /* ---- turning a page instead of flipping a card ----
@@ -373,7 +378,7 @@
   }
   .look-back{z-index:1;}
   .look-card.flipped .look-front{
-    transform:rotateY(-172deg);
+    transform:rotateY(-155deg);
     box-shadow:24px 0 40px rgba(74,16,36,.20);
   }
   .look-card.flipped .look-inner{transform:none;}
@@ -452,14 +457,17 @@
   .attire-bar span{width:34px; height:6px;}
   /* the reminder occupies the third column where Accents used to sit;
      centred in its cell so the missing label doesn't read as an omission */
-  .attire-notes .note-cell{display:flex; align-items:center;}
+  .attire-notes .note-cell{display:flex; align-items:center; justify-content:center;}
+  /* only one note left, so it centres rather than sitting in a column */
+  .attire-notes{max-width:720px; text-align:center;}
+  .attire-notes .avoid{max-width:34em; margin:0 auto;}
   .attire-notes .avoid{
     margin:0; font-size:16px; line-height:1.7; color:var(--burgundy);
     font-style:italic; font-family:'Cormorant Garamond', serif; font-weight:300;
   }
   @media(max-width:760px){
-    .attire-notes .note-cell{padding-top:8px; border-top:1px solid var(--champagne);}
-    .attire-notes .avoid{padding-top:20px;}
+    .attire-notes .note-cell{padding-top:0; border-top:none;}
+    .attire-notes .avoid{padding-top:0;}
   }
   @media(max-width:560px){
     .pal-row{grid-template-columns:repeat(5,1fr); gap:5px;}
@@ -1899,7 +1907,7 @@
         <div class="reveal-inner float-card">
           <p>Ours has never been a story with a single turning point. It has been made of small, ordinary moments that quietly became everything. Long drives with the windows down. Coffee at the campsite before the sun was fully up. Bonfires that kept us talking long after we meant to sleep.</p>
           <p>We found each other in the places in between, on the road, by the shore, somewhere between one adventure and the next. Somehow every path kept circling back to <em class="script">us</em>.</p>
-          <p>Now, after years of choosing each other in the small moments, we're ready to choose each other for all of them. On December 8, 2026, we'd love for you to be there as we say "I do."</p>
+          <p>Now, after years of choosing each other in the small moments, we're ready to choose each other for all of them.<br><br>On December 8, 2026, we'd love for you to be there as we say "I do."</p>
           <span class="story-sig">JC &amp; MJ</span>
         </div>
       </div>
@@ -1918,7 +1926,7 @@
     <div class="eyebrow">Prenup Gallery</div>
     <h2 class="section-title">Our Story, In Chapters</h2>
     <div class="divider"></div>
-    <p class="section-sub">A few of our favourite moments, told through the things we love to do together.</p>
+    <p class="section-sub">A few of our favorite moments, told through the things we love to do together.</p>
     <div class="album">
       <div class="album-tabs" id="albumTabs" role="tablist" aria-label="Story chapters"></div>
       <!-- On a phone the chapter list becomes a row of icons above the reel and
@@ -1950,7 +1958,7 @@
     <div class="eyebrow">Watch</div>
     <h2 class="section-title">Our Prenup Film</h2>
     <div class="divider"></div>
-    <p class="section-sub">We're still filming our story. Check back closer to the big day for the full video.</p>
+    <p class="section-sub">We're still filming our story. Check back<br>closer to the big day for the full video.</p>
     <div class="video-frame" id="videoFrame">
       <div class="video-placeholder">
         <div class="play-btn">&#9658;</div>
@@ -1992,30 +2000,30 @@
     <div class="eyebrow">How The Day Unfolds</div>
     <h2 class="section-title">Wedding Day Timeline</h2>
     <div class="divider"></div>
-    <p class="section-sub">A rough idea of how our celebration will flow, from first hello to last dance.</p>
+    <p class="section-sub">A rough idea of how our celebration will flow,<br>from first hello to last dance.</p>
     <div class="tl">
       <div class="tl-item">
-        <div class="tl-card"><span class="tl-time">2:30 PM</span><h4>Guests Arrive</h4><p>Please be seated at Our Lady of Guadalupe Chapel.</p></div>
+        <div class="tl-card"><span class="tl-time">2:30 PM</span><h4>Guests Arrive</h4><p>Please be seated at<br>Our Lady of Guadalupe Chapel.</p></div>
         <div class="tl-dot"><svg viewBox="0 0 40 40"><path d="M20 4 v5"/><path d="M17.5 6.5 h5"/><path d="M8 20 L20 10 L32 20"/><path d="M10.6 18 V33 h18.8 V18"/><path d="M20 33 v-8.4 a3.1 3.1 0 0 0 -3.1 3.1 V33"/><path d="M16.9 27.7 a3.1 3.1 0 0 1 6.2 0"/></svg></div>
         <div class="tl-spacer"></div>
       </div>
       <div class="tl-item">
         <div class="tl-spacer"></div>
         <div class="tl-dot"><svg viewBox="0 0 40 40"><circle cx="15.5" cy="23" r="8.2"/><circle cx="24.5" cy="23" r="8.2"/><path d="M24.5 9.6 l2.4 3.6 h-4.8 z" class="solid"/><path d="M24.5 13.2 v1.6"/></svg></div>
-        <div class="tl-card"><span class="tl-time">3:00 PM</span><h4>Wedding Ceremony</h4><p>We say &ldquo;I do&rdquo; surrounded by the people we love most.</p></div>
+        <div class="tl-card"><span class="tl-time">3:00 PM</span><h4>Wedding Ceremony</h4><p>We say &ldquo;I do&rdquo; surrounded by<br>the people we love most.</p></div>
       </div>
       <div class="tl-item">
-        <div class="tl-card"><span class="tl-time">5:00 PM</span><h4>Cocktails</h4><p>Drinks, grazing table, and good conversation at Lower Beach Club.</p></div>
+        <div class="tl-card"><span class="tl-time">5:00 PM</span><h4>Cocktails</h4><p>Drinks, grazing table, and good conversation<br>as the sun sets over the beach.</p></div>
         <div class="tl-dot"><svg viewBox="0 0 40 40"><path d="M6 11 h12 l-6 7.4 z"/><path d="M12 18.4 V29"/><path d="M8.4 29 h7.2"/><path d="M22 11 h12 l-6 7.4 z"/><path d="M28 18.4 V29"/><path d="M24.4 29 h7.2"/><path d="M18.6 7.6 l1.4 -2.2 l1.4 2.2" class="solid"/></svg></div>
         <div class="tl-spacer"></div>
       </div>
       <div class="tl-item">
         <div class="tl-spacer"></div>
         <div class="tl-dot"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="8.6"/><circle cx="20" cy="20" r="5.2"/><path d="M6.4 7.5 v6.2 a2.6 2.6 0 0 0 2.6 2.6 a2.6 2.6 0 0 0 2.6 -2.6 V7.5"/><path d="M9 16.3 V32.5"/><path d="M32.6 7.5 c-2.2 1.6 -2.8 4 -2.8 6.3 c0 1.6 .8 2.6 2.2 2.8"/><path d="M32.6 16.6 V32.5"/></svg></div>
-        <div class="tl-card"><span class="tl-time">6:30 PM</span><h4>Reception &amp; Dinner</h4><p>Dinner is served as the sun sets over the beach.</p></div>
+        <div class="tl-card"><span class="tl-time">6:30 PM</span><h4>Reception &amp; Dinner</h4><p>Dinner is served beneath<br>the evening sky.</p></div>
       </div>
       <div class="tl-item">
-        <div class="tl-card"><span class="tl-time">9:00 PM</span><h4>Dancing &amp; Celebration</h4><p>The mobile bar opens and the dance floor comes alive.</p></div>
+        <div class="tl-card"><span class="tl-time">9:00 PM</span><h4>Dancing &amp; Celebration</h4><p>The mobile bar opens and<br>the dance floor comes alive.</p></div>
         <div class="tl-dot"><svg viewBox="0 0 40 40"><path d="M16 27.4 V10.6 l12 -2.6 v16.2"/><ellipse cx="12.8" cy="27.8" rx="3.4" ry="2.8"/><ellipse cx="24.8" cy="24.4" rx="3.4" ry="2.8"/><path d="M16 15.4 l12 -2.6"/><path d="M32.6 29.2 l.9 2.1 l2.1 .9 l-2.1 .9 l-.9 2.1 l-.9 -2.1 l-2.1 -.9 l2.1 -.9 z" class="solid"/></svg></div>
         <div class="tl-spacer"></div>
       </div>
@@ -2138,7 +2146,7 @@
 
 <section class="venues photo-section" id="details">
   <div class="container">
-    <div class="eyebrow">Save the Date</div>
+    <div class="eyebrow">Your Guide to the Day</div>
     <h2 class="section-title">How To Get There</h2>
     <div class="divider"></div>
     <p class="section-sub">Two places, one unforgettable day.</p>
@@ -2250,15 +2258,10 @@
       </button>
     </div>
 
+    <!-- Fabric and Footwear removed: the palettes and the two boards already say
+         what to wear, and three columns of guidance was more than guests need.
+         The one request that is not obvious from a photograph stays. -->
     <div class="attire-notes">
-      <div>
-        <h4>Fabric</h4>
-        <p>A warm beach garden afternoon into a cool evening. Linen, cotton blends, chiffon and crepe. Light wool suits work. Bring a wrap or a jacket for after sunset.</p>
-      </div>
-      <div>
-        <h4>Footwear</h4>
-        <p>The cocktail hour and reception are on lawn. Block heels, wedges or flats for the ladies. Leather or suede soles for the men, and no trainers please.</p>
-      </div>
       <div class="note-cell">
         <p class="avoid">With love, we kindly ask guests to avoid wearing champagne, as it&rsquo;s reserved for the bride.</p>
       </div>
@@ -2286,7 +2289,7 @@
         </div>
         <button type="submit" class="submit-btn">Continue</button>
         <p class="gate-msg" id="gateMsg" role="status" aria-live="polite"></p>
-        <p class="rsvp-note">Cannot find your code? Message us and we will look it up for you.</p>
+        <p class="rsvp-note">Cannot find your code?<br>Message us and we will look it up for you.</p>
       </form>
     </div>
 
@@ -2318,7 +2321,7 @@
         <textarea id="message" placeholder="Leave a note for JC & MJ"></textarea>
       </div>
       <button type="submit" class="submit-btn">Send RSVP</button>
-      <p class="rsvp-note">Kindly respond by October 8, 2026</p>
+      <p class="rsvp-note">Kindly respond by October 15, 2026</p>
     </form>
     <div class="thankyou" id="thankyou">
       <svg class="check" viewBox="0 0 52 52" aria-hidden="true">
@@ -2334,7 +2337,7 @@
 <section class="gift" id="gifts">
   <div class="container">
     <div class="eyebrow">Gifts</div>
-    <h2 class="section-title">Where Our Next Adventures Lead</h2>
+    <h2 class="section-title">Where Our Next<br>Adventures Lead</h2>
     <div class="divider"></div>
 
     <div class="registry">
@@ -2477,7 +2480,7 @@
         </div>
       </div>
 
-      <p class="registry-close">Whether you help us put down roots or help us find our way somewhere new, your gift will become part of our story. Thank you for helping us build a life we've dreamed about and fill it with memories we'll treasure for years to come.</p>
+      <p class="registry-close">Thank you for helping us build a life we've dreamed about and fill it with memories we'll treasure for years to come.</p>
     </div>
   </div>
 </section>
@@ -2489,7 +2492,7 @@
     <div class="faq-list">
       <div class="faq-item open">
         <div class="faq-q"><span>What should I wear?</span><span class="plus">+</span></div>
-        <div class="faq-a"><p>Soft romantic tones, mauve, blush, olive and earthy greens, or warm neutrals. Gentlemen in black suits. Please avoid champagne, which is reserved for the bride.</p><a class="faq-link" href="#attire">See the full dress code <span class="arw" aria-hidden="true">&rarr;</span></a></div>
+        <div class="faq-a"><p>Formal, in light and muted shades. Ladies in floor length dresses in soft roses, dusty mauves and pale sages. Gentlemen in sages, sands and taupes, as a suit or a long sleeve shirt with trousers. Please avoid champagne, which is reserved for the bride.</p><a class="faq-link" href="#attire">See the full dress code <span class="arw" aria-hidden="true">&rarr;</span></a></div>
       </div>
       <div class="faq-item">
         <div class="faq-q"><span>Is the reception indoors or outdoors?</span><span class="plus">+</span></div>
@@ -3275,7 +3278,7 @@
     var ALBUMS = [
       { id:'a2', num:'01', title:'Motorcycle', line:'We Were Always Meant to Go Somewhere', folder:'gallery/album-2', total:10 },
       { id:'a3', num:'02', title:'Camping',    line:'So We Found Somewhere We Could Stay Awhile', folder:'gallery/album-3', total:9  },
-      { id:'a5', num:'03', title:'Fishing',    line:'We Stayed Long Enough to Enjoy the Silence, and Learned to Wait', folder:'gallery/album-5', total:10 },
+      { id:'a5', num:'03', title:'Fishing',    line:'We Stayed Long Enough to Enjoy the Silence', folder:'gallery/album-5', total:10 },
       { id:'a4', num:'04', title:'Picnic',     line:'We Realized We Didn’t Need Much to Be Happy', folder:'gallery/album-4', total:10 },
       { id:'a1', num:'05', title:'Beach',      line:'Because Wherever We Are, That’s Home', folder:'gallery/album-1', total:10 }
     ];
