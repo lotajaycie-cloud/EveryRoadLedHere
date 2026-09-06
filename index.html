@@ -1614,8 +1614,8 @@
   .tl-dogs .leaf path{stroke:var(--olive); stroke-width:1.3;}
   .tl-dogs .leaf .ground{opacity:.5;}
   .tl-dogs .solid{fill:var(--burgundy); stroke:none;}
-  .tl-dogs .ear{fill:var(--burgundy); fill-opacity:.22; stroke:var(--burgundy);}
-  .tl-dogs .collar{opacity:.55;}
+  .tl-dogs .ear{fill:var(--burgundy); fill-opacity:.2; stroke:var(--burgundy);}
+  .tl-dogs .tail{fill:var(--burgundy); fill-opacity:.16; stroke:var(--burgundy);}
   @media(max-width:600px){ .tl-dogs{max-width:280px; margin-top:24px;} }
 
   /* ---- the chosen chapter carries the weight ----
@@ -2021,92 +2021,114 @@
       </div>
     </div>
     <div class="tl-dogs" aria-hidden="true">
-      <!-- Three of them from directly overhead, running the length of the day.
-           SMIL rather than CSS keyframes, for the same reason as the gift
-           plates: WebKit is unreliable animating CSS transforms on SVG
-           children. Translation only, so no transform-box is needed. -->
-      <svg viewBox="0 0 300 120" role="presentation" focusable="false">
+      <!-- Seen from directly overhead walking toward you, drawn from the
+           reference the couple supplied: tail up, the back tapering away, the
+           head low with long ears either side and the muzzle below it, and no
+           legs showing, which is what it actually looks like from up there.
+           SMIL rather than CSS keyframes, same WebKit reason as the gift
+           plates, and translation only so no transform-box is needed. -->
+      <svg viewBox="0 0 300 130" role="presentation" focusable="false">
         <g class="leaf">
-          <path class="ground" d="M8 106 q62 -8 130 0 t150 -2"/>
-      <path d="M20 60 h15"><animate attributeName="opacity" values="0;.75;0" dur="1.05s" begin="0s" repeatCount="indefinite"/></path>
-      <path d="M14 68 h10"><animate attributeName="opacity" values="0;.75;0" dur="1.05s" begin="0.16s" repeatCount="indefinite"/></path>
-      <path d="M92 30 h14"><animate attributeName="opacity" values="0;.75;0" dur="1.05s" begin="0.42s" repeatCount="indefinite"/></path>
-      <path d="M86 38 h9"><animate attributeName="opacity" values="0;.75;0" dur="1.05s" begin="0.58s" repeatCount="indefinite"/></path>
-      <path d="M146 90 h13"><animate attributeName="opacity" values="0;.75;0" dur="1.05s" begin="0.24s" repeatCount="indefinite"/></path>
-      <path d="M140 98 h8"><animate attributeName="opacity" values="0;.75;0" dur="1.05s" begin="0.4s" repeatCount="indefinite"/></path>
+          <path class="ground" d="M10 120 q64 -9 134 0 t148 -3"/>
+          <path d="M34 40 h13"><animate attributeName="opacity" values="0;.7;0" dur="1.15s" begin="0s" repeatCount="indefinite"/></path>
+          <path d="M28 48 h9"><animate attributeName="opacity" values="0;.7;0" dur="1.15s" begin="0.18s" repeatCount="indefinite"/></path>
+          <path d="M256 44 h13"><animate attributeName="opacity" values="0;.7;0" dur="1.15s" begin="0.5s" repeatCount="indefinite"/></path>
+          <path d="M262 52 h9"><animate attributeName="opacity" values="0;.7;0" dur="1.15s" begin="0.66s" repeatCount="indefinite"/></path>
         </g>
         <g class="ink">
-      <g transform="translate(78,64) scale(1.0) rotate(-7)">
-        <g>
-          <animateTransform attributeName="transform" type="translate"
-            values="0 0; 1.4 -2.4; 0 0" dur="0.52s" begin="0s" repeatCount="indefinite"/>
-          <path d="M6 -8.6 c3 -3 5 -4.5 7.5 -5.4"/><circle class="solid" cx="14.4" cy="-14.6" r="1.45"/>
-          <path d="M6 8.6 c3 3.4 4.6 5.2 6.6 6.4"/><circle class="solid" cx="13.6" cy="15.6" r="1.45"/>
-          <path d="M-7 -8.6 c-3.4 -2.6 -5.6 -3.6 -8.4 -4"/><circle class="solid" cx="-16.4" cy="-12.8" r="1.45"/>
-          <path d="M-7 8.6 c-3 3 -5 4.4 -7.4 5.2"/><circle class="solid" cx="-15.4" cy="14" r="1.45"/>
+        <g transform="translate(84,78) scale(0.95) rotate(-4)">
           <g>
             <animateTransform attributeName="transform" type="translate"
-              values="0 0; -1 -1.6; 0 0" dur="0.37s" begin="0s" repeatCount="indefinite"/>
-            <path d="M-14 -1 c-7 -2.5 -11 -7 -9.5 -12.5 c.5 -1.9 2 -3 3.4 -2.6"/>
+              values="0 0; 0 -2.6; 0 0" dur="0.62s" begin="0s" repeatCount="indefinite"/>
+            <g>
+              <animateTransform attributeName="transform" type="translate"
+                values="-1.6 0; 1.6 0; -1.6 0" dur="0.38s" begin="0s" repeatCount="indefinite"/>
+              <path class="tail" d="M-2.2 -25 C-3.6 -32 -1.6 -38.4 2.6 -41.4 C4.8 -43 6.8 -41.6 6 -39.4 C4.2 -34.6 1.8 -30 2.2 -24.6 Z"/>
+            </g>
+            <path d="M-9.6 -23.4 C-12.8 -14 -13.4 -4 -11.2 3.2
+                     C-9.8 8.4 -5.2 11.4 0 11.4
+                     C5.2 11.4 9.8 8.4 11.2 3.2
+                     C13.4 -4 12.8 -14 9.6 -23.4
+                     C6.6 -28.4 -6.6 -28.4 -9.6 -23.4 Z"/>
+            <path class="ear" d="M-7.6 10.2 C-14.0 11.4 -16.6 16.6 -15.0 22.4
+                     C-13.9 26.6 -9.6 27.2 -8.2 22.9
+                     C-7.4 20.3 -7.2 15.4 -7.2 11.8 Z"/>
+            <path class="ear" d="M7.6 10.2 C14.0 11.4 16.6 16.6 15.0 22.4
+                     C13.9 26.6 9.6 27.2 8.2 22.9
+                     C7.4 20.3 7.2 15.4 7.2 11.8 Z"/>
+            <path d="M-8.4 12.6 C-8.4 7 -4.7 4.6 0 4.6
+                     C4.7 4.6 8.4 7 8.4 12.6
+                     C8.4 18.2 5.2 21.6 0 21.6
+                     C-5.2 21.6 -8.4 18.2 -8.4 12.6 Z"/>
+            <path d="M-3.6 20.2 C-4.1 25 -2.0 27.6 0 27.6
+                     C2.0 27.6 4.1 25 3.6 20.2"/>
+            <circle class="solid" cx="0" cy="26.4" r="1.55"/>
+            <circle class="solid" cx="-3.5" cy="13.4" r=".95"/>
+            <circle class="solid" cx="3.5" cy="13.4" r=".95"/>
           </g>
-          <ellipse cx="0" cy="0" rx="14" ry="9.6"/>
-        <path class="collar" d="M9.4 -7.6 c1.6 2.4 1.6 12.8 0 15.2"/>
-          <path class="ear" d="M18.6 -6.2 c-1.4 -3.4 -.4 -6 1.8 -6.2 c1.9 -.2 3 1.9 2.4 4.4 c-.4 1.7 -1.6 2.8 -2.8 3 z"/>
-          <path class="ear" d="M18.6 6.2 c-1.4 3.4 -.4 6 1.8 6.2 c1.9 .2 3 -1.9 2.4 -4.4 c-.4 -1.7 -1.6 -2.8 -2.8 -3 z"/>
-          <circle cx="21" cy="0" r="7.1"/>
-          <path d="M26.6 -3.4 c4.4 .4 6.8 1.6 6.8 3.4 c0 1.8 -2.4 3 -6.8 3.4"/>
-          <circle class="solid" cx="33.6" cy="0" r="1.6"/>
-          <circle class="solid" cx="23.6" cy="-3.4" r=".9"/>
-          <circle class="solid" cx="23.6" cy="3.4" r=".9"/>
         </g>
-      </g>
-      <g transform="translate(156,38) scale(0.84) rotate(5)">
-        <g>
-          <animateTransform attributeName="transform" type="translate"
-            values="0 0; 1.4 -2.4; 0 0" dur="0.46s" begin="0.19s" repeatCount="indefinite"/>
-          <path d="M6 -8.6 c3 -3 5 -4.5 7.5 -5.4"/><circle class="solid" cx="14.4" cy="-14.6" r="1.45"/>
-          <path d="M6 8.6 c3 3.4 4.6 5.2 6.6 6.4"/><circle class="solid" cx="13.6" cy="15.6" r="1.45"/>
-          <path d="M-7 -8.6 c-3.4 -2.6 -5.6 -3.6 -8.4 -4"/><circle class="solid" cx="-16.4" cy="-12.8" r="1.45"/>
-          <path d="M-7 8.6 c-3 3 -5 4.4 -7.4 5.2"/><circle class="solid" cx="-15.4" cy="14" r="1.45"/>
+        <g transform="translate(150,68) scale(0.82) rotate(3)">
           <g>
             <animateTransform attributeName="transform" type="translate"
-              values="0 0; -1 -1.6; 0 0" dur="0.33s" begin="0.19s" repeatCount="indefinite"/>
-            <path d="M-14 -1 c-7 -2.5 -11 -7 -9.5 -12.5 c.5 -1.9 2 -3 3.4 -2.6"/>
+              values="0 0; 0 -2.6; 0 0" dur="0.55s" begin="0.21s" repeatCount="indefinite"/>
+            <g>
+              <animateTransform attributeName="transform" type="translate"
+                values="-1.6 0; 1.6 0; -1.6 0" dur="0.34s" begin="0.21s" repeatCount="indefinite"/>
+              <path class="tail" d="M-2.2 -25 C-4.6 -31 -8 -35.6 -12.6 -36.6 C-15.2 -37.2 -16 -35 -14.4 -33.4 C-10.8 -29.8 -6 -27.6 2.2 -24.6 Z"/>
+            </g>
+            <path d="M-8.83 -23.4 C-11.78 -14 -12.33 -4 -10.3 3.2
+                     C-9.02 8.4 -4.78 11.4 0 11.4
+                     C4.78 11.4 9.02 8.4 10.3 3.2
+                     C12.33 -4 11.78 -14 8.83 -23.4
+                     C6.07 -28.4 -6.07 -28.4 -8.83 -23.4 Z"/>
+            <path class="ear" d="M-6.99 10.2 C-12.88 11.4 -15.27 16.6 -13.8 22.4
+                     C-12.79 26.6 -8.83 27.2 -7.54 22.9
+                     C-6.81 20.3 -6.62 15.4 -6.62 11.8 Z"/>
+            <path class="ear" d="M6.99 10.2 C12.88 11.4 15.27 16.6 13.8 22.4
+                     C12.79 26.6 8.83 27.2 7.54 22.9
+                     C6.81 20.3 6.62 15.4 6.62 11.8 Z"/>
+            <path d="M-7.73 12.6 C-7.73 7 -4.32 4.6 0 4.6
+                     C4.32 4.6 7.73 7 7.73 12.6
+                     C7.73 18.2 4.78 21.6 0 21.6
+                     C-4.78 21.6 -7.73 18.2 -7.73 12.6 Z"/>
+            <path d="M-3.31 20.2 C-3.77 25 -1.84 27.6 0 27.6
+                     C1.84 27.6 3.77 25 3.31 20.2"/>
+            <circle class="solid" cx="0" cy="26.4" r="1.55"/>
+            <circle class="solid" cx="-3.22" cy="13.4" r=".95"/>
+            <circle class="solid" cx="3.22" cy="13.4" r=".95"/>
           </g>
-          <ellipse cx="0" cy="0" rx="14" ry="9.6"/>
-          <path class="ear" d="M18.6 -6.2 c-1.4 -3.4 -.4 -6 1.8 -6.2 c1.9 -.2 3 1.9 2.4 4.4 c-.4 1.7 -1.6 2.8 -2.8 3 z"/>
-          <path class="ear" d="M18.6 6.2 c-1.4 3.4 -.4 6 1.8 6.2 c1.9 .2 3 -1.9 2.4 -4.4 c-.4 -1.7 -1.6 -2.8 -2.8 -3 z"/>
-          <circle cx="21" cy="0" r="7.1"/>
-          <path d="M26.6 -3.4 c4.4 .4 6.8 1.6 6.8 3.4 c0 1.8 -2.4 3 -6.8 3.4"/>
-          <circle class="solid" cx="33.6" cy="0" r="1.6"/>
-          <circle class="solid" cx="23.6" cy="-3.4" r=".9"/>
-          <circle class="solid" cx="23.6" cy="3.4" r=".9"/>
         </g>
-      </g>
-      <g transform="translate(218,88) scale(0.92) rotate(-3)">
-        <g>
-          <animateTransform attributeName="transform" type="translate"
-            values="0 0; 1.4 -2.4; 0 0" dur="0.5s" begin="0.33s" repeatCount="indefinite"/>
-          <path d="M6 -8.6 c3 -3 5 -4.5 7.5 -5.4"/><circle class="solid" cx="14.4" cy="-14.6" r="1.45"/>
-          <path d="M6 8.6 c3 3.4 4.6 5.2 6.6 6.4"/><circle class="solid" cx="13.6" cy="15.6" r="1.45"/>
-          <path d="M-7 -8.6 c-3.4 -2.6 -5.6 -3.6 -8.4 -4"/><circle class="solid" cx="-16.4" cy="-12.8" r="1.45"/>
-          <path d="M-7 8.6 c-3 3 -5 4.4 -7.4 5.2"/><circle class="solid" cx="-15.4" cy="14" r="1.45"/>
+        <g transform="translate(214,82) scale(1.02) rotate(-2)">
           <g>
             <animateTransform attributeName="transform" type="translate"
-              values="0 0; -1 -1.6; 0 0" dur="0.36s" begin="0.33s" repeatCount="indefinite"/>
-            <path d="M-14 -1 c-7 -2.5 -11 -7 -9.5 -12.5 c.5 -1.9 2 -3 3.4 -2.6"/>
+              values="0 0; 0 -2.6; 0 0" dur="0.68s" begin="0.36s" repeatCount="indefinite"/>
+            <g>
+              <animateTransform attributeName="transform" type="translate"
+                values="-1.6 0; 1.6 0; -1.6 0" dur="0.42s" begin="0.36s" repeatCount="indefinite"/>
+              <path class="tail" d="M-2.2 -25 C-2.6 -31.4 0.4 -36.6 5.4 -38.4 C7.8 -39.2 9.2 -37.4 7.8 -35.6 C5 -32 2.6 -28.6 2.2 -24.6 Z"/>
+            </g>
+            <path d="M-10.56 -23.4 C-14.08 -14 -14.74 -4 -12.32 3.2
+                     C-10.78 8.4 -5.72 11.4 0 11.4
+                     C5.72 11.4 10.78 8.4 12.32 3.2
+                     C14.74 -4 14.08 -14 10.56 -23.4
+                     C7.26 -28.4 -7.26 -28.4 -10.56 -23.4 Z"/>
+            <path class="ear" d="M-8.36 10.2 C-15.4 11.4 -18.26 16.6 -16.5 22.4
+                     C-15.29 26.6 -10.56 27.2 -9.02 22.9
+                     C-8.14 20.3 -7.92 15.4 -7.92 11.8 Z"/>
+            <path class="ear" d="M8.36 10.2 C15.4 11.4 18.26 16.6 16.5 22.4
+                     C15.29 26.6 10.56 27.2 9.02 22.9
+                     C8.14 20.3 7.92 15.4 7.92 11.8 Z"/>
+            <path d="M-9.24 12.6 C-9.24 7 -5.17 4.6 0 4.6
+                     C5.17 4.6 9.24 7 9.24 12.6
+                     C9.24 18.2 5.72 21.6 0 21.6
+                     C-5.72 21.6 -9.24 18.2 -9.24 12.6 Z"/>
+            <path d="M-3.96 20.2 C-4.51 25 -2.2 27.6 0 27.6
+                     C2.2 27.6 4.51 25 3.96 20.2"/>
+            <circle class="solid" cx="0" cy="26.4" r="1.55"/>
+            <circle class="solid" cx="-3.85" cy="13.4" r=".95"/>
+            <circle class="solid" cx="3.85" cy="13.4" r=".95"/>
           </g>
-          <ellipse cx="0" cy="0" rx="14" ry="9.6"/>
-        <path class="collar" d="M9.4 -7.6 c1.6 2.4 1.6 12.8 0 15.2"/>
-          <path class="ear" d="M18.6 -6.2 c-1.4 -3.4 -.4 -6 1.8 -6.2 c1.9 -.2 3 1.9 2.4 4.4 c-.4 1.7 -1.6 2.8 -2.8 3 z"/>
-          <path class="ear" d="M18.6 6.2 c-1.4 3.4 -.4 6 1.8 6.2 c1.9 .2 3 -1.9 2.4 -4.4 c-.4 -1.7 -1.6 -2.8 -2.8 -3 z"/>
-          <circle cx="21" cy="0" r="7.1"/>
-          <path d="M26.6 -3.4 c4.4 .4 6.8 1.6 6.8 3.4 c0 1.8 -2.4 3 -6.8 3.4"/>
-          <circle class="solid" cx="33.6" cy="0" r="1.6"/>
-          <circle class="solid" cx="23.6" cy="-3.4" r=".9"/>
-          <circle class="solid" cx="23.6" cy="3.4" r=".9"/>
         </g>
-      </g>
         </g>
       </svg>
     </div>
