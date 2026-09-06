@@ -2018,14 +2018,20 @@
       setTimeout(function(){              // push-in starts while the flap is still travelling
         gate.classList.add('zooming');
       }, 820);
-      /* ── TIMING ────────────────────────────────────────────────────────
-          350 music cue      (0.3s before the original 650: pulled 0.5s
-                              earlier, then eased back 0.2s. The track's
-                              ~1.05s lead-in runs out shortly after the veil
-                              begins its fade)
-         1150 veil bloom starts
-         2080 site swaps in beneath the white
-         2550 white releases and the clouds part                            */
+      /* ══ LOCKED TIMING — APPROVED. DO NOT CHANGE. ══════════════════════
+         Signed off after several rounds of tuning. Only revisit if the
+         couple explicitly asks for it.
+
+          350  music cue     <- the value that was dialled in
+         1150  veil begins its fade to white
+         2080  site swaps in beneath the white
+         2550  white releases, clouds part
+
+         Why 350 works: the track opens with roughly 1.05s of quiet, so
+         cueing it here means the lead-in runs out just after the veil
+         starts and the first line arrives into the fade. Move this and the
+         entrance falls out of step with the visuals.
+         ═════════════════════════════════════════════════════════════════ */
       setTimeout(cueMusic, 350);
       setTimeout(function(){              // white bloom rises while the push-in continues
         spawnSparks();
