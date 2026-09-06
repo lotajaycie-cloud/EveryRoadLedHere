@@ -597,59 +597,19 @@
 
 
   /* ---- the house comes alive: smoke from the flue, birds across the sky ----
-     Same register as the balloon's drift, but more visible because the house
-     otherwise sat completely still next to it. Every keyframe is translate and
-     opacity only: a scale or rotate on an SVG child needs transform-box to be
-     supported for its origin to land correctly, and iOS Safari has been
-     unreliable there. Translation needs no origin at all. */
-  .fund-sketch .puff{
-    opacity:0;
-    animation:fundSmoke 4.2s linear infinite;
-  }
-  .fund-sketch .puff.p2{animation-delay:1.4s;}
-  .fund-sketch .puff.p3{animation-delay:2.8s;}
-  @keyframes fundSmoke{
-    0%  {opacity:0;   transform:translate(0, 3px);}
-    14% {opacity:.75;}
-    62% {opacity:.42;}
-    100%{opacity:0;   transform:translate(-9px, -30px);}
-  }
+     The motion itself now lives in the SVG as SMIL (see the markup), because
+     WebKit is unreliable animating CSS transforms on SVG children and this is
+     the technique Safari has always handled well. What stays here is only the
+     resting appearance, so that if SMIL is ever unavailable the drawing still
+     reads as a complete picture rather than losing its smoke and birds. */
+  .fund-sketch .puff{opacity:.55;}
+  .fund-sketch .flock{opacity:.62;}
 
-  /* the flock carries the birds across; each bird beats within it */
-  .fund-sketch .flock{animation:fundFlock 13s linear infinite;}
-  .fund-sketch .flock-b{animation-duration:17s; animation-delay:3s;}
-  @keyframes fundFlock{
-    0%  {opacity:0;   transform:translate(16px, 7px);}
-    10% {opacity:.7;}
-    82% {opacity:.6;}
-    100%{opacity:0;   transform:translate(-155px, -20px);}
-  }
-  .fund-sketch .bird{animation:fundFlap .8s ease-in-out infinite;}
-  .fund-sketch .bird.b2{animation-duration:.72s; animation-delay:.16s;}
-  .fund-sketch .bird.b3{animation-duration:.88s; animation-delay:.34s;}
-  @keyframes fundFlap{
-    0%,100%{transform:translateY(0);}
-    50%    {transform:translateY(-2.4px);}
-  }
-
-  /* the balloon lifts a little on its own, and a little more on hover */
-  @keyframes fundDrift{
-    0%,100%{transform:translateY(0);}
-    50%    {transform:translateY(-5px);}
-  }
-  .fund-sketch .float{
-    animation:fundDrift 7s ease-in-out infinite;
-    transform-origin:110px 75px;
-  }
   .fund-card:hover .fund-sketch .float{animation-duration:4.5s;}
   @media(prefers-reduced-motion:reduce){
-    .fund-sketch .float{animation:none;}
-    /* hold a single curl and one flock in place rather than leaving the sky
-       and the chimney empty, which would look like a drawing with bits missing */
-    .fund-sketch .puff, .fund-sketch .flock, .fund-sketch .bird{animation:none;}
-    .fund-sketch .puff{opacity:0;}
-    .fund-sketch .puff.p2{opacity:.62;}
-    .fund-sketch .flock{opacity:.6;}
+    /* SMIL ignores this query, so the timelines are paused in script instead
+       (see pauseSketches below). The drawing keeps its smoke and birds, they
+       simply hold still. */
   }
 
 .fund-num{
@@ -1128,7 +1088,7 @@
     display:flex; gap:18px; overflow-x:auto; overflow-y:hidden;
     padding:18px 0 22px;
     align-items:center; touch-action:pan-y;
-    -webkit-overflow-scrolling:touch;
+    /* -webkit-overflow-scrolling removed: deprecated, and its separate scroll layer is what resists a programmatic scrollLeft on iOS */
     scrollbar-width:none; -ms-overflow-style:none;
     cursor:grab;
   }
@@ -1572,6 +1532,16 @@
      defect or improves the small-screen reading experience; nothing below
      1024px-only rules touches the approved desktop composition.
      ══════════════════════════════════════════════════════════════════════ */
+
+
+  /* The reel falls back to this when the browser ignores a programmatic
+     scrollLeft (iOS hands scrolling to another process). The carousel becomes
+     the clipping box and the track is moved with a compositor transform. */
+  .carousel.reel-transform{overflow:hidden;}
+  .carousel.reel-transform .carousel-track{
+    overflow:visible;
+    will-change:transform;
+  }
 
   /* ---- 1. Touch targets -------------------------------------------------
      Measured before this change: burger 22x16, direction buttons 36px tall,
@@ -2076,21 +2046,70 @@
                 <path class="faint" d="M175 126 c-.4 -5 2.6 -8 5.5 -8 c3 0 6 3 5.5 8"/>
                 <path class="faint" d="M26 126 c-.3 -4 2 -6.5 4.5 -6.5 c2.5 0 4.8 2.5 4.5 6.5"/>
                 <!-- chimney smoke: three curls leaving the flue in turn -->
+                <!-- Smoke and birds are animated with SMIL rather than CSS keyframes.
+                     WebKit is unreliable animating CSS transforms on SVG children,
+                     and SMIL is the one technique Safari has always supported well.
+                     A script pauses these when the guest asks for reduced motion. -->
                 <g class="smokestack">
-                  <path class="puff p1" d="M139 46 c0 -4 5 -3.4 5 -7.4 s-4 -3.4 -4 -6.8"/>
-                  <path class="puff p2" d="M139 46 c0 -5 6 -4.4 6 -9 s-5 -3.8 -5 -7.8"/>
-                  <path class="puff p3" d="M139 46 c0 -6 7 -5 7 -10.4 s-6 -4.4 -6 -8.8"/>
+                  <g class="puff">
+                    <path d="M139 46 c0 -4 5 -3.4 5 -7.4 s-4 -3.4 -4 -6.8"/>
+                    <animateTransform attributeName="transform" type="translate"
+                      values="0 3; -9 -30" dur="4.2s" begin="0s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0;.75;.42;0"
+                      keyTimes="0;.14;.62;1" dur="4.2s" begin="0s" repeatCount="indefinite"/>
+                  </g>
+                  <g class="puff">
+                    <path d="M139 46 c0 -5 6 -4.4 6 -9 s-5 -3.8 -5 -7.8"/>
+                    <animateTransform attributeName="transform" type="translate"
+                      values="0 3; -9 -30" dur="4.2s" begin="1.4s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0;.75;.42;0"
+                      keyTimes="0;.14;.62;1" dur="4.2s" begin="1.4s" repeatCount="indefinite"/>
+                  </g>
+                  <g class="puff">
+                    <path d="M139 46 c0 -6 7 -5 7 -10.4 s-6 -4.4 -6 -8.8"/>
+                    <animateTransform attributeName="transform" type="translate"
+                      values="0 3; -9 -30" dur="4.2s" begin="2.8s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0;.75;.42;0"
+                      keyTimes="0;.14;.62;1" dur="4.2s" begin="2.8s" repeatCount="indefinite"/>
+                  </g>
                 </g>
-                <!-- two flocks crossing the sky, each bird on its own beat -->
-                <g class="flock flock-a">
-                  <path class="bird b1" d="M170 44 q4.2 -4.2 8.4 0"/>
-                  <path class="bird b2" d="M181 48 q3.6 -3.6 7.2 0"/>
-                  <path class="bird b3" d="M190 40 q3.2 -3.2 6.4 0"/>
-                </g>
-                <g class="flock flock-b">
-                  <path class="bird b1" d="M120 28 q3.8 -3.8 7.6 0"/>
-                  <path class="bird b2" d="M131 33 q3.2 -3.2 6.4 0"/>
-                </g>
+                  <g class="flock">
+                    <g>
+                      <path d="M170 44 q4.2 -4.2 8.4 0"/>
+                      <animateTransform attributeName="transform" type="translate"
+                        values="0 0; 0 -2.4; 0 0" dur="0.8s" begin="0s" repeatCount="indefinite"/>
+                    </g>
+                    <g>
+                      <path d="M181 48 q3.6 -3.6 7.2 0"/>
+                      <animateTransform attributeName="transform" type="translate"
+                        values="0 0; 0 -2.4; 0 0" dur="0.72s" begin="0.16s" repeatCount="indefinite"/>
+                    </g>
+                    <g>
+                      <path d="M190 40 q3.2 -3.2 6.4 0"/>
+                      <animateTransform attributeName="transform" type="translate"
+                        values="0 0; 0 -2.4; 0 0" dur="0.88s" begin="0.34s" repeatCount="indefinite"/>
+                    </g>
+                    <animateTransform attributeName="transform" type="translate"
+                      values="16 7; -155 -20" dur="13s" begin="0s" repeatCount="indefinite" additive="sum"/>
+                    <animate attributeName="opacity" values="0;.7;.6;0"
+                      keyTimes="0;.1;.82;1" dur="13s" begin="0s" repeatCount="indefinite"/>
+                  </g>
+                  <g class="flock">
+                    <g>
+                      <path d="M120 28 q3.8 -3.8 7.6 0"/>
+                      <animateTransform attributeName="transform" type="translate"
+                        values="0 0; 0 -2.4; 0 0" dur="0.8s" begin="0.1s" repeatCount="indefinite"/>
+                    </g>
+                    <g>
+                      <path d="M131 33 q3.2 -3.2 6.4 0"/>
+                      <animateTransform attributeName="transform" type="translate"
+                        values="0 0; 0 -2.4; 0 0" dur="0.74s" begin="0.3s" repeatCount="indefinite"/>
+                    </g>
+                    <animateTransform attributeName="transform" type="translate"
+                      values="16 7; -155 -20" dur="17s" begin="3s" repeatCount="indefinite" additive="sum"/>
+                    <animate attributeName="opacity" values="0;.7;.6;0"
+                      keyTimes="0;.1;.82;1" dur="17s" begin="3s" repeatCount="indefinite"/>
+                  </g>
               </g>
             </svg>
           </div>
@@ -2114,6 +2133,9 @@
                 </g>
               </g>
               <g class="ink float">
+                <!-- same reasoning as the house: SMIL, not a CSS keyframe -->
+                <animateTransform attributeName="transform" type="translate"
+                  values="0 0; 0 -5; 0 0" dur="7s" repeatCount="indefinite"/>
                 <path d="M110 20 C133 20 148 40 148 60 C148 80 130 94 122 104 L98 104 C90 94 72 80 72 60 C72 40 87 20 110 20 Z"/>
                 <path class="gore" d="M110 20 V104"/>
                 <path class="gore faint" d="M110 20 C96 34 90 48 90 62 C90 80 94 94 98 104"/>
@@ -2317,10 +2339,42 @@
        So: start the track muted inside the click and never stop it. It keeps
        running silently through the flap and push-in, which both satisfies the
        gesture rule for good and buffers the file. */
+    /* ---- getting the track into memory before the tap ----
+       preload="auto" is honoured on desktop but iOS Safari will not pull a
+       media file down until a user gesture, so on an iPhone the mp3 was still
+       arriving when the 350ms cue fired and the music came in behind the veil.
+
+       fetch() carries no such restriction. Pulling the file with fetch while
+       the guest is still looking at the envelope, then handing the element a
+       blob URL, means the audio is in memory by the time they tap: play() and
+       the seek back to zero are both instant, and the cue lands where it was
+       tuned to land. If the fetch has not finished, or the browser is too old
+       for it, the element keeps its ordinary network src and the existing
+       clock correction takes over, so this can only ever help. */
+    var audioPrimed = false;
+    var trackBlobUrl = null;
+
+    (function preloadTrack(){
+      if(!CONFIG.musicUrl) return;
+      if(!window.fetch || !window.URL || !window.URL.createObjectURL) return;
+      fetch(CONFIG.musicUrl, {credentials:'same-origin'})
+        .then(function(r){ return r.ok ? r.blob() : null; })
+        .then(function(blob){
+          if(!blob || audioPrimed) return;      // too late to swap without a stutter
+          var a = gateAudio();
+          if(!a || audioPrimed) return;
+          trackBlobUrl = URL.createObjectURL(blob);
+          a.src = trackBlobUrl;
+          a.load();
+        })
+        .catch(function(){ /* stay on the network src */ });
+    })();
+
     function primeAudio(){
       if(!CONFIG.musicUrl) return;
       var a = gateAudio();
       if(!a) return;
+      audioPrimed = true;                 // from here the src is left alone
       if(!a.src){ a.src = CONFIG.musicUrl; }
       a.muted = true;                 // the part iOS honours
       a.volume = 0.55;                // desktop only; ignored on iOS
@@ -2476,6 +2530,28 @@
     stage.addEventListener('keydown', function(e){
       if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openInvite(); }
     });
+  })();
+
+
+  /* ---------- reduced motion for the SVG sketches ----------
+     SMIL runs on the SVG's own timeline and is not covered by the CSS
+     prefers-reduced-motion query, so honour it here instead. Pausing rather
+     than removing keeps the smoke and the birds in the picture; they simply
+     stop moving, which is what the setting actually asks for. */
+  (function pauseSketches(){
+    if(!window.matchMedia) return;
+    var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    function apply(){
+      var svgs = document.querySelectorAll('.fund-sketch svg');
+      for(var i = 0; i < svgs.length; i++){
+        var s = svgs[i];
+        if(mq.matches){ if(s.pauseAnimations) s.pauseAnimations(); }
+        else          { if(s.unpauseAnimations) s.unpauseAnimations(); }
+      }
+    }
+    apply();
+    if(mq.addEventListener) mq.addEventListener('change', apply);
+    else if(mq.addListener) mq.addListener(apply);
   })();
 
   /* ---------- Mobile nav toggle ---------- */
@@ -2953,8 +3029,10 @@
 
     function layout(){
       if(!mids.length) return;
-      var vw  = trackEl.clientWidth;
-      var mid = trackEl.scrollLeft + vw / 2;
+      // the visible width is the carousel, not the track: once the reel is in
+      // transform mode the track is as wide as all 98 photographs put together
+      var vw  = carEl.clientWidth || trackEl.clientWidth;
+      var mid = pos + vw / 2;      // pos is authoritative; scrollLeft is rounded
       var span = vw * 0.42;
       var best = -1, bestDist = Infinity;
 
@@ -3052,6 +3130,39 @@
        threw the remainder away every frame and the reel crawled or stalled on
        120Hz screens (iPhone Pro, iPad Pro, most recent laptops). */
     var pos = 0;
+    var carEl = trackEl.parentElement;        // the clipping box
+
+    /* iOS hands overflow scrolling to a separate process, and on some builds a
+       scrollLeft written every frame simply does not take, which leaves the
+       reel frozen while every other browser animates it. Rather than guess
+       which browsers misbehave, the reel writes the position and then checks
+       whether it actually landed; if it did not, it switches to moving the
+       track with a compositor transform, which no browser ignores. */
+    var useTransform = false, probeFrames = 0;
+
+    /* NB: named applyPos, not paint. The lightbox further down declares its own
+       paint(url), and function declarations hoist, so a second paint() here
+       would be silently replaced by that one and every position write would
+       vanish into the image loader. */
+    function applyPos(){
+      if(useTransform){
+        trackEl.style.transform = 'translate3d(' + (-pos).toFixed(2) + 'px,0,0)';
+      } else {
+        trackEl.scrollLeft = pos;
+      }
+    }
+
+    function checkScrollHonoured(){
+      if(useTransform || probeFrames > 12) return;
+      probeFrames++;
+      if(probeFrames < 4) return;                 // let it settle first
+      if(pos > 4 && Math.abs(trackEl.scrollLeft - pos) > 3){
+        useTransform = true;
+        carEl.classList.add('reel-transform');
+        trackEl.scrollLeft = 0;
+        applyPos();
+      }
+    }
 
     function measure(){
       mids = new Array(tiles.length);
@@ -3086,7 +3197,8 @@
       if(!halted && !paused && !dragging && !reduce){
         pos += dt * PX_PER_MS;               // accumulate in full precision
         wrap();
-        trackEl.scrollLeft = pos;            // then hand the browser one value
+        applyPos();
+        checkScrollHonoured();
       }
       layout();
       rafId = requestAnimationFrame(frame);
@@ -3117,9 +3229,9 @@
       if(!mids.length) measure();
       // hard set: no smooth-scroll easing, so the chapter appears at once
       trackEl.style.scrollBehavior = 'auto';
-      pos = mids[t] - trackEl.clientWidth / 2;
+      pos = mids[t] - (carEl.clientWidth || trackEl.clientWidth) / 2;
       wrap();
-      trackEl.scrollLeft = pos;
+      applyPos();
       layout();
       // land on the chapter immediately rather than waiting for the reel to drift in
       setActive(al);
@@ -3135,7 +3247,7 @@
     trackEl.addEventListener('pointerdown', function(e){
       if(e.button && e.button !== 0) return;      // left button / touch only
       dragging = true; moved = 0; dragId = e.pointerId;
-      dragX = e.clientX; dragStart = trackEl.scrollLeft;
+      dragX = e.clientX; dragStart = pos;
       trackEl.classList.add('dragging');
     });
 
@@ -3146,7 +3258,7 @@
       if(moved > 4 && e.cancelable) e.preventDefault();
       pos = dragStart - dx;
       wrap();
-      trackEl.scrollLeft = pos;
+      applyPos();
     }
     function endDrag(){
       if(!dragging) return;
@@ -3169,8 +3281,8 @@
     });
     window.addEventListener('resize', function(){
       measure();
-      pos = trackEl.scrollLeft;     // tile widths changed; re-anchor
       wrap();
+      applyPos();
       layout();
     });
 
@@ -3311,7 +3423,7 @@
     requestAnimationFrame(function(){
       measure();
       pos = loopW;                  // start inside the middle pass
-      trackEl.scrollLeft = pos;
+      paint();
       layout();
       run();
     });
