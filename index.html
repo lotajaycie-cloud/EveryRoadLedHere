@@ -327,14 +327,6 @@
   }
 
   /* palettes */
-  .pal-pair{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:clamp(28px,4vw,52px); max-width:1000px; margin:0 auto 72px;
-  }
-  .pal-label{
-    font-size:10.5px; letter-spacing:2.8px; text-transform:uppercase;
-    color:var(--olive); margin-bottom:16px;
-  }
   .pal-row{display:grid; grid-template-columns:repeat(5,1fr); gap:8px;}
   .pal-chip{
     height:88px; border-radius:3px; margin-bottom:9px;
@@ -372,13 +364,27 @@
     box-shadow:0 2px 6px rgba(74,16,36,.10), 0 14px 32px rgba(74,16,36,.12);
   }
   .look-front{
-    display:flex; flex-direction:column; justify-content:center;
+    display:flex; flex-direction:column; justify-content:flex-start;
     padding:clamp(24px,3vw,40px); min-height:340px;
   }
+  .look-front .look-cue{margin-top:auto; padding-top:24px;}
   /* The front face is a clean, fully opaque white tile. The sample-look
      board is kept in the markup but hidden here — restore it by putting the
      opacity back to about .15 if the faint hint behind the text is wanted. */
   .look-front .ghost{display:none;}
+  /* The palette now lives inside the tile, sitting above the copy — the
+     swatches and the words about them are one object rather than two
+     separate blocks the eye has to pair up. A hairline separates them. */
+  .look-front .pal-row{
+    position:relative; margin-bottom:22px; padding-bottom:20px;
+    border-bottom:1px solid var(--champagne);
+  }
+  .look-front .pal-chip{
+    height:54px; margin-bottom:8px;
+    box-shadow:0 1px 2px rgba(74,16,36,.10), 0 4px 10px rgba(74,16,36,.09);
+  }
+  .look-front .pal-name{font-size:8.5px; letter-spacing:.6px; line-height:1.45;}
+
   .look-kicker{
     position:relative; font-size:10.5px; letter-spacing:2.8px; text-transform:uppercase;
     color:var(--olive); margin-bottom:13px;
@@ -436,7 +442,10 @@
     .pal-row{grid-template-columns:repeat(5,1fr); gap:5px;}
     .pal-chip{height:60px;}
     .pal-name{font-size:8.5px; letter-spacing:.4px;}
-    .look-front{min-height:0; padding:24px 20px;}   /* let the copy set the height */
+    .look-front{min-height:0; padding:24px 20px;}
+    .look-front .pal-chip{height:42px; margin-bottom:6px;}
+    .look-front .pal-row{margin-bottom:18px; padding-bottom:16px; gap:5px;}
+    .look-front .pal-name{font-size:7.5px; letter-spacing:.2px;}   /* let the copy set the height */
     .look-back{padding:8px 8px 6px;}
   }
   @media(prefers-reduced-motion:reduce){
@@ -1555,67 +1564,21 @@
       <span class="rule"></span>
     </div>
 
-    <div class="pal-pair">
-      <div>
-        <div class="pal-label">For the men &mdash; sage &amp; taupes</div>
-        <div class="pal-row">
-          <div class="pal-swatch">
-            <div class="pal-chip" style="background:#5E7355"></div>
-            <div class="pal-name">Forest Green</div>
-          </div>
-          <div class="pal-swatch">
-            <div class="pal-chip" style="background:#A8B5A2"></div>
-            <div class="pal-name">Sage Green</div>
-          </div>
-          <div class="pal-swatch">
-            <div class="pal-chip" style="background:#8F9F8C"></div>
-            <div class="pal-name">Olive Mist</div>
-          </div>
-          <div class="pal-swatch">
-            <div class="pal-chip" style="background:#C9B8A6"></div>
-            <div class="pal-name">Warm Sand</div>
-          </div>
-          <div class="pal-swatch">
-            <div class="pal-chip" style="background:#8B7F74"></div>
-            <div class="pal-name">Earthy Taupe</div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="pal-label">For the women &mdash; sage &amp; mauves</div>
-        <div class="pal-row">
-          <div class="pal-swatch">
-            <div class="pal-chip" style="background:#F8D0D3"></div>
-            <div class="pal-name">Ophelia Rose</div>
-          </div>
-          <div class="pal-swatch">
-            <div class="pal-chip" style="background:#B7959B"></div>
-            <div class="pal-name">Smoky Pink</div>
-          </div>
-          <div class="pal-swatch">
-            <div class="pal-chip" style="background:#A5738A"></div>
-            <div class="pal-name">Dusty Orchid</div>
-          </div>
-          <div class="pal-swatch">
-            <div class="pal-chip" style="background:#C0C9B4"></div>
-            <div class="pal-name">Muted Sage</div>
-          </div>
-          <div class="pal-swatch">
-            <div class="pal-chip" style="background:#A7AE74"></div>
-            <div class="pal-name">Light Olive</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="look-grid">
       <button type="button" class="look-card" aria-pressed="false">
         <div class="look-inner">
           <div class="look-face look-front">
             <img class="ghost" src="images/attire-men.jpg" alt="" aria-hidden="true">
-            <div class="look-kicker">Formal, in the palette above</div>
+            <div class="pal-row">
+              <div class="pal-swatch"><div class="pal-chip" style="background:#5E7355"></div><div class="pal-name">Forest Green</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#A8B5A2"></div><div class="pal-name">Sage Green</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#8F9F8C"></div><div class="pal-name">Olive Mist</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#C9B8A6"></div><div class="pal-name">Warm Sand</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#8B7F74"></div><div class="pal-name">Earthy Taupe</div></div>
+            </div>
+            <div class="look-kicker">Formal &middot; sage &amp; taupes</div>
             <h3>The Men</h3>
-            <p>Light and muted shades are what we love most &mdash; the softer sages, sands and taupes above. Wear yours as a formal suit or a long-sleeve shirt and trousers; both look right on the day.</p>
+            <p>Light and muted shades are what we love most &mdash; the softer sages, sands and taupes shown here. Wear yours as a formal suit or a long-sleeve shirt and trousers; both look right on the day.</p>
             <div class="look-cue">Tap for sample looks &rarr;</div>
           </div>
           <div class="look-face look-back">
@@ -1629,7 +1592,14 @@
         <div class="look-inner">
           <div class="look-face look-front">
             <img class="ghost" src="images/attire-women.jpg" alt="" aria-hidden="true">
-            <div class="look-kicker">Floor length, in the palette above</div>
+            <div class="pal-row">
+              <div class="pal-swatch"><div class="pal-chip" style="background:#F8D0D3"></div><div class="pal-name">Ophelia Rose</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#B7959B"></div><div class="pal-name">Smoky Pink</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#A5738A"></div><div class="pal-name">Dusty Orchid</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#C0C9B4"></div><div class="pal-name">Muted Sage</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#A7AE74"></div><div class="pal-name">Light Olive</div></div>
+            </div>
+            <div class="look-kicker">Floor length &middot; sage &amp; mauves</div>
             <h3>The Women</h3>
             <p>Light and muted shades are preferred &mdash; soft roses, dusty mauves and pale sages rather than anything deep or bright. Floor length, and the silhouette is entirely yours.</p>
             <div class="look-cue">Tap for sample looks &rarr;</div>
@@ -2477,11 +2447,18 @@
                                    // the chapter-click pause, fixed separately.
 
     var loopW = 0, mids = [], PX_PER_MS = 0.045;
+    /* The scroll position is tracked here as a float rather than read back
+       from scrollLeft each frame. Browsers round scrollLeft to whole pixels,
+       and above 60Hz one frame of drift is less than 1px — so `scrollLeft +=`
+       threw the remainder away every frame and the reel crawled or stalled on
+       120Hz screens (iPhone Pro, iPad Pro, most recent laptops). */
+    var pos = 0;
 
     function measure(){
       mids = new Array(tiles.length);
+      var base = trackEl.offsetLeft;          // keep midpoints track-relative
       for(var k = 0; k < tiles.length; k++){
-        mids[k] = tiles[k].offsetLeft + tiles[k].offsetWidth / 2;
+        mids[k] = (tiles[k].offsetLeft - base) + tiles[k].offsetWidth / 2;
       }
       // exact distance between the same photo in pass 0 and pass 1 —
       // dividing scrollWidth would leave a gap-sized error and drift the seam
@@ -2499,8 +2476,8 @@
 
     function wrap(){
       if(loopW <= 0) return;
-      if(trackEl.scrollLeft >= loopW * 1.5)      trackEl.scrollLeft -= loopW;
-      else if(trackEl.scrollLeft < loopW * 0.5)  trackEl.scrollLeft += loopW;
+      if(pos >= loopW * 1.5)      pos -= loopW;
+      else if(pos < loopW * 0.5)  pos += loopW;
     }
 
     function frame(ts){
@@ -2508,8 +2485,9 @@
       var dt = Math.min(64, ts - last);        // clamp after a background tab
       last = ts;
       if(!halted && !paused && !dragging && !reduce){
-        trackEl.scrollLeft += dt * PX_PER_MS;
+        pos += dt * PX_PER_MS;               // accumulate in full precision
         wrap();
+        trackEl.scrollLeft = pos;            // then hand the browser one value
       }
       layout();
       rafId = requestAnimationFrame(frame);
@@ -2540,8 +2518,9 @@
       if(!mids.length) measure();
       // hard set: no smooth-scroll easing, so the chapter appears at once
       trackEl.style.scrollBehavior = 'auto';
-      trackEl.scrollLeft = mids[t] - trackEl.clientWidth / 2;
+      pos = mids[t] - trackEl.clientWidth / 2;
       wrap();
+      trackEl.scrollLeft = pos;
       layout();
       // land on the chapter immediately rather than waiting for the reel to drift in
       setActive(al);
@@ -2566,8 +2545,9 @@
       var dx = e.clientX - dragX;
       moved = Math.max(moved, Math.abs(dx));
       if(moved > 4 && e.cancelable) e.preventDefault();
-      trackEl.scrollLeft = dragStart - dx;
+      pos = dragStart - dx;
       wrap();
+      trackEl.scrollLeft = pos;
     }
     function endDrag(){
       if(!dragging) return;
@@ -2588,7 +2568,12 @@
     document.addEventListener('visibilitychange', function(){
       if(document.hidden) stop(); else run();
     });
-    window.addEventListener('resize', function(){ measure(); layout(); });
+    window.addEventListener('resize', function(){
+      measure();
+      pos = trackEl.scrollLeft;     // tile widths changed; re-anchor
+      wrap();
+      layout();
+    });
 
     /* ---- lightbox: fit-to-screen, with a true full-resolution view ---- */
     var lbAlbum = ALBUMS[0], idx = 0, lastFocus = null;
@@ -2726,7 +2711,8 @@
     emptyEl.hidden = true;
     requestAnimationFrame(function(){
       measure();
-      trackEl.scrollLeft = loopW;   // start inside the middle pass
+      pos = loopW;                  // start inside the middle pass
+      trackEl.scrollLeft = pos;
       layout();
       run();
     });
