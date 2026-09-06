@@ -202,7 +202,7 @@
   }
   .reveal-stage{
     width:100%; max-width:1180px; margin:0 auto; padding:0 clamp(22px,5vw,64px);
-    display:grid; grid-template-columns:minmax(320px, 46%) 1fr; align-items:center; gap:0;
+    display:grid; grid-template-columns:minmax(min(320px,100%), 46%) 1fr; align-items:center; gap:0;
   }
   .reveal-left{position:relative;}
   .reveal-heading .eyebrow{text-align:left; margin-bottom:12px; color:var(--blush);}
@@ -341,7 +341,7 @@
 
   /* flip cards — tap to see sample looks */
   .look-grid{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));
     gap:clamp(18px,2.4vw,28px); max-width:1180px; margin:0 auto;
   }
   .look-card{
@@ -414,7 +414,7 @@
   .attire-notes{
     max-width:1000px; margin:72px auto 0; background:#fff;
     border:1px solid var(--blush); border-radius:4px; padding:clamp(28px,4vw,48px);
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:clamp(26px,3.4vw,40px);
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr)); gap:clamp(26px,3.4vw,40px);
   }
   .attire-notes h4{
     font-size:10.5px; letter-spacing:2.8px; text-transform:uppercase;
@@ -1007,7 +1007,7 @@
   .gallery{background:var(--ivory);}
   .album{
     max-width:1240px; margin:0 auto;
-    display:grid; grid-template-columns:minmax(220px, 27%) 1fr; gap:clamp(26px,3.4vw,52px);
+    display:grid; grid-template-columns:minmax(min(220px,100%), 27%) 1fr; gap:clamp(26px,3.4vw,52px);
     align-items:center;
   }
 
@@ -1522,8 +1522,76 @@
     .navlinks a{letter-spacing:1.1px;}
   }
 
-  /* Tap targets. 44px is Apple's floor and Android's is 48dp; the gate
-     button and the code field are the two new ones that must clear it. */
+
+  /* ══════════════════════════════════════════════════════════════════════
+     MOBILE-FIRST LAYER
+     Phones are the primary surface. Everything here either fixes a measured
+     defect or improves the small-screen reading experience; nothing below
+     1024px-only rules touches the approved desktop composition.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  /* ---- 1. Touch targets -------------------------------------------------
+     Measured before this change: burger 22x16, direction buttons 36px tall,
+     FAQ shortcuts 39px, reveal toggles 40px. Apple's floor is 44px and
+     Android's is 48dp, so all of them were under. Raising the hit area does
+     not change any type size or colour. */
+  .navtoggle{
+    width:44px; height:44px; margin-right:-8px;
+    align-items:center; justify-content:center;
+  }
+  .faq-link{min-height:44px;}
+  .dir-btn{min-height:46px;}
+  .reveal-toggle{min-height:46px;}
+
+  @media(max-width:820px){
+    /* the dropdown is the touch surface, so give each row a full-size row */
+    .navlinks a{min-height:44px; display:flex; align-items:center;}
+  }
+  @media(min-width:821px) and (pointer:coarse){
+    /* an iPad shows the horizontal bar, where the links were only 16px tall.
+       min-height rather than padding alone, because padding plus a 16px line
+       box lands at 42 and the floor is 44. */
+    .navlinks a{min-height:44px; display:inline-flex; align-items:center;}
+  }
+
+  /* ---- 2. The two photograph chapters ----------------------------------
+     These had min-height:auto on phones, so each collapsed to about 356px:
+     a full-bleed photograph reduced to a letterbox band, while the desktop
+     gives them 792px. Height is added on the inner stage rather than the
+     section, because the photograph and its wash are absolutely positioned
+     pseudo-elements on the section and must not become layout children. */
+  @media(max-width:820px){
+    .reveal-section .reveal-stage{
+      min-height:min(58vh, 430px);
+      align-content:center;
+    }
+  }
+  @media(max-width:420px){
+    .reveal-section .reveal-stage{min-height:min(54vh, 380px);}
+  }
+
+  /* ---- 3. Vertical rhythm ----------------------------------------------
+     A flat 60px gap under every section intro is desktop spacing worn on a
+     phone. Fluid values keep the proportion instead of the pixel count. */
+  @media(max-width:820px){
+    .section-sub{
+      margin-bottom:clamp(30px, 7vw, 60px);
+      font-size:15.5px; line-height:1.7;
+      padding-left:2px; padding-right:2px;
+    }
+    .section-title{margin-bottom:16px;}
+  }
+
+  /* ---- 4. Long words and headings --------------------------------------
+     Nothing in the copy currently overflows, but venue names and email
+     addresses are the classic cause of a stray horizontal scrollbar on a
+     320px screen, so headings and body copy are allowed to break rather
+     than push the page wide. */
+  h1, h2, h3, h4, p, li, a, .section-title, .tab-line, .gw-name{
+    overflow-wrap:break-word;
+  }
+
+  /* The RSVP gate controls, held at the same 44px floor as everything else. */
   #guestcode{min-height:48px;}
   .rsvp-gate .submit-btn{min-height:48px;}
   .gw-swap{min-height:44px; display:inline-flex; align-items:center;}
