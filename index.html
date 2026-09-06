@@ -421,11 +421,16 @@
     display:flex; justify-content:center; margin:60px auto 0; max-width:1000px;
   }
   .attire-bar span{width:34px; height:6px;}
+  /* the reminder occupies the third column where Accents used to sit;
+     centred in its cell so the missing label doesn't read as an omission */
+  .attire-notes .note-cell{display:flex; align-items:center;}
   .attire-notes .avoid{
-    grid-column:1 / -1; margin:4px 0 0; padding-top:24px; text-align:center;
-    border-top:1px solid var(--champagne);
-    font-size:15px; color:var(--burgundy); font-style:italic;
-    font-family:'Cormorant Garamond', serif; font-weight:300;
+    margin:0; font-size:16px; line-height:1.7; color:var(--burgundy);
+    font-style:italic; font-family:'Cormorant Garamond', serif; font-weight:300;
+  }
+  @media(max-width:760px){
+    .attire-notes .note-cell{padding-top:8px; border-top:1px solid var(--champagne);}
+    .attire-notes .avoid{padding-top:20px;}
   }
   @media(max-width:560px){
     .pal-row{grid-template-columns:repeat(5,1fr); gap:5px;}
@@ -1644,13 +1649,11 @@
       </div>
       <div>
         <h4>Footwear</h4>
-        <p>The ceremony and cocktail hour are on lawn. Block heels, wedges or flats for the ladies. Leather or suede soles for the men &mdash; no trainers.</p>
+        <p>The cocktail hour and reception are on lawn. Block heels, wedges or flats for the ladies. Leather or suede soles for the men &mdash; no trainers.</p>
       </div>
-      <div>
-        <h4>Accents</h4>
-        <p>Light Olive is the tie-in between the two palettes. One accent per outfit is plenty: a tie, a sash, a clutch, a boutonni&egrave;re.</p>
+      <div class="note-cell">
+        <p class="avoid">With love, we kindly ask guests to avoid wearing champagne, as it&rsquo;s reserved for the bride.</p>
       </div>
-      <p class="avoid">With love, we kindly ask guests to avoid wearing champagne, as it&rsquo;s reserved for the bride.</p>
     </div>
 
     <div class="attire-bar"><span style="background:#F8D0D3"></span><span style="background:#B7959B"></span><span style="background:#A5738A"></span><span style="background:#C0C9B4"></span><span style="background:#A7AE74"></span><span style="background:#A8B5A2"></span><span style="background:#8F9F8C"></span><span style="background:#C9B8A6"></span></div>
