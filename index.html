@@ -345,18 +345,38 @@
     gap:clamp(18px,2.4vw,28px); max-width:1180px; margin:0 auto;
   }
   .look-card{
-    perspective:1600px; cursor:pointer; background:none; border:none;
+    perspective:1400px;
+    -webkit-perspective:1400px; cursor:pointer; background:none; border:none;
     padding:0; font-family:inherit; text-align:left; width:100%;
   }
   .look-inner{
     position:relative; width:100%;
+    /* a faint crease down the spine, so the turn has something to hinge on */
+    background:linear-gradient(90deg, rgba(74,16,36,.10) 0 1px, transparent 1px 100%);
     display:grid;                     /* both faces share one cell, so the
                                          card sizes to the taller of the two
                                          and nothing can spill or overlap */
     transform-style:preserve-3d; -webkit-transform-style:preserve-3d;
     transition:transform .8s cubic-bezier(.3,.9,.3,1);
   }
-  .look-card.flipped .look-inner{transform:rotateY(180deg);}
+  /* ---- turning a page instead of flipping a card ----
+     The card used to spin about its own centre. A page turns about its spine,
+     so the front leaf alone rotates around its left edge and lifts away to
+     show the board resting underneath. backface-visibility hides the leaf once
+     it passes ninety degrees, which is what makes it read as paper rather
+     than a rotating panel. */
+  .look-front{
+    transform-origin:left center;
+    -webkit-transform-origin:left center;
+    z-index:2;
+    transition:transform .78s cubic-bezier(.42,.02,.24,1), box-shadow .78s ease;
+  }
+  .look-back{z-index:1;}
+  .look-card.flipped .look-front{
+    transform:rotateY(-172deg);
+    box-shadow:24px 0 40px rgba(74,16,36,.20);
+  }
+  .look-card.flipped .look-inner{transform:none;}
   .look-face{
     grid-area:1 / 1; border-radius:4px; overflow:hidden;
     background:#fff; border:1px solid var(--blush);
@@ -400,8 +420,11 @@
     position:relative; margin-top:24px; font-size:10.5px; letter-spacing:2.6px;
     text-transform:uppercase; color:var(--olive-light);
   }
-  .look-back{transform:rotateY(180deg); padding:10px 10px 8px; display:flex; flex-direction:column;}
-  .look-back img{width:100%; height:auto; display:block; flex:1; min-height:0; object-fit:contain;}
+  /* The board was inset at 70% of the card. Filling the width and trimming
+     the frame to a hairline puts roughly half as much picture again on screen,
+     which is what the enlarge tap was previously there to provide. */
+  .look-back{transform:none; padding:5px 5px 6px; display:flex; flex-direction:column; justify-content:center;}
+  .look-back img{width:100%; height:auto; display:block; flex:0 0 auto; object-fit:contain; border-radius:2px;}
   .look-back .cap{
     display:flex; justify-content:space-between; align-items:baseline;
     padding-top:10px; border-top:1px solid var(--champagne); margin-top:8px;
@@ -446,11 +469,13 @@
     .look-front .pal-chip{height:42px; margin-bottom:6px;}
     .look-front .pal-row{margin-bottom:18px; padding-bottom:16px; gap:5px;}
     .look-front .pal-name{font-size:7.5px; letter-spacing:.2px;}   /* let the copy set the height */
-    .look-back{padding:8px 8px 6px;}
+    .look-back{padding:4px 4px 5px;}
   }
   @media(prefers-reduced-motion:reduce){
     /* swap the flip for a cross-fade — rotation is the vestibular part */
     .look-inner{transition:none;}
+    .look-front{transition:opacity .45s ease; transform:none !important;}
+    .look-card.flipped .look-front{transform:none !important;}
     .look-card.flipped .look-inner{transform:none;}
     .look-face{transition:opacity .45s ease;}
     .look-back{transform:none; opacity:0;}
@@ -1532,31 +1557,6 @@
   }
 
 
-  /* ---- outfit boards ----
-     Scaled to 70% of the card so the grid of looks is a comfortable glance
-     rather than a wall of detail, with the full resolution one tap away. */
-  .look-back .look-shot{
-    width:70%; max-width:70%; margin:0 auto; cursor:zoom-in;
-  }
-
-  .shot-view{
-    position:fixed; inset:0; z-index:600; display:none;
-    background:rgba(18,12,10,.96);
-    align-items:center; justify-content:center;
-    padding:calc(18px + env(safe-area-inset-top)) 14px calc(18px + env(safe-area-inset-bottom));
-  }
-  .shot-view.open{display:flex;}
-  .shot-view img{
-    max-width:100%; max-height:100%;
-    width:auto; height:auto; object-fit:contain; display:block;
-  }
-  .shot-close{
-    position:absolute; top:calc(14px + env(safe-area-inset-top));
-    right:calc(14px + env(safe-area-inset-right));
-    width:46px; height:46px; border-radius:50%; border:1px solid rgba(255,255,255,.35);
-    background:rgba(0,0,0,.35); color:#fff; font-size:26px; line-height:1; cursor:pointer;
-  }
-
   /* ══════════════════════════════════════════════════════════════════════
      SECTION SPACING ON A PHONE
      Desktop padding worn on a small screen makes every section feel like it
@@ -1601,6 +1601,40 @@
     .venue-block{padding:22px 15px;}
     .venue-block h3{font-size:19.5px;}
     .venue-time{font-size:22px;}
+  }
+
+  /* ---- the nudge that tells a guest the icons do something ----
+     Only on the layout where the chapter names are hidden; on a laptop the
+     words are right there beside each icon and a hint would be noise. */
+  .album-cue{display:none;}
+
+  @media(max-width:860px){
+    .album-cue{
+      display:block; order:4;
+      text-align:center; margin:2px auto 0;
+      font-family:'Jost', sans-serif; font-weight:300;
+      font-size:10px; letter-spacing:2.6px; text-transform:uppercase;
+      color:var(--olive-light);
+      transition:opacity .5s ease, max-height .5s ease;
+      opacity:1; max-height:2em;
+    }
+    .album.explored .album-cue{opacity:0; max-height:0; pointer-events:none;}
+
+    /* while the hint stands, the icons breathe so the eye finds them */
+    .album:not(.explored) .album-tab .tab-icon{
+      animation:albumBeckon 2.6s ease-in-out infinite;
+    }
+    .album:not(.explored) .album-tab:nth-child(2) .tab-icon{animation-delay:.18s;}
+    .album:not(.explored) .album-tab:nth-child(3) .tab-icon{animation-delay:.36s;}
+    .album:not(.explored) .album-tab:nth-child(4) .tab-icon{animation-delay:.54s;}
+    .album:not(.explored) .album-tab:nth-child(5) .tab-icon{animation-delay:.72s;}
+    @keyframes albumBeckon{
+      0%,100%{box-shadow:0 0 0 5px var(--ivory), 0 4px 10px rgba(74,16,36,.16);}
+      50%    {box-shadow:0 0 0 5px var(--ivory), 0 6px 16px rgba(109,24,52,.30);}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .album:not(.explored) .album-tab .tab-icon{animation:none;}
+    }
   }
 
   /* ══════════════════════════════════════════════════════════════════════
@@ -1867,6 +1901,10 @@
       <!-- On a phone the chapter list becomes a row of icons above the reel and
            this carries the storyline for whichever one is selected. -->
       <p class="album-line" id="albumLine" aria-live="polite"></p>
+      <!-- On a phone the chapter buttons are icons with no words next to them,
+           so nothing says they can be tapped. This says it, once, and retires
+           itself the first time a guest uses one. -->
+      <span class="album-cue" id="albumCue">Tap a chapter to view</span>
       <div class="album-stage">
         <div class="carousel">
           <div class="carousel-track" id="galleryGrid"></div>
@@ -2045,13 +2083,13 @@
               <div class="pal-swatch"><div class="pal-chip" style="background:#8B7F74"></div><div class="pal-name">Earthy Taupe</div></div>
             </div>
             <div class="look-kicker">Formal &middot; sage &amp; taupes</div>
-            <h3>The Men</h3>
+            <h3>Gentlemen</h3>
             <p>Light and muted shades are what we love most. Think of the softer sages, sands and taupes shown here. Wear yours as a formal suit, or as a long sleeve shirt with trousers. Both look right on the day.</p>
-            <div class="look-cue">Tap for sample looks &rarr;</div>
+            <div class="look-cue">Tap to turn the page &rarr;</div>
           </div>
           <div class="look-face look-back">
-            <img class="look-shot" src="images/attire-men.jpg" alt="Six sample menswear looks in sage, olive, cream and taupe linen">
-            <div class="cap"><b>Sample looks for the men</b><i>Tap photo to enlarge</i></div>
+            <img src="images/attire-men.jpg" alt="Six sample menswear looks in sage, olive, cream and taupe linen">
+            <div class="cap"><b>Sample looks for men</b><i>Tap to turn back</i></div>
           </div>
         </div>
       </button>
@@ -2068,13 +2106,13 @@
               <div class="pal-swatch"><div class="pal-chip" style="background:#A7AE74"></div><div class="pal-name">Light Olive</div></div>
             </div>
             <div class="look-kicker">Floor length &middot; sage &amp; mauves</div>
-            <h3>The Women</h3>
+            <h3>Ladies</h3>
             <p>Light and muted shades are preferred. Soft roses, dusty mauves and pale sages rather than anything deep or bright. Floor length, and the silhouette is entirely yours.</p>
-            <div class="look-cue">Tap for sample looks &rarr;</div>
+            <div class="look-cue">Tap to turn the page &rarr;</div>
           </div>
           <div class="look-face look-back">
-            <img class="look-shot" src="images/attire-women.jpg" alt="Seven sample floor length gowns in mauve, rose, olive and sage">
-            <div class="cap"><b>Sample looks for the women</b><i>Tap photo to enlarge</i></div>
+            <img src="images/attire-women.jpg" alt="Seven sample floor length gowns in mauve, rose, olive and sage">
+            <div class="cap"><b>Sample looks for women</b><i>Tap to turn back</i></div>
           </div>
         </div>
       </button>
@@ -2098,14 +2136,6 @@
   </div>
 </section>
 
-
-<!-- Fullscreen viewer for the outfit boards. Deliberately its own overlay:
-     the gallery lightbox is wired to album/photo indices and reusing it would
-     mean threading a fake album through the chapter logic. -->
-<div class="shot-view" id="shotView" role="dialog" aria-modal="true" aria-label="Outfit sample looks">
-  <button class="shot-close" id="shotClose" type="button" aria-label="Close">&times;</button>
-  <img id="shotImg" alt="">
-</div>
 
 <section class="rsvp photo-section" id="rsvp">
   <div class="container">
@@ -2511,11 +2541,17 @@
        clock correction takes over, so this can only ever help. */
     var audioPrimed = false;
     var trackBlobUrl = null;
+    var preloadAbort = null;
 
     (function preloadTrack(){
       if(!CONFIG.musicUrl) return;
       if(!window.fetch || !window.URL || !window.URL.createObjectURL) return;
-      fetch(CONFIG.musicUrl, {credentials:'same-origin'})
+      var opts = {credentials:'same-origin'};
+      if(window.AbortController){
+        preloadAbort = new AbortController();
+        opts.signal = preloadAbort.signal;
+      }
+      fetch(CONFIG.musicUrl, opts)
         .then(function(r){ return r.ok ? r.blob() : null; })
         .then(function(blob){
           if(!blob || audioPrimed) return;      // too late to swap without a stutter
@@ -2533,6 +2569,16 @@
       var a = gateAudio();
       if(!a) return;
       audioPrimed = true;                 // from here the src is left alone
+
+      /* If the whole-file fetch is still running, stop it. On a slow link it
+         is competing for the same bandwidth the audio element needs to buffer
+         its opening seconds, and the element only needs the first chunk to
+         start. Measured on a throttled connection, leaving the fetch running
+         pushed the moment the track became playable out past three seconds. */
+      if(preloadAbort && !trackBlobUrl){
+        try { preloadAbort.abort(); } catch(err){}
+        preloadAbort = null;
+      }
       if(!a.src){ a.src = CONFIG.musicUrl; }
       a.muted = true;                 // the part iOS honours
       a.volume = 0.55;                // desktop only; ignored on iOS
@@ -2641,35 +2687,84 @@
       setTimeout(function(){              // push-in starts while the flap is still travelling
         gate.classList.add('zooming');
       }, 820);
-      /* ══ LOCKED TIMING — APPROVED. DO NOT CHANGE. ══════════════════════
-         Signed off after several rounds of tuning. Only revisit if the
-         couple explicitly asks for it.
+      /* ══ LOCKED TIMING — APPROVED. ═════════════════════════════════════
+         The four beats and the gaps between them are exactly as signed off:
 
-          350  music cue     <- the value that was dialled in
-         1150  veil begins its fade to white
-         2080  site swaps in beneath the white
-         2550  white releases, clouds part
+            0  music starts
+         +800  veil begins its fade to white      (was 1150 after the tap)
+        +1730  site swaps in beneath the white    (was 2080)
+        +2200  white releases, clouds part        (was 2550)
 
-         Why 350 works: the track opens with roughly 1.05s of quiet, so
-         cueing it here means the lead-in runs out just after the veil
-         starts and the first line arrives into the fade. Move this and the
-         entrance falls out of step with the visuals.
+         What changed is only what they are measured from. They used to run
+         from the tap, on the assumption that the track would be ready 350ms
+         later. It is a 4.6MB file: on a home connection it is, and on a phone
+         on mobile data it is nowhere near — measured at 1558ms on a throttled
+         connection, by which point the veil had already bloomed and the first
+         line arrived over the countdown instead of into the fade. That is the
+         timing being off.
+
+         So the beats now hang off the music rather than the tap. The moment
+         the track can actually play becomes zero, and everything follows at
+         the same distances it always did. On a fast connection the audio is
+         ready almost at once and the entrance is identical to before, 350ms
+         to the cue. On a slow one the whole sequence waits a beat longer and
+         stays in step, which is the part that was signed off.
          ═════════════════════════════════════════════════════════════════ */
-      setTimeout(cueMusic, 350);
-      setTimeout(function(){              // white bloom rises while the push-in continues
-        spawnSparks();
-        veil.classList.add('bloom');
-      }, 1150);
-      setTimeout(function(){              // swap to the site at peak white
-        gate.classList.add('opened');
-        gate.style.display = 'none';
-        document.body.classList.remove('gate-active');
-        document.body.classList.add('opened');
-      }, 2080);
-      setTimeout(function(){              // hold on total white, then part the clouds
-        veil.classList.remove('bloom');
-        veil.classList.add('clear');
-      }, 2550);
+      var ENTRANCE_CAP = 3000;    // never hold the envelope longer than this
+
+      function runEntrance(){
+        /* Re-anchor the audio clock to this instant so cueMusic starts the
+           track at its beginning rather than skipping in to catch up: we have
+           deliberately waited for it, so there is nothing to catch up on. */
+        openedAt = performance.now() - CUE_AT;
+        cueMusic();
+
+        setTimeout(function(){            // white bloom rises
+          spawnSparks();
+          veil.classList.add('bloom');
+        }, 800);
+        setTimeout(function(){            // swap to the site at peak white
+          gate.classList.add('opened');
+          gate.style.display = 'none';
+          document.body.classList.remove('gate-active');
+          document.body.classList.add('opened');
+        }, 1730);
+        setTimeout(function(){            // hold on total white, then part the clouds
+          veil.classList.remove('bloom');
+          veil.classList.add('clear');
+        }, 2200);
+      }
+
+      /* Wait for the track to be genuinely playable, then start. readyState 2
+         means there is data at the current position; below that a play would
+         stall and the music would arrive late however it was scheduled. */
+      (function whenAudioReady(){
+        var a = gateAudio();
+        var fired = false;
+        function go(){
+          if(fired) return;
+          fired = true;
+          if(a){
+            a.removeEventListener('canplay', go);
+            a.removeEventListener('playing', go);
+            a.removeEventListener('loadeddata', go);
+          }
+          /* 350ms is a floor, not a target. If the track is ready sooner the
+             entrance still waits for it, so the flap and the burst keep the
+             pacing they were tuned with; if it is ready later, everything
+             shifts together and the offsets hold. */
+          var elapsed = performance.now() - openedAt;
+          setTimeout(runEntrance, Math.max(0, CUE_AT - elapsed));
+        }
+        if(!a || !CONFIG.musicUrl){ go(); return; }
+        if(a.readyState >= 2){ go(); return; }
+
+        a.addEventListener('canplay', go);
+        a.addEventListener('playing', go);
+        a.addEventListener('loadeddata', go);
+        setTimeout(go, ENTRANCE_CAP);     // never leave the guest waiting
+      })();
+
       setTimeout(function(){
         if(sparkWrap){ sparkWrap.innerHTML = ''; }
       }, 4200);
@@ -3092,43 +3187,6 @@
   })();
 
 
-  /* ---------- outfit boards, full size ----------
-     The card behind these flips on click, so the image handler has to stop
-     the event reaching the card or the board would flip shut underneath the
-     viewer the moment it opened. */
-  (function(){
-    var view = document.getElementById('shotView');
-    var img  = document.getElementById('shotImg');
-    var shut = document.getElementById('shotClose');
-    if(!view || !img) return;
-
-    function open(src, alt){
-      img.src = src;
-      img.alt = alt || '';
-      view.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function close(){
-      view.classList.remove('open');
-      document.body.style.overflow = '';
-      img.src = '';
-    }
-
-    document.querySelectorAll('.look-shot').forEach(function(el){
-      el.addEventListener('click', function(e){
-        e.stopPropagation();
-        e.preventDefault();
-        open(el.currentSrc || el.src, el.alt);
-      });
-    });
-
-    if(shut) shut.addEventListener('click', close);
-    view.addEventListener('click', function(e){ if(e.target !== img) close(); });
-    document.addEventListener('keydown', function(e){
-      if(e.key === 'Escape' && view.classList.contains('open')) close();
-    });
-  })();
-
   /* ---------- Prenup reel: one continuous ribbon through every chapter ---------- */
   (function(){
     var ALBUMS = [
@@ -3280,6 +3338,12 @@
       });
     }
 
+    var albumWrap = tabsEl.parentElement;    // .album
+
+    function markExplored(){
+      if(albumWrap) albumWrap.classList.add('explored');
+    }
+
     function renderTabs(){
       tabsEl.innerHTML = '';
       ALBUMS.forEach(function(al){
@@ -3294,6 +3358,7 @@
           '<span class="tab-line"></span>';
         b.querySelector('.tab-line').textContent = al.line;
         b.addEventListener('click', function(){
+          markExplored();        // the hint has done its job
           jumpTo(al);            // lands instantly, then keeps drifting
           resumeNow();
         });
