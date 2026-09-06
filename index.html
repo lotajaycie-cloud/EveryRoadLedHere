@@ -1603,37 +1603,48 @@
     .venue-time{font-size:22px;}
   }
 
-  /* ---- the nudge that tells a guest the icons do something ----
-     Only on the layout where the chapter names are hidden; on a laptop the
-     words are right there beside each icon and a hint would be noise. */
-  .album-cue{display:none;}
+  /* ---- pointing at the chapter that comes next ----
+     The icons alone say nothing about being tappable. Rather than a general
+     hint, the chapter after the one playing carries a slow beat and a small
+     note, so the invitation is attached to a specific thing to press. The
+     chapter being shown does not beat, because it has already been chosen. */
+  .tab-hint{display:none;}
 
   @media(max-width:860px){
-    .album-cue{
-      display:block; order:4;
-      text-align:center; margin:2px auto 0;
-      font-family:'Jost', sans-serif; font-weight:300;
-      font-size:10px; letter-spacing:2.6px; text-transform:uppercase;
-      color:var(--olive-light);
-      transition:opacity .5s ease, max-height .5s ease;
-      opacity:1; max-height:2em;
-    }
-    .album.explored .album-cue{opacity:0; max-height:0; pointer-events:none;}
+    .album-tab{position:relative;}
+    .album-tabs{padding-bottom:26px;}      /* room for the note to sit under */
 
-    /* while the hint stands, the icons breathe so the eye finds them */
-    .album:not(.explored) .album-tab .tab-icon{
-      animation:albumBeckon 2.6s ease-in-out infinite;
+    .album-tab.next .tab-hint{
+      display:block;
+      position:absolute; top:100%; left:50%;
+      transform:translateX(-50%);
+      margin-top:3px; white-space:nowrap;
+      font-family:'Jost', sans-serif; font-weight:300;
+      font-size:9px; letter-spacing:2.2px; text-transform:uppercase;
+      color:var(--burgundy); opacity:.85;
+      animation:hintFade .6s ease both;
     }
-    .album:not(.explored) .album-tab:nth-child(2) .tab-icon{animation-delay:.18s;}
-    .album:not(.explored) .album-tab:nth-child(3) .tab-icon{animation-delay:.36s;}
-    .album:not(.explored) .album-tab:nth-child(4) .tab-icon{animation-delay:.54s;}
-    .album:not(.explored) .album-tab:nth-child(5) .tab-icon{animation-delay:.72s;}
-    @keyframes albumBeckon{
-      0%,100%{box-shadow:0 0 0 5px var(--ivory), 0 4px 10px rgba(74,16,36,.16);}
-      50%    {box-shadow:0 0 0 5px var(--ivory), 0 6px 16px rgba(109,24,52,.30);}
+    @keyframes hintFade{ from{opacity:0; transform:translate(-50%, -3px);}
+                         to  {opacity:.85; transform:translate(-50%, 0);} }
+
+    /* a slow beat, closer to breathing than blinking */
+    .album-tab.next .tab-icon{
+      animation:albumBeat 3.4s ease-in-out infinite;
+      border-color:var(--burgundy);
     }
+    @keyframes albumBeat{
+      0%, 100%{ transform:scale(1);
+                box-shadow:0 0 0 5px var(--ivory), 0 3px 9px rgba(74,16,36,.16); }
+      48%     { transform:scale(1.11);
+                box-shadow:0 0 0 5px var(--ivory), 0 0 0 8px rgba(109,24,52,.10), 0 7px 18px rgba(109,24,52,.28); }
+    }
+
+    /* the chosen one is still, and sits above the beat if they are neighbours */
+    .album-tab.active .tab-icon{animation:none; z-index:2;}
+
     @media(prefers-reduced-motion:reduce){
-      .album:not(.explored) .album-tab .tab-icon{animation:none;}
+      .album-tab.next .tab-icon{animation:none; box-shadow:0 0 0 5px var(--ivory), 0 0 0 8px rgba(109,24,52,.12);}
+      .album-tab.next .tab-hint{animation:none;}
     }
   }
 
@@ -1680,7 +1691,7 @@
     .album-line{
       display:block;
       font-size:16px;
-      margin:14px auto 4px;
+      margin:8px auto 4px;
       max-width:19em;
       min-height:2.8em;
     }
@@ -1901,10 +1912,7 @@
       <!-- On a phone the chapter list becomes a row of icons above the reel and
            this carries the storyline for whichever one is selected. -->
       <p class="album-line" id="albumLine" aria-live="polite"></p>
-      <!-- On a phone the chapter buttons are icons with no words next to them,
-           so nothing says they can be tapped. This says it, once, and retires
-           itself the first time a guest uses one. -->
-      <span class="album-cue" id="albumCue">Tap a chapter to view</span>
+
       <div class="album-stage">
         <div class="carousel">
           <div class="carousel-track" id="galleryGrid"></div>
@@ -3282,17 +3290,21 @@
     function setActive(al){
       activeAlbum = al;
       if(lineEl) lineEl.textContent = al.line || '';
+
+      /* Whichever chapter is playing, the one after it is the invitation.
+         It carries the beat and the note; the chapter already being shown
+         does not, because it has been chosen. Wraps round at the end so the
+         fifth chapter points back at the first. */
+      var at = -1;
+      for(var q = 0; q < ALBUMS.length; q++){ if(ALBUMS[q].id === al.id){ at = q; break; } }
+      var nextId = (at >= 0) ? ALBUMS[(at + 1) % ALBUMS.length].id : null;
+
       Array.prototype.forEach.call(tabsEl.children, function(b){
         var on = b.dataset.album === al.id;
         b.classList.toggle('active', on);
+        b.classList.toggle('next', b.dataset.album === nextId);
         b.setAttribute('aria-selected', on ? 'true' : 'false');
       });
-    }
-
-    var albumWrap = tabsEl.parentElement;    // .album
-
-    function markExplored(){
-      if(albumWrap) albumWrap.classList.add('explored');
     }
 
     function renderTabs(){
@@ -3306,10 +3318,10 @@
         b.innerHTML =
           '<span class="tab-icon" aria-hidden="true">' + (ICONS[al.id] || '') + '</span>' +
           '<span class="tab-num">' + al.num + '</span>' +
-          '<span class="tab-line"></span>';
+          '<span class="tab-line"></span>' +
+          '<span class="tab-hint" aria-hidden="true">Click to view</span>';
         b.querySelector('.tab-line').textContent = al.line;
         b.addEventListener('click', function(){
-          markExplored();        // the hint has done its job
           jumpTo(al);            // lands instantly, then keeps drifting
           resumeNow();
         });
