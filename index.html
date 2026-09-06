@@ -1419,6 +1419,102 @@
   body.gate-active{height:100dvh;}
 
 
+
+  /* ══════════════════════════════════════════════════════════════════
+     MOBILE LAYOUT — hero, gallery, and the shared icon scale
+     ══════════════════════════════════════════════════════════════════ */
+
+  @media(max-width:760px){
+    /* The countdown was a wrapping flex row. Because "Seconds" is wider than
+       "Days", the four tiles wrapped into two rows of different widths and
+       the second row ran into the SCROLL cue pinned to the hero's bottom.
+       An even 2x2 grid makes all four tiles the same size, and the hero gets
+       room at the foot so nothing can reach the cue. */
+    .countdown{
+      display:grid; grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:10px; width:100%; max-width:330px; margin:14px auto 0;
+    }
+    .countdown div{
+      padding:12px 6px; margin:0; min-width:0;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+    }
+    .countdown .num{font-size:27px; line-height:1.1;}
+    .countdown .lbl{font-size:9px; letter-spacing:1.4px;}
+
+    .hero{padding-bottom:calc(env(safe-area-inset-bottom) + 86px);}
+    .scroll-cue{bottom:18px;}
+    .scroll-cue .line{height:24px;}
+    .hero-content{width:100%; padding-left:6px; padding-right:6px;}
+  }
+
+  @media(max-width:400px){
+    .countdown{max-width:100%; gap:8px;}
+    .countdown .num{font-size:24px;}
+    .hero{padding-bottom:calc(env(safe-area-inset-bottom) + 78px);}
+  }
+
+  @media(max-width:860px){
+    /* The album grid kept its two columns all the way down, so on a phone the
+       chapter list held its 220px minimum and the carousel was left with the
+       remainder, which is why the photo showed as a narrow vertical sliver.
+       One column now, and the carousel comes first: guests see the photographs
+       straight away and read the chapter it belongs to underneath. */
+    .album{
+      grid-template-columns:1fr;
+      gap:26px;
+      align-items:stretch;
+    }
+    .album-stage{order:1;}
+    .album-tabs{order:2;}
+
+    /* The rail runs down the left of the list; the icons hang 52px to the left
+       of each row, so the padding has to leave at least that much or they get
+       cut off by the edge of the screen, which is what was happening. */
+    .album-tabs{
+      padding-left:54px; padding-right:4px;
+      justify-content:flex-start; gap:2px;
+    }
+    .album-tabs::before{left:19px;}
+    .album-tab{padding:11px 0;}
+    .album-tab .tab-icon{left:-54px;}
+  }
+
+  @media(max-width:600px){
+    /* Full-bleed reel. The track escapes the container so photographs run to
+       both edges the way they do on a laptop, where there is room to breathe. */
+    .album-stage{
+      width:100vw; margin-left:calc(50% - 50vw);
+      /* deliberately not translateX(-50%): a transform here would become the
+         containing block for the reel and put a second stacking context
+         between the tiles and their 3D, which Safari handles badly */
+    }
+    .carousel-track{padding-left:16px; padding-right:16px;}
+
+    /* the chapter list stays inside the container */
+    .album-tabs{padding-left:52px;}
+    .album-tabs::before{left:18px;}
+    .album-tab .tab-icon{left:-52px;}
+  }
+
+  /* One icon size across the whole site. The chapter list, the day timeline
+     and the gift plates were drifting apart; a shared scale is most of what
+     "cohesive" means when the screen is small. */
+  @media(max-width:760px){
+    .tab-icon{width:38px; height:38px;}
+    .tab-icon svg{width:19px; height:19px;}
+    .album-tab .tab-line{font-size:15.5px; line-height:1.45;}
+    .album-tab .tab-num{font-size:9px;}
+  }
+
+
+  /* An absolutely positioned box measures from its ancestor's padding EDGE,
+     so the safe-area padding on .lightbox does not shift these. They need the
+     inset themselves or they sit under the iPhone home indicator. */
+  .lb-zoom { bottom:calc(20px + env(safe-area-inset-bottom)); right:calc(22px + env(safe-area-inset-right)); }
+  .lb-dim  { bottom:calc(24px + env(safe-area-inset-bottom)); left:calc(22px + env(safe-area-inset-left)); }
+  .lb-count{ bottom:calc(20px + env(safe-area-inset-bottom)); }
+  .lb-close{ top:calc(18px + env(safe-area-inset-top)); right:calc(18px + env(safe-area-inset-right)); }
+
   /* Nine nav links only just clear the brand between the burger breakpoint
      and a roomy desktop, so the gap eases in that band rather than wrapping. */
   @media(min-width:821px) and (max-width:1040px){
@@ -1957,7 +2053,7 @@
 
 <button class="back-to-top" id="backToTop" aria-label="Back to top">&#8593;</button>
 <button class="music-toggle" id="musicToggle" aria-label="Toggle background music"><span class="music-icon">&#9834;</span></button>
-<audio id="bgMusic" loop preload="auto" playsinline webkit-playsinline></audio>
+<audio id="bgMusic" src="audio/bawat-daan.mp3" loop preload="auto" playsinline webkit-playsinline></audio>
 
 <script>
   /* =========================================================
@@ -2108,6 +2204,32 @@
       if(p && p.catch) p.catch(function(){});
     }
 
+    /* ---- keeping the locked timing on a slow connection ----
+       The four numbers below are unchanged. What changed is that they are now
+       actually reached on a phone.
+
+       The track is meant to sit at t=0 exactly CUE_AT ms after the click. On
+       wifi it does. On cellular the file may not have buffered yet, so the
+       audio used to arrive whenever it was ready, which is why mobile drifted
+       out of step with the veil.
+
+       So the cue maps audio time to wall-clock time instead of assuming they
+       agree: if we are late by delta, we start delta into the track rather
+       than at zero. The song opens with roughly 1.05s of quiet, so up to a
+       second of lateness is swallowed by that silence and the first line still
+       lands on the beat it was tuned to. Past that we start at the top of the
+       verse rather than clipping into the middle of a word. */
+    var CUE_AT   = 350;      // ms after the click, the locked value
+    var LEAD_IN  = 1.05;     // seconds of quiet before the first line
+    var openedAt = 0;        // stamped when the envelope is clicked
+
+    function audioOffset(){
+      if(!openedAt) return 0;
+      var late = (performance.now() - openedAt) - CUE_AT;
+      if(late <= 0) return 0;
+      return Math.min(late / 1000, LEAD_IN);
+    }
+
     function cueMusic(){
       if(musicCued) return;
       musicCued = true;
@@ -2123,10 +2245,37 @@
       }
 
       if(a.paused){
-        // priming was refused — fall back to a direct start
+        /* Priming was refused, so nothing is running yet. Start it, and once
+           it is genuinely playing drop it at the offset the clock says we owe,
+           recomputed at that moment rather than at this one. */
         a.muted = false; a.volume = 0.55;
         var p = a.play();
-        if(p && p.then) p.then(flag).catch(function(){}); else flag();
+        function land(){
+          try { a.currentTime = audioOffset(); } catch(err){}
+          flag();
+        }
+        if(p && p.then) p.then(land).catch(function(){}); else land();
+        return;
+      }
+
+      /* Running silently, but on a slow link it may not have buffered enough to
+         seek yet. readyState 2 means it has data at the current position; below
+         that a seek would stall and the music would come in late anyway. Wait
+         for the first frame of audio, then place it by the clock. */
+      if(a.readyState < 2){
+        var started = false;
+        var place = function(){
+          if(started) return;
+          started = true;
+          a.removeEventListener('canplay', place);
+          a.removeEventListener('playing', place);
+          try { a.currentTime = audioOffset(); } catch(err){}
+          a.muted = false; a.volume = 0.55;
+          flag();
+        };
+        a.addEventListener('canplay', place);
+        a.addEventListener('playing', place);
+        setTimeout(place, 1200);        // never leave it silent
         return;
       }
 
@@ -2134,7 +2283,7 @@
          backward seek inside data we have just buffered, so it is quick — then
          unmute. Unmuting is instantaneous and needs no gesture, which is what
          makes this work on iPhone while the timing stays identical to desktop. */
-      try { a.currentTime = 0; } catch(err){}
+      try { a.currentTime = audioOffset(); } catch(err){}
       a.muted = false;
       a.volume = 0.55;
       flag();
@@ -2143,6 +2292,7 @@
     function openInvite(){
       stage.removeEventListener('click', openInvite);
       stage.classList.add('is-opening');
+      openedAt = performance.now();       // everything below is measured from here
       primeAudio();                       // buffer now so the cue is instant
       if(reduceMotion){
         finishOpen();
