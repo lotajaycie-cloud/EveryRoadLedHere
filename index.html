@@ -370,6 +370,8 @@
   .look-face{
     position:absolute; inset:0; border-radius:4px; overflow:hidden;
     background:#fff; border:1px solid var(--blush);
+    /* per-card tints set below; the sample-look boards are flattened onto the
+       same values so the back face has no white block behind the figures */
     backface-visibility:hidden; -webkit-backface-visibility:hidden;
     box-shadow:0 2px 6px rgba(74,16,36,.10), 0 14px 32px rgba(74,16,36,.12);
   }
@@ -404,6 +406,20 @@
   }
   .look-back .cap b{font-family:'Cormorant Garamond',serif; font-weight:300; font-size:19px; color:var(--burgundy);}
   .look-back .cap i{font-style:normal; font-size:10.5px; letter-spacing:2.4px; text-transform:uppercase; color:var(--olive);}
+
+
+  /* The Men — sage;  The Women — mauve.
+     Tints rather than the palette at full strength: Smoky Pink behind body
+     copy only reaches 2.8:1, well under the 4.5:1 needed to stay readable.
+     These sit at 5.3-5.4:1 while still reading clearly as sage and mauve. */
+  .look-card:nth-child(1) .look-face{background:#D5DECE;}
+  .look-card:nth-child(2) .look-face{background:#E8D5DA;}
+  .look-card .look-kicker,
+  .look-card .look-cue{color:#55603a;}          /* 4.9:1 on both tints */
+  .look-card:nth-child(1) .look-back .cap,
+  .look-card:nth-child(2) .look-back .cap{border-top-color:rgba(92,83,76,.22);}
+  .look-card .look-back .cap i{color:#55603a;}
+  .look-front .ghost{opacity:.22;}              /* tint carries it further than white did */
 
   /* fabric / footwear / accents */
   .attire-notes{
@@ -2002,14 +2018,15 @@
       setTimeout(function(){              // push-in starts while the flap is still travelling
         gate.classList.add('zooming');
       }, 820);
-      /* ── LOCKED TIMING — approved, please don't drift ──────────────────
-         650  music cue      (leads the veil by 0.5s; the track's ~1.05s
-                              lead-in then puts the first line on the white)
+      /* ── TIMING ────────────────────────────────────────────────────────
+         1150 music cue      (moved +0.5s from 650; now fires together with
+                              the veil, so the track's ~1.05s lead-in runs
+                              across the fade and the first line lands as the
+                              screen reaches white)
          1150 veil bloom starts
          2080 site swaps in beneath the white
-         2550 white releases and the clouds part
-         Changing any one of these will pull the vocal off the white peak. */
-      setTimeout(cueMusic, 650);
+         2550 white releases and the clouds part                            */
+      setTimeout(cueMusic, 1150);
       setTimeout(function(){              // white bloom rises while the push-in continues
         spawnSparks();
         veil.classList.add('bloom');
