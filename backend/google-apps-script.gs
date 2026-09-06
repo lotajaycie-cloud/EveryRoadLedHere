@@ -47,7 +47,10 @@ function doPost(e) {
     data.name || '',
     data.attending || '',
     data.guests || '',
-    data.message || ''
+    data.message || '',
+    data.code || '',
+    data.household || '',
+    data.seatsReserved || ''
   ]);
   return ContentService
     .createTextOutput(JSON.stringify({ status: 'ok' }))
@@ -74,7 +77,10 @@ function doGet(e) {
         name: row[1],
         attending: row[2],
         guests: row[3],
-        message: row[4]
+        message: row[4],
+        code: row[5],
+        household: row[6],
+        seatsReserved: row[7]
       };
     });
 
@@ -88,7 +94,7 @@ function getSheet_() {
   var sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
-    sheet.appendRow(['Timestamp', 'Name', 'Attending', 'Guests', 'Message']);
+    sheet.appendRow(['Timestamp', 'Name', 'Attending', 'Guests', 'Message', 'Guest Code', 'Household', 'Seats Reserved']);
     sheet.setFrozenRows(1);
   }
   return sheet;

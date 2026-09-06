@@ -122,6 +122,41 @@ button is disabled while sending, so a double tap cannot post twice.
 
 ---
 
+## Guest codes
+
+Each invitation carries a short code. A guest types it into the RSVP and the
+form opens with their household's name filled in and the guest number capped at
+the seats you actually reserved, which is what stops a party of two arriving as
+five.
+
+Edit the list near the top of the `<script>` block in `index.html`:
+
+```js
+var GUESTS = {
+  'JCMJ01': { names: 'The Sample Family',      seats: 4 },
+  'JCMJ02': { names: 'Juan & Maria Dela Cruz', seats: 2 },
+  'JCMJ03': { names: 'Ana Reyes',              seats: 1 }
+};
+```
+
+One line per household. The key is the code printed on that household's
+invitation. Matching ignores case, spaces, dashes and dots, so `jcmj 01` and
+`JCMJ-01` both open the same record.
+
+Three things worth knowing:
+
+- **Empty list means no gate.** Delete every entry and the RSVP behaves exactly
+  as it did before, so nothing breaks while you are still building the list.
+- **A code is a courtesy, not a lock.** The list sits in the page source, so
+  anyone curious can read it. Keep private notes out of the `names` field.
+- **The code travels to the sheet.** Three extra columns are recorded with each
+  reply: Guest Code, Household, and Seats Reserved. If your sheet already has
+  the old five headers, add these three to the right of Message, or delete the
+  header row and let the script rebuild it.
+
+Once a guest passes the gate their code is remembered in that browser, so
+returning to the page does not ask again. The "Not you?" link clears it.
+
 ## Editing the site
 
 Everything lives in `index.html`.

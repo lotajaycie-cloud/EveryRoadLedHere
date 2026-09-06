@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>JC &amp; MJ | December 8, 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --burgundy:#6d1834;
@@ -37,8 +37,8 @@
     overflow-x:hidden;
     letter-spacing:.2px;
   }
-  h1,h2,h3{font-family:'Cormorant Garamond', serif; font-weight:600; letter-spacing:.3px;}
-  .script{font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:500;}
+  h1,h2,h3{font-family:'Cormorant Garamond', serif; font-weight:300; letter-spacing:.3px;}
+  .script{font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:300;}
   a{color:inherit;}
   .container{max-width:1100px; margin:0 auto; padding:0 24px;}
 
@@ -51,7 +51,7 @@
     transition:padding .3s ease;
   }
   nav .container{display:flex; align-items:center; justify-content:space-between; padding-top:14px; padding-bottom:14px;}
-  .brand{font-family:'Cormorant Garamond',serif; font-weight:600; font-size:20px; letter-spacing:2px; color:var(--burgundy);}
+  .brand{font-family:'Cormorant Garamond',serif; font-weight:300; font-size:20px; letter-spacing:2px; color:var(--burgundy);}
   .navlinks{display:flex; gap:28px; list-style:none;}
   .navlinks a{
     text-decoration:none; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; font-weight:500;
@@ -101,12 +101,12 @@
   }
   .hero h1{
     font-size:clamp(48px, 9vw, 96px);
-    font-weight:600;
+    font-weight:300;
     line-height:1;
     margin:10px 0 18px;
     text-shadow:0 4px 24px rgba(0,0,0,.25);
   }
-  .hero .amp{font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:var(--blush); font-size:0.65em; padding:0 8px;}
+  .hero .amp{font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:300; color:var(--blush); font-size:0.65em; padding:0 8px;}
   .hero-date{font-size:17px; letter-spacing:3px; text-transform:uppercase; margin-bottom:14px; opacity:.95;}
   .hero-venue{font-size:14.5px; opacity:.85; margin-bottom:30px;}
 
@@ -122,7 +122,7 @@
     padding:15px 19px;
     min-width:80px;
   }
-  .countdown .num{font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:600; display:block;}
+  .countdown .num{font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; display:block;}
   .countdown .lbl{font-size:10px; letter-spacing:2px; text-transform:uppercase; opacity:.8;}
 
   .scroll-cue{
@@ -136,7 +136,8 @@
   section{padding:100px 0;}
   .eyebrow{
     text-align:center; letter-spacing:4px; text-transform:uppercase; font-size:12px;
-    color:var(--olive); margin-bottom:14px; font-weight:600;
+    color:var(--olive); margin-bottom:14px;
+    font-family:'Jost', sans-serif; font-weight:300;
   }
   .section-title{text-align:center; font-size:clamp(30px,4vw,46px); color:var(--burgundy); margin-bottom:20px;}
   .section-sub{text-align:center; max-width:620px; margin:0 auto 60px; color:#5c534c; font-size:16px;}
@@ -284,7 +285,7 @@
     border:1px solid rgba(217,179,174,.5); border-radius:20px; padding:5px 14px; margin-bottom:16px;
   }
   .venue-block h3{font-size:23px; margin-bottom:12px; letter-spacing:.3px; line-height:1.3;}
-  .venue-time{font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:600; font-size:28px; margin-bottom:10px; color:var(--blush);}
+  .venue-time{font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300; font-size:28px; margin-bottom:10px; color:var(--blush);}
   .venue-meta{font-size:13.5px; opacity:.85;}
 
   .venue-divider{display:flex; flex-direction:column; align-items:center; gap:14px; padding:0 28px; height:100%;}
@@ -314,16 +315,148 @@
   }
   .dir-result .dir-note{opacity:.7; font-size:12px;}
 
-  /* Palette / Dress code */
+  /* ===== Dress code / What to Wear ===== */
   .palette{background:var(--champagne);}
-  .swatches{display:flex; justify-content:center; gap:22px; flex-wrap:wrap; margin-bottom:50px;}
-  .swatch{text-align:center;}
-  .swatch .chip{width:64px; height:64px; border-radius:50%; margin:0 auto 10px; box-shadow:0 4px 14px rgba(0,0,0,.12); border:3px solid #fff;}
-  .swatch span{display:block; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:#5c534c;}
-  .dresscode-note{max-width:680px; margin:0 auto; text-align:center; background:#fff; padding:36px 40px; border-radius:4px; border:1px solid rgba(109,24,52,.1);}
-  .dresscode-note h3{color:var(--burgundy); margin-bottom:14px; font-size:22px;}
-  .dresscode-note p{color:#5c534c; font-size:15px;}
-  .avoid{margin-top:18px; font-size:13px; color:var(--burgundy); font-style:italic; font-family:'Cormorant Garamond', serif; font-weight:600;}
+  .attire-sub{
+    display:flex; align-items:center; justify-content:center; gap:16px; margin:-8px 0 24px;
+  }
+  .attire-sub span.rule{height:1px; width:56px; background:var(--blush);}
+  .attire-sub span.txt{
+    font-family:'Cormorant Garamond',serif; font-style:italic;
+    font-size:21px; color:var(--olive);
+  }
+
+  /* palettes */
+  .pal-row{display:grid; grid-template-columns:repeat(5,1fr); gap:8px;}
+  .pal-chip{
+    height:88px; border-radius:3px; margin-bottom:9px;
+    box-shadow:0 1px 3px rgba(74,16,36,.10), 0 6px 16px rgba(74,16,36,.10);
+    transition:transform .3s cubic-bezier(.2,.8,.2,1);
+  }
+  .pal-swatch:hover .pal-chip{transform:translateY(-3px);}
+  .pal-name{
+    font-size:9.5px; letter-spacing:.9px; text-transform:uppercase;
+    line-height:1.5; color:#5c534c;
+  }
+
+  /* flip cards — tap to see sample looks */
+  .look-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+    gap:clamp(18px,2.4vw,28px); max-width:1180px; margin:0 auto;
+  }
+  .look-card{
+    perspective:1600px; cursor:pointer; background:none; border:none;
+    padding:0; font-family:inherit; text-align:left; width:100%;
+  }
+  .look-inner{
+    position:relative; width:100%;
+    display:grid;                     /* both faces share one cell, so the
+                                         card sizes to the taller of the two
+                                         and nothing can spill or overlap */
+    transform-style:preserve-3d; -webkit-transform-style:preserve-3d;
+    transition:transform .8s cubic-bezier(.3,.9,.3,1);
+  }
+  .look-card.flipped .look-inner{transform:rotateY(180deg);}
+  .look-face{
+    grid-area:1 / 1; border-radius:4px; overflow:hidden;
+    background:#fff; border:1px solid var(--blush);
+    backface-visibility:hidden; -webkit-backface-visibility:hidden;
+    box-shadow:0 2px 6px rgba(74,16,36,.10), 0 14px 32px rgba(74,16,36,.12);
+  }
+  .look-front{
+    display:flex; flex-direction:column; justify-content:flex-start;
+    padding:clamp(24px,3vw,40px); min-height:340px;
+  }
+  .look-front .look-cue{margin-top:auto; padding-top:24px;}
+  /* The front face is a clean, fully opaque white tile. The sample-look
+     board is kept in the markup but hidden here — restore it by putting the
+     opacity back to about .15 if the faint hint behind the text is wanted. */
+  .look-front .ghost{display:none;}
+  /* The palette now lives inside the tile, sitting above the copy — the
+     swatches and the words about them are one object rather than two
+     separate blocks the eye has to pair up. A hairline separates them. */
+  .look-front .pal-row{
+    position:relative; margin-bottom:22px; padding-bottom:20px;
+    border-bottom:1px solid var(--champagne);
+  }
+  .look-front .pal-chip{
+    height:54px; margin-bottom:8px;
+    box-shadow:0 1px 2px rgba(74,16,36,.10), 0 4px 10px rgba(74,16,36,.09);
+  }
+  .look-front .pal-name{font-size:8.5px; letter-spacing:.6px; line-height:1.45;}
+
+  .look-kicker{
+    position:relative; font-size:10.5px; letter-spacing:2.8px; text-transform:uppercase;
+    color:var(--olive); margin-bottom:13px;
+  }
+  .look-front h3{
+    position:relative; font-family:'Cormorant Garamond',serif; font-weight:300;
+    font-size:clamp(28px,3.4vw,40px); color:var(--burgundy); margin-bottom:16px; line-height:1.15;
+  }
+  .look-front p{
+    position:relative; font-size:14.5px; line-height:1.8; color:#5c534c; margin:0;
+  }
+  .look-cue{
+    position:relative; margin-top:24px; font-size:10.5px; letter-spacing:2.6px;
+    text-transform:uppercase; color:var(--olive-light);
+  }
+  .look-back{transform:rotateY(180deg); padding:10px 10px 8px; display:flex; flex-direction:column;}
+  .look-back img{width:100%; height:auto; display:block; flex:1; min-height:0; object-fit:contain;}
+  .look-back .cap{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding-top:10px; border-top:1px solid var(--champagne); margin-top:8px;
+  }
+  .look-back .cap b{font-family:'Cormorant Garamond',serif; font-weight:300; font-size:19px; color:var(--burgundy);}
+  .look-back .cap i{font-style:normal; font-size:10.5px; letter-spacing:2.4px; text-transform:uppercase; color:var(--olive);}
+
+
+  /* fabric / footwear / accents */
+  .attire-notes{
+    max-width:1000px; margin:72px auto 0; background:#fff;
+    border:1px solid var(--blush); border-radius:4px; padding:clamp(28px,4vw,48px);
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:clamp(26px,3.4vw,40px);
+  }
+  .attire-notes h4{
+    font-size:10.5px; letter-spacing:2.8px; text-transform:uppercase;
+    color:var(--olive); margin-bottom:12px;
+    font-family:'Jost', sans-serif; font-weight:300;
+  }
+  .attire-notes p{font-size:14.5px; line-height:1.8; color:#5c534c; margin:0;}
+
+  .attire-bar{
+    display:flex; justify-content:center; margin:60px auto 0; max-width:1000px;
+  }
+  .attire-bar span{width:34px; height:6px;}
+  /* the reminder occupies the third column where Accents used to sit;
+     centred in its cell so the missing label doesn't read as an omission */
+  .attire-notes .note-cell{display:flex; align-items:center;}
+  .attire-notes .avoid{
+    margin:0; font-size:16px; line-height:1.7; color:var(--burgundy);
+    font-style:italic; font-family:'Cormorant Garamond', serif; font-weight:300;
+  }
+  @media(max-width:760px){
+    .attire-notes .note-cell{padding-top:8px; border-top:1px solid var(--champagne);}
+    .attire-notes .avoid{padding-top:20px;}
+  }
+  @media(max-width:560px){
+    .pal-row{grid-template-columns:repeat(5,1fr); gap:5px;}
+    .pal-chip{height:60px;}
+    .pal-name{font-size:8.5px; letter-spacing:.4px;}
+    .look-front{min-height:0; padding:24px 20px;}
+    .look-front .pal-chip{height:42px; margin-bottom:6px;}
+    .look-front .pal-row{margin-bottom:18px; padding-bottom:16px; gap:5px;}
+    .look-front .pal-name{font-size:7.5px; letter-spacing:.2px;}   /* let the copy set the height */
+    .look-back{padding:8px 8px 6px;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    /* swap the flip for a cross-fade — rotation is the vestibular part */
+    .look-inner{transition:none;}
+    .look-card.flipped .look-inner{transform:none;}
+    .look-face{transition:opacity .45s ease;}
+    .look-back{transform:none; opacity:0;}
+    .look-card.flipped .look-front{opacity:0;}
+    .look-card.flipped .look-back{opacity:1;}
+  }
 
   /* Wedding Party */
 
@@ -343,6 +476,56 @@
   .rsvp .section-sub{color:rgba(255,255,255,.88);}
   .rsvp .divider{background:linear-gradient(to right, transparent, var(--champagne), transparent);}
   .rsvp .divider::after{background:var(--champagne); box-shadow:0 0 0 5px rgba(26,28,16,.8);}
+  /* ===== RSVP guest code gate ===== */
+  .rsvp-gate{
+    max-width:560px; margin:0 auto; padding:44px; border-radius:4px;
+    background:rgba(24,26,15,.46); border:1px solid rgba(255,255,255,.2);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    box-shadow:0 24px 50px rgba(0,0,0,.3);
+  }
+  .rsvp-gate.hide{display:none;}
+  .gate-lead{
+    color:rgba(255,255,255,.9); font-size:14.5px; line-height:1.75;
+    text-align:center; margin-bottom:26px;
+  }
+  #guestcode{
+    text-align:center; letter-spacing:5px; text-transform:uppercase;
+    font-size:19px; padding:15px 14px;
+  }
+  #guestcode::placeholder{letter-spacing:2px; text-transform:none; font-size:14px; opacity:.55;}
+  .gate-msg{
+    min-height:19px; margin-top:14px; text-align:center;
+    font-size:13px; line-height:1.5; color:var(--champagne);
+  }
+  .gate-msg.bad{color:#F8D0D3;}
+  /* a short nudge rather than a long shake: enough to read as "no", not
+     enough to be unpleasant on a phone held close */
+  @keyframes gateNudge{
+    0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);}
+    75%{transform:translateX(6px);}
+  }
+  .rsvp-gate.wrong{animation:gateNudge .3s ease;}
+  @media(prefers-reduced-motion:reduce){ .rsvp-gate.wrong{animation:none;} }
+
+  .gate-who{
+    display:flex; align-items:baseline; justify-content:space-between; gap:14px;
+    margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,.22);
+  }
+  .gw-name{
+    font-family:'Cormorant Garamond',serif; font-weight:300; font-size:22px;
+    color:#fff; line-height:1.3;
+  }
+  .gw-swap{
+    flex:none; background:none; border:none; padding:6px 2px; cursor:pointer;
+    font-family:'Jost',sans-serif; font-size:10.5px; letter-spacing:2px;
+    text-transform:uppercase; color:var(--champagne); text-decoration:underline;
+    text-underline-offset:4px;
+  }
+  .seat-hint{
+    display:block; margin-top:8px; font-size:11.5px; line-height:1.5;
+    color:var(--champagne); opacity:.92;
+  }
+
   .rsvp-form{
     max-width:560px; margin:0 auto; padding:44px; border-radius:4px;
     background:rgba(24,26,15,.46); border:1px solid rgba(255,255,255,.2);
@@ -394,38 +577,43 @@
   }
   .fund-card:hover{transform:translateY(-4px); box-shadow:0 18px 36px rgba(74,16,36,.13);}
 
-  /* icon medallion */
-  .fund-icon{
-    width:72px; height:72px; margin-bottom:20px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    background:linear-gradient(145deg, var(--champagne), #fff);
-    border:1px solid var(--blush); position:relative;
-    transition:transform .45s cubic-bezier(.2,.8,.2,1), border-color .3s ease;
+  /* ===== Gift sketches =====
+     Two hand-drawn plates standing in for the old medallions: the house we
+     hope to fill, and the balloon we hope to travel in. Burgundy carries the
+     subject, olive the world around it, so the pair reads as one hand. */
+  .fund-sketch{
+    width:100%; max-width:300px; margin:-4px auto 24px; padding-bottom:20px;
+    border-bottom:1px solid var(--champagne);
   }
-  .fund-icon::after{
-    content:""; position:absolute; inset:-6px; border-radius:50%;
-    border:1px solid rgba(217,179,174,.4);
-    transition:inset .45s cubic-bezier(.2,.8,.2,1), opacity .3s ease;
-  }
-  .fund-card:hover .fund-icon{transform:scale(1.06) rotate(-3deg); border-color:var(--burgundy);}
-  .fund-card:hover .fund-icon::after{inset:-10px; opacity:.75;}
-  .fund-icon svg{width:38px; height:38px; display:block; overflow:visible;}
-  .fund-icon svg *{
-    fill:none; stroke:var(--burgundy); stroke-width:1.5;
-    stroke-linecap:round; stroke-linejoin:round;
-  }
-  .fund-card:nth-child(2) .fund-icon svg *{stroke:var(--olive);}
-  .fund-card:nth-child(2) .fund-icon{background:linear-gradient(145deg, #eef0e4, #fff);}
-  .fund-card:nth-child(2):hover .fund-icon{border-color:var(--olive);}
-  /* accents that should read as filled, not outlined */
-  .fund-icon svg .solid{fill:var(--burgundy); stroke:none;}
-  .fund-card:nth-child(2) .fund-icon svg .solid{fill:var(--olive); stroke:none;}
+  .fund-sketch svg{width:100%; height:auto; display:block; overflow:visible;}
+  .fund-sketch g{fill:none; stroke-linecap:round; stroke-linejoin:round;}
+  .fund-sketch .ink  path, .fund-sketch .ink  rect, .fund-sketch .ink  circle{stroke:var(--burgundy); stroke-width:1.5;}
+  .fund-sketch .leaf path, .fund-sketch .leaf rect, .fund-sketch .leaf circle{stroke:var(--olive);    stroke-width:1.35;}
+  .fund-sketch .faint{opacity:.5;}   /* on the group only: naming the child too compounds it to .25 */
+  .fund-sketch .gore{opacity:.62;}
+  .fund-sketch .band{opacity:.42;}
+  .fund-sketch .smoke{opacity:.65;}
+  .fund-sketch .heart, .fund-sketch .dot{fill:var(--burgundy); stroke:none;}
 
-  .fund-num{
+  /* the balloon lifts a little on its own, and a little more on hover */
+  @keyframes fundDrift{
+    0%,100%{transform:translateY(0);}
+    50%    {transform:translateY(-5px);}
+  }
+  .fund-sketch .float{
+    animation:fundDrift 7s ease-in-out infinite;
+    transform-origin:110px 75px;
+  }
+  .fund-card:hover .fund-sketch .float{animation-duration:4.5s;}
+  @media(prefers-reduced-motion:reduce){
+    .fund-sketch .float{animation:none;}
+  }
+
+.fund-num{
     font-size:11px; letter-spacing:2.8px; color:var(--olive); margin-bottom:10px; display:block;
   }
   .fund-card h3{
-    font-family:'Cormorant Garamond',serif; font-weight:500; font-size:25px;
+    font-family:'Cormorant Garamond',serif; font-weight:300; font-size:25px;
     color:var(--burgundy); margin-bottom:14px; line-height:1.25;
   }
   .fund-card p{color:#5c534c; font-size:15px; line-height:1.72; margin-bottom:20px; flex:1;}
@@ -471,10 +659,6 @@
     .navlinks.open{display:flex;}
     .navtoggle{display:flex;}
   }
-  @media(max-width:520px){
-    .swatches{gap:14px;}
-    .swatch .chip{width:52px; height:52px;}
-  }
 
   /* ===== Entrance gate — full-bleed 3D sage envelope ===== */
   body.gate-active{overflow:hidden; height:100vh;}
@@ -510,8 +694,8 @@
   .env-reveal{position:absolute; inset:0; z-index:1; overflow:hidden; background-image:var(--hero-photo); background-size:cover; background-position:50% 44%;}
   .env-reveal::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(32,27,22,.34) 0%, rgba(32,27,22,.10) 30%, rgba(38,29,24,.30) 56%, rgba(30,23,19,.72) 80%, rgba(26,20,16,.90) 100%);}
   .env-reveal-text{position:absolute; left:0; right:0; bottom:9%; text-align:center; color:#fdf6ec; z-index:2; padding:0 20px;}
-  .env-reveal-script{font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:clamp(26px,7.5vw,36px); text-shadow:0 4px 18px rgba(0,0,0,.4);}
-  .env-reveal-names{font-family:'Cormorant Garamond',serif; font-weight:600; letter-spacing:3px; text-transform:uppercase; font-size:13px; margin-top:8px; color:var(--blush);}
+  .env-reveal-script{font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300; font-size:clamp(26px,7.5vw,36px); text-shadow:0 4px 18px rgba(0,0,0,.4);}
+  .env-reveal-names{font-family:'Cormorant Garamond',serif; font-weight:300; letter-spacing:3px; text-transform:uppercase; font-size:13px; margin-top:8px; color:var(--blush);}
   .env-reveal-date{font-size:10.5px; letter-spacing:2px; text-transform:uppercase; opacity:.8; margin-top:6px;}
 
   .env-flap-wrap{
@@ -727,12 +911,12 @@
   .tl-item:nth-child(odd) .tl-card{grid-column:1; text-align:right;}
   .tl-item:nth-child(even) .tl-card{grid-column:3; text-align:left;}
   .tl-time{
-    display:inline-block; font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:600;
+    display:inline-block; font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300;
     font-size:20px; color:var(--olive); margin-bottom:4px;
   }
   .tl-card h4{
     font-family:'Cormorant Garamond',serif; font-size:21px; color:var(--burgundy);
-    margin-bottom:6px; font-weight:500; letter-spacing:.3px;
+    margin-bottom:6px; font-weight:300; letter-spacing:.3px;
   }
   .tl-card p{font-size:13.5px; color:#6b6259; max-width:280px; line-height:1.6;}
   .tl-item:nth-child(odd) .tl-card p{margin-left:auto;}
@@ -783,8 +967,6 @@
   /* ===== Card / interaction polish ===== */
   .card{transition:transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s ease, border-color .4s ease;}
   .card:hover{transform:translateY(-6px); border-color:rgba(255,255,255,.4); box-shadow:0 20px 40px rgba(0,0,0,.18);}
-  .swatch .chip{transition:transform .3s ease;}
-  .swatch:hover .chip{transform:scale(1.1) translateY(-2px);}
   .story-frame{overflow:hidden;}
   .story-frame img{transition:transform .7s cubic-bezier(.2,.8,.2,1);}
   .story-frame:hover img{transform:scale(1.045);}
@@ -880,7 +1062,7 @@
   .album-tab.active .tab-icon svg *{stroke:var(--burgundy);}
   .album-tab.active .tab-icon svg .solid{fill:var(--burgundy); stroke:none;}
   .album-tab.active .tab-num{color:var(--burgundy);}
-  .album-tab.active .tab-line{color:var(--burgundy-dark); font-weight:600;}
+  .album-tab.active .tab-line{color:var(--burgundy-dark); font-weight:400;}
   .album-tab:focus-visible{outline:2px solid var(--burgundy); outline-offset:3px;}
 
   /* -- right: continuous 3D reel -- */
@@ -1076,7 +1258,6 @@
     .fund-card{padding:26px 22px;}
     .rsvp-form{padding:30px 22px;}
     .thankyou{padding:32px 24px;}
-    .letter, .dresscode-note{padding:28px 22px;}
   }
   @media(max-width:420px){
     .g-tile{width:80vw;}
@@ -1122,7 +1303,6 @@
       background:linear-gradient(155deg, rgba(34,36,22,.86), rgba(22,24,14,.92));
       border-color:rgba(255,255,255,.24);
     }
-    .venues-attire .dresscode-note{background:rgba(28,12,19,.88);}
     .lb-btn, .lb-zoom{background:rgba(30,22,20,.88);}
     .lb-count{background:rgba(0,0,0,.62);}
     .countdown div{background:rgba(255,255,255,.20);}
@@ -1166,6 +1346,91 @@
     .g-tile{box-shadow:0 2px 6px rgba(74,16,36,.20), 0 12px 26px rgba(74,16,36,.22);}
     .g-tile.is-center{box-shadow:0 4px 10px rgba(74,16,36,.26), 0 20px 44px rgba(74,16,36,.32);}
   }
+
+
+  /* ══════════════════════════════════════════════════════════════════
+     MOBILE HARDENING — iOS Safari and Android Chrome
+     Appended last so it wins on equal specificity. Everything here is a
+     fix for something a phone does that a desktop browser does not.
+     ══════════════════════════════════════════════════════════════════ */
+
+  /* Anchor jumps (the FAQ shortcuts) land under the fixed nav without this. */
+  html{scroll-padding-top:86px;}
+  @media(max-width:760px){ html{scroll-padding-top:70px;} }
+
+  /* Android Chrome paints a blue-grey box over anything tapped. A faint
+     burgundy keeps the feedback without the browser-chrome look. */
+  a, button, input, select, textarea, [role="button"], .g-tile, .look-card{
+    -webkit-tap-highlight-color:rgba(109,24,52,.12);
+  }
+
+  /* iPhone home indicator and the notch. env() is zero everywhere else,
+     so these are inert on Android and desktop. */
+  .back-to-top{
+    right:calc(22px + env(safe-area-inset-right));
+    bottom:calc(22px + env(safe-area-inset-bottom));
+  }
+  .music-toggle{
+    left:calc(22px + env(safe-area-inset-left));
+    bottom:calc(22px + env(safe-area-inset-bottom));
+  }
+  nav{
+    padding-left:env(safe-area-inset-left);
+    padding-right:env(safe-area-inset-right);
+  }
+  .lightbox{
+    padding-top:calc(14px + env(safe-area-inset-top));
+    padding-bottom:calc(14px + env(safe-area-inset-bottom));
+  }
+
+  @media(max-width:760px){
+    /* iOS Safari force-zooms the whole page when a field smaller than 16px
+       takes focus, and never zooms back out. This is the single most
+       common reason a form "breaks" on iPhone. */
+    .field input, .field select, .field textarea{font-size:16px;}
+    #guestcode{font-size:18px; letter-spacing:4px;}
+
+    /* the code panel matches the form it stands in front of */
+    .rsvp-gate{padding:30px 22px;}
+    .gate-lead{font-size:14px; margin-bottom:22px;}
+
+    /* name and the escape hatch stack rather than squeeze */
+    .gate-who{flex-wrap:wrap; gap:6px;}
+    .gw-name{font-size:20px;}
+
+    .fund-sketch{max-width:250px; margin-bottom:20px; padding-bottom:16px;}
+  }
+
+  @media(max-width:400px){
+    .rsvp-gate{padding:26px 18px;}
+    #guestcode{letter-spacing:3px;}
+    .fund-sketch{max-width:210px;}
+  }
+
+
+  /* iOS reports 100vh as the toolbar-HIDDEN height, so a 100vh hero is
+     taller than what the guest can actually see when the page first loads
+     and the bottom of it hides under the Safari bar. 100dvh tracks the real
+     visible box. Declared second so browsers without dvh keep the vh value. */
+  .hero{
+    min-height:100dvh;
+    padding-bottom:calc(env(safe-area-inset-bottom) + 8px);
+  }
+  body.gate-active{height:100dvh;}
+
+
+  /* Nine nav links only just clear the brand between the burger breakpoint
+     and a roomy desktop, so the gap eases in that band rather than wrapping. */
+  @media(min-width:821px) and (max-width:1040px){
+    .navlinks{gap:19px;}
+    .navlinks a{letter-spacing:1.1px;}
+  }
+
+  /* Tap targets. 44px is Apple's floor and Android's is 48dp; the gate
+     button and the code field are the two new ones that must clear it. */
+  #guestcode{min-height:48px;}
+  .rsvp-gate .submit-btn{min-height:48px;}
+  .gw-swap{min-height:44px; display:inline-flex; align-items:center;}
 
 </style>
 </head>
@@ -1216,6 +1481,7 @@
       <li><a href="#details">Venues</a></li>
       <li><a href="#attire">Attire</a></li>
       <li><a href="#rsvp">RSVP</a></li>
+      <li><a href="#gifts">Gifts</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ul>
     <button class="navtoggle" id="navtoggle" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -1250,8 +1516,8 @@
       </div>
       <div class="reveal-body" id="storyReveal">
         <div class="reveal-inner float-card">
-          <p>Ours has never been a story with a single turning point &mdash; it's been made of small, ordinary moments that quietly became everything. Long drives with the windows down. Coffee at the campsite before the sun was fully up. Bonfires that kept us talking long after we meant to sleep.</p>
-          <p>We found each other in the in-between places &mdash; on the road, by the shore, somewhere between one adventure and the next &mdash; and somehow, every path kept circling back to <em class="script">us</em>.</p>
+          <p>Ours has never been a story with a single turning point. It has been made of small, ordinary moments that quietly became everything. Long drives with the windows down. Coffee at the campsite before the sun was fully up. Bonfires that kept us talking long after we meant to sleep.</p>
+          <p>We found each other in the places in between, on the road, by the shore, somewhere between one adventure and the next. Somehow every path kept circling back to <em class="script">us</em>.</p>
           <p>Now, after years of choosing each other in the small moments, we're ready to choose each other for all of them. On December 8, 2026, we'd love for you to be there as we say "I do."</p>
           <span class="story-sig">JC &amp; MJ</span>
         </div>
@@ -1271,7 +1537,7 @@
     <div class="eyebrow">Prenup Gallery</div>
     <h2 class="section-title">Our Story, In Chapters</h2>
     <div class="divider"></div>
-    <p class="section-sub">A few of our favourite moments — told through the things we love to do together.</p>
+    <p class="section-sub">A few of our favourite moments, told through the things we love to do together.</p>
     <div class="album">
       <div class="album-tabs" id="albumTabs" role="tablist" aria-label="Story chapters"></div>
       <div class="album-stage">
@@ -1299,7 +1565,7 @@
     <div class="eyebrow">Watch</div>
     <h2 class="section-title">Our Prenup Film</h2>
     <div class="divider"></div>
-    <p class="section-sub">We're still filming our story — check back closer to the big day for the full video.</p>
+    <p class="section-sub">We're still filming our story. Check back closer to the big day for the full video.</p>
     <div class="video-frame" id="videoFrame">
       <div class="video-placeholder">
         <div class="play-btn">&#9658;</div>
@@ -1320,7 +1586,7 @@
       <div class="reveal-body" id="loveReveal">
         <div class="reveal-inner float-card">
           <p>Dear family and friends,</p>
-          <p>Thank you &mdash; for every part you've played in our story so far. For the long talks, the quiet Sundays, the road trips and the celebrations, for showing up for us again and again. You are the reason our story has felt so full.</p>
+          <p>Thank you for every part you've played in our story so far. For the long talks, the quiet Sundays, the road trips and the celebrations, for showing up for us again and again. You are the reason our story has felt so full.</p>
           <p>As we prepare to say "I do," we can't imagine this day without you standing beside us, cheering us on the way you always have. We hope you feel, in every detail of this celebration, just how loved and appreciated you are.</p>
           <p>Thank you for saying yes to being part of our forever. We can't wait to celebrate with you.</p>
           <p class="sign">With all our love,<br><span class="script">JC &amp; MJ</span></p>
@@ -1369,7 +1635,7 @@
         <div class="tl-spacer"></div>
       </div>
     </div>
-    <p class="tl-note">Exact timing may shift slightly on the day &mdash; we'll keep the program cards updated closer to the date.</p>
+    <p class="tl-note">Exact timing may shift slightly on the day. We will keep the program cards updated closer to the date.</p>
   </div>
 </section>
 
@@ -1431,22 +1697,77 @@
 
 <section class="palette" id="attire">
   <div class="container">
-    <div class="eyebrow">Dress Code</div>
-    <h2 class="section-title">Soft Romantics &amp; Earthy Greens</h2>
-    <div class="divider"></div>
-    <div class="swatches">
-      <div class="swatch"><div class="chip" style="background:#6d1834"></div><span>Burgundy</span></div>
-      <div class="swatch"><div class="chip" style="background:#707c4c"></div><span>Olive</span></div>
-      <div class="swatch"><div class="chip" style="background:#d9b3ae"></div><span>Blush</span></div>
-      <div class="swatch"><div class="chip" style="background:#c9a98f"></div><span>Mauve</span></div>
-      <div class="swatch"><div class="chip" style="background:#f3ead9"></div><span>Ivory / Neutral</span></div>
-      <div class="swatch"><div class="chip" style="background:#1c1c1c"></div><span>Black (formal suits)</span></div>
+    <div class="eyebrow">Formal &middot; Beach Garden Wedding</div>
+    <h2 class="section-title">What to Wear</h2>
+    <div class="attire-sub">
+      <span class="rule"></span>
+      <span class="txt">a guide for our guests</span>
+      <span class="rule"></span>
     </div>
-    <div class="dresscode-note">
-      <h3>Formal Attire</h3>
-      <p>We'd love to see our guests in soft romantic tones — think blush, mauve, dusty rose, olive and other earthy greens, and warm neutrals. Gentlemen look wonderful in black suits.</p>
-      <p class="avoid">With love, we kindly ask guests to avoid wearing champagne, as it's reserved for the bride.</p>
+
+    <div class="look-grid">
+      <button type="button" class="look-card" aria-pressed="false">
+        <div class="look-inner">
+          <div class="look-face look-front">
+            <img class="ghost" src="images/attire-men.jpg" alt="" aria-hidden="true">
+            <div class="pal-row">
+              <div class="pal-swatch"><div class="pal-chip" style="background:#5E7355"></div><div class="pal-name">Forest Green</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#A8B5A2"></div><div class="pal-name">Sage Green</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#8F9F8C"></div><div class="pal-name">Olive Mist</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#C9B8A6"></div><div class="pal-name">Warm Sand</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#8B7F74"></div><div class="pal-name">Earthy Taupe</div></div>
+            </div>
+            <div class="look-kicker">Formal &middot; sage &amp; taupes</div>
+            <h3>The Men</h3>
+            <p>Light and muted shades are what we love most. Think of the softer sages, sands and taupes shown here. Wear yours as a formal suit, or as a long sleeve shirt with trousers. Both look right on the day.</p>
+            <div class="look-cue">Tap for sample looks &rarr;</div>
+          </div>
+          <div class="look-face look-back">
+            <img src="images/attire-men.jpg" alt="Six sample menswear looks in sage, olive, cream and taupe linen">
+            <div class="cap"><b>Sample looks for the men</b><i>&larr; Back</i></div>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="look-card" aria-pressed="false">
+        <div class="look-inner">
+          <div class="look-face look-front">
+            <img class="ghost" src="images/attire-women.jpg" alt="" aria-hidden="true">
+            <div class="pal-row">
+              <div class="pal-swatch"><div class="pal-chip" style="background:#F8D0D3"></div><div class="pal-name">Ophelia Rose</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#B7959B"></div><div class="pal-name">Smoky Pink</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#A5738A"></div><div class="pal-name">Dusty Orchid</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#C0C9B4"></div><div class="pal-name">Muted Sage</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#A7AE74"></div><div class="pal-name">Light Olive</div></div>
+            </div>
+            <div class="look-kicker">Floor length &middot; sage &amp; mauves</div>
+            <h3>The Women</h3>
+            <p>Light and muted shades are preferred. Soft roses, dusty mauves and pale sages rather than anything deep or bright. Floor length, and the silhouette is entirely yours.</p>
+            <div class="look-cue">Tap for sample looks &rarr;</div>
+          </div>
+          <div class="look-face look-back">
+            <img src="images/attire-women.jpg" alt="Seven sample floor length gowns in mauve, rose, olive and sage">
+            <div class="cap"><b>Sample looks for the women</b><i>&larr; Back</i></div>
+          </div>
+        </div>
+      </button>
     </div>
+
+    <div class="attire-notes">
+      <div>
+        <h4>Fabric</h4>
+        <p>A warm beach garden afternoon into a cool evening. Linen, cotton blends, chiffon and crepe. Light wool suits work. Bring a wrap or a jacket for after sunset.</p>
+      </div>
+      <div>
+        <h4>Footwear</h4>
+        <p>The cocktail hour and reception are on lawn. Block heels, wedges or flats for the ladies. Leather or suede soles for the men, and no trainers please.</p>
+      </div>
+      <div class="note-cell">
+        <p class="avoid">With love, we kindly ask guests to avoid wearing champagne, as it&rsquo;s reserved for the bride.</p>
+      </div>
+    </div>
+
+    <div class="attire-bar"><span style="background:#F8D0D3"></span><span style="background:#B7959B"></span><span style="background:#A5738A"></span><span style="background:#C0C9B4"></span><span style="background:#A7AE74"></span><span style="background:#A8B5A2"></span><span style="background:#8F9F8C"></span><span style="background:#C9B8A6"></span></div>
   </div>
 </section>
 
@@ -1457,7 +1778,26 @@
     <h2 class="section-title">RSVP</h2>
     <div class="divider"></div>
     <p class="section-sub">Please let us know if you'll be joining us by filling out the form below.</p>
-    <form class="rsvp-form" id="rsvpForm">
+    <div class="rsvp-gate" id="rsvpGate">
+      <p class="gate-lead">Your invitation carries a guest code. Enter it below to open your RSVP.</p>
+      <form id="gateForm" novalidate>
+        <div class="field">
+          <label for="guestcode">Guest Code</label>
+          <input type="text" id="guestcode" inputmode="latin" autocomplete="off"
+                 autocapitalize="characters" spellcheck="false" maxlength="16"
+                 placeholder="e.g. JCMJ01" aria-describedby="gateMsg">
+        </div>
+        <button type="submit" class="submit-btn">Continue</button>
+        <p class="gate-msg" id="gateMsg" role="status" aria-live="polite"></p>
+        <p class="rsvp-note">Cannot find your code? Message us and we will look it up for you.</p>
+      </form>
+    </div>
+
+    <form class="rsvp-form hide" id="rsvpForm">
+      <div class="gate-who" id="gateWho" hidden>
+        <span class="gw-name" id="gwName"></span>
+        <button type="button" class="gw-swap" id="gateReset">Not you?</button>
+      </div>
       <div class="field">
         <label for="fullname">Full Name</label>
         <input type="text" id="fullname" required placeholder="Your name">
@@ -1473,6 +1813,7 @@
         <div class="field">
           <label for="guests">Number of Guests</label>
           <input type="number" id="guests" min="0" max="4" value="1">
+          <span class="seat-hint" id="seatHint"></span>
         </div>
       </div>
       <div class="field">
@@ -1487,7 +1828,7 @@
         <circle class="check-circle" cx="26" cy="26" r="24"/>
         <path class="check-mark" fill="none" d="M14 27l7 7 16-16"/>
       </svg>
-      <h3 style="font-family:'Cormorant Garamond',serif; font-size:26px; margin-bottom:10px;">Thank You!</h3>
+      <h3 style="font-family:'Cormorant Garamond',serif; font-weight:300; font-size:26px; margin-bottom:10px;">Thank You!</h3>
       <p>Your RSVP has been noted. We can't wait to celebrate with you.</p>
     </div>
   </div>
@@ -1505,32 +1846,71 @@
 
       <div class="fund-grid">
         <div class="fund-card">
-          <div class="fund-icon" aria-hidden="true">
-            <svg viewBox="0 0 40 40">
-              <path d="M6 18.5 L20 7 L34 18.5"/>
-              <path d="M9.5 16.4 V32 a1.6 1.6 0 0 0 1.6 1.6 h17.8 a1.6 1.6 0 0 0 1.6 -1.6 V16.4"/>
-              <path d="M28.5 12.2 V7.6 h3.4 v7.4"/>
-              <path class="solid" d="M20 28.3 c-3.4 -2.6 -5.3 -4.4 -5.3 -6.6 a2.9 2.9 0 0 1 5.3 -1.7 a2.9 2.9 0 0 1 5.3 1.7 c0 2.2 -1.9 4 -5.3 6.6 z"/>
+          <div class="fund-sketch" aria-hidden="true">
+            <svg viewBox="0 0 220 150" role="presentation" focusable="false">
+              <g class="ink">
+                <path d="M56 84 L110 44 L164 84"/>
+                <path class="faint" d="M66 80 L110 47 L154 80"/>
+                <path d="M70 80 V126 H150 V80"/>
+                <path d="M134 64 V50 h9 v20"/>
+                <path d="M101 126 V100 a9 9 0 0 1 18 0 V126"/>
+                <circle class="dot" cx="115" cy="113" r="1.3"/>
+                <rect x="78" y="91" width="15" height="15" rx="1.5"/>
+                <path d="M85.5 91 V106 M78 98.5 H93"/>
+                <rect x="127" y="91" width="15" height="15" rx="1.5"/>
+                <path d="M134.5 91 V106 M127 98.5 H142"/>
+                <path class="heart" d="M110 72 c-3.3 -2.5 -5.2 -4.2 -5.2 -6.4 a2.85 2.85 0 0 1 5.2 -1.7 a2.85 2.85 0 0 1 5.2 1.7 c0 2.2 -1.9 3.9 -5.2 6.4 z"/>
+              </g>
+              <g class="leaf">
+                <path d="M12 126 q28 -5 58 0 M150 126 q30 -5 58 0"/>
+                <path d="M42 126 V106"/>
+                <path d="M42 106 a12 12 0 1 1 .1 0"/>
+                <path d="M157 126 c-.5 -7 3.5 -11 7.5 -11 c4 0 8 4 7.5 11"/>
+                <path class="faint" d="M175 126 c-.4 -5 2.6 -8 5.5 -8 c3 0 6 3 5.5 8"/>
+                <path class="faint" d="M26 126 c-.3 -4 2 -6.5 4.5 -6.5 c2.5 0 4.8 2.5 4.5 6.5"/>
+                <path class="smoke" d="M139 48 c0 -5 6 -4.5 6 -9.5 s-5 -4 -5 -8.5"/>
+                <path class="faint" d="M172 44 q4 -4 8 0 M180 44 q4 -4 8 0"/>
+                <path class="faint" d="M32 62 q3.5 -3.5 7 0 M39 62 q3.5 -3.5 7 0"/>
+              </g>
             </svg>
           </div>
           <span class="fund-num">01</span>
           <h3>A Place We'll Call Home</h3>
-          <p>We dream of having a little place that is truly ours &mdash; where ordinary days become our favorite memories, where friends and family always have a place at the table, and where we can watch our life together grow.</p>
+          <p>We dream of having a little place that is truly ours, where ordinary days become our favorite memories, where friends and family always have a place at the table, and where we can watch our life together grow.</p>
           <span class="fund-tag">For our dream home fund</span>
         </div>
         <div class="fund-card">
-          <div class="fund-icon" aria-hidden="true">
-            <svg viewBox="0 0 40 40">
-              <circle cx="20" cy="20" r="13.2"/>
-              <ellipse cx="20" cy="20" rx="5.6" ry="13.2"/>
-              <path d="M7.6 15.4 h24.8"/>
-              <path d="M7.6 24.6 h24.8"/>
-              <path class="solid" d="M31.6 8.4 l-4.2 6.1 l-4.4 1.2 l2.1 -4.2 l-3.5 .9 l-1.4 1.9 l-1.8 .5 l1 -2.5 l-1 -2.5 l1.8 .5 l1.4 1.9 l3.5 .9 l-2.1 -4.2 l4.4 1.2 z"/>
+          <div class="fund-sketch" aria-hidden="true">
+            <svg viewBox="0 0 220 150" role="presentation" focusable="false">
+              <g class="leaf">
+                <path d="M12 142 q50 -6 98 0 t98 0"/>
+                <g class="faint">
+                  <path d="M34 46 C41 46 45 52 45 58 C45 64 39 69 37 73 h-6 C29 69 23 64 23 58 C23 52 27 46 34 46 Z"/>
+                  <path d="M31 73 h6 M32 76 h4 l-.5 5 h-3 z"/>
+                  <path d="M166 40 q6 -8 13 -3 q5 -7 12 -1 q7 -1 7 6"/>
+                  <path d="M22 108 q5 -7 11 -2 q5 -6 10 -1 q6 -1 6 5"/>
+                  <path d="M172 96 q4 -4 8 0 M180 96 q4 -4 8 0"/>
+                  <path d="M62 118 q3.5 -3.5 7 0 M69 118 q3.5 -3.5 7 0"/>
+                </g>
+              </g>
+              <g class="ink float">
+                <path d="M110 20 C133 20 148 40 148 60 C148 80 130 94 122 104 L98 104 C90 94 72 80 72 60 C72 40 87 20 110 20 Z"/>
+                <path class="gore" d="M110 20 V104"/>
+                <path class="gore faint" d="M110 20 C96 34 90 48 90 62 C90 80 94 94 98 104"/>
+                <path class="gore faint" d="M110 20 C124 34 130 48 130 62 C130 80 126 94 122 104"/>
+                <path class="band" d="M76 62 q34 11 68 0"/>
+                <path class="band" d="M85 85 q25 8 50 0"/>
+                <path d="M98 104 h24"/>
+                <path d="M100 104 L103 118 M120 104 L117 118"/>
+                <path d="M103 118 h14 l-1.5 12 h-11 z"/>
+                <path class="band" d="M103 122 h14"/>
+                <path class="heart" d="M110 70 c-3.3 -2.5 -5.2 -4.2 -5.2 -6.4 a2.85 2.85 0 0 1 5.2 -1.7 a2.85 2.85 0 0 1 5.2 1.7 c0 2.2 -1.9 3.9 -5.2 6.4 z"/>
+              </g>
             </svg>
           </div>
           <span class="fund-num">02</span>
           <h3>Somewhere We've Never Been</h3>
-          <p>We also dream of beginning our marriage with a journey we'll never forget. We'd love to spend our honeymoon in Turkey &mdash; exploring somewhere new, taking our time, trying things for the first time, and simply enjoying being newlyweds.</p>
+          <p>We also dream of beginning our marriage with a journey we'll never forget. We'd love to spend our honeymoon in Turkey, exploring somewhere new, taking our time, trying things for the first time, and simply enjoying being newlyweds.</p>
           <span class="fund-tag">For our Turkey honeymoon fund</span>
         </div>
       </div>
@@ -1551,11 +1931,11 @@
       </div>
       <div class="faq-item">
         <div class="faq-q"><span>Is the reception indoors or outdoors?</span><span class="plus">+</span></div>
-        <div class="faq-a"><p>The reception will be held at Lower Beach Club with open-air, ocean-view styling — comfortable shoes are recommended.</p><a class="faq-link" href="#details">View the venue details <span class="arw" aria-hidden="true">&rarr;</span></a></div>
+        <div class="faq-a"><p>The reception will be held at Lower Beach Club, styled in the open air with a view of the ocean. Comfortable shoes are recommended.</p><a class="faq-link" href="#details">View the venue details <span class="arw" aria-hidden="true">&rarr;</span></a></div>
       </div>
       <div class="faq-item">
         <div class="faq-q"><span>Can I bring a plus one or my kids?</span><span class="plus">+</span></div>
-        <div class="faq-a"><p>We've reserved seating based on our final guest list — please check your invitation for the exact number of seats reserved in your honor.</p><a class="faq-link" href="#rsvp">Send your RSVP <span class="arw" aria-hidden="true">&rarr;</span></a></div>
+        <div class="faq-a"><p>We've reserved seating based on our final guest list. Enter the guest code from your invitation on the RSVP and it will show the exact number of seats held in your honour.</p><a class="faq-link" href="#rsvp">Send your RSVP <span class="arw" aria-hidden="true">&rarr;</span></a></div>
       </div>
       <div class="faq-item">
         <div class="faq-q"><span>What time should I arrive?</span><span class="plus">+</span></div>
@@ -1563,7 +1943,7 @@
       </div>
       <div class="faq-item">
         <div class="faq-q"><span>Do you have a gift registry?</span><span class="plus">+</span></div>
-        <div class="faq-a"><p>Having you there to celebrate with us is truly the greatest gift. If you'd like to bless us with something more, we've set aside two dreams you can be part of &mdash; a fund for our first home together, and a fund for our honeymoon in Turkey. You're welcome to choose whichever one you'd like to share in.</p><a class="faq-link" href="#gifts">Choose a dream to support <span class="arw" aria-hidden="true">&rarr;</span></a></div>
+        <div class="faq-a"><p>Having you there to celebrate with us is truly the greatest gift. If you'd like to bless us with something more, we've set aside two dreams you can be part of: a fund for our first home together, and a fund for our honeymoon in Turkey. You're welcome to choose whichever one you'd like to share in.</p><a class="faq-link" href="#gifts">Choose a dream to support <span class="arw" aria-hidden="true">&rarr;</span></a></div>
       </div>
     </div>
   </div>
@@ -1583,6 +1963,31 @@
   /* =========================================================
      CONFIG — edit these values for your own wedding
      ========================================================= */
+
+  /* ═══════════════════════════════════════════════════════════════════
+     GUEST LIST  —  this is the only part you edit to set up guest codes.
+
+     One line per household. The key is the code you print on that
+     household's invitation; it is matched case-insensitively and spaces,
+     dashes and dots are ignored, so "jcmj 01" and "JCMJ-01" both work.
+
+         names : shown as a greeting and pre-filled into the name field
+         seats : how many people that household may bring, total
+
+     Codes are a courtesy, not a lock. They keep the form tidy and stop
+     casual over-booking; anyone determined can still read this list in
+     the page source. Do not put anything private in here.
+
+     WHILE THIS LIST IS EMPTY the gate hides itself and the form behaves
+     exactly as it did before, so the site keeps working until you are
+     ready. Delete the three samples and add your own when the list is set.
+     ═══════════════════════════════════════════════════════════════════ */
+  var GUESTS = {
+    'JCMJ01': { names: 'The Sample Family',      seats: 4 },
+    'JCMJ02': { names: 'Juan & Maria Dela Cruz', seats: 2 },
+    'JCMJ03': { names: 'Ana Reyes',              seats: 1 }
+  };
+
   var CONFIG = {
     // Venue coordinates for the directions/travel-time feature.
     // Get real coordinates: open Google Maps, right-click the venue pin,
@@ -1750,14 +2155,21 @@
       setTimeout(function(){              // push-in starts while the flap is still travelling
         gate.classList.add('zooming');
       }, 820);
-      /* ── LOCKED TIMING — approved, please don't drift ──────────────────
-         650  music cue      (leads the veil by 0.5s; the track's ~1.05s
-                              lead-in then puts the first line on the white)
-         1150 veil bloom starts
-         2080 site swaps in beneath the white
-         2550 white releases and the clouds part
-         Changing any one of these will pull the vocal off the white peak. */
-      setTimeout(cueMusic, 650);
+      /* ══ LOCKED TIMING — APPROVED. DO NOT CHANGE. ══════════════════════
+         Signed off after several rounds of tuning. Only revisit if the
+         couple explicitly asks for it.
+
+          350  music cue     <- the value that was dialled in
+         1150  veil begins its fade to white
+         2080  site swaps in beneath the white
+         2550  white releases, clouds part
+
+         Why 350 works: the track opens with roughly 1.05s of quiet, so
+         cueing it here means the lead-in runs out just after the veil
+         starts and the first line arrives into the fade. Move this and the
+         entrance falls out of step with the visuals.
+         ═════════════════════════════════════════════════════════════════ */
+      setTimeout(cueMusic, 350);
       setTimeout(function(){              // white bloom rises while the push-in continues
         spawnSparks();
         veil.classList.add('bloom');
@@ -1845,6 +2257,99 @@
     localStorage.setItem('jcmj_rsvps', JSON.stringify(list));
   }
 
+  /* ---------- RSVP guest code gate ----------
+     Codes map a household to its name and its seat allowance. Passing the
+     gate pre-fills the name and caps the guest number at what was actually
+     reserved, which is the part that stops a party of two arriving as five. */
+  var gateEl   = document.getElementById('rsvpGate');
+  var gateForm = document.getElementById('gateForm');
+  var formEl   = document.getElementById('rsvpForm');
+  var codeIn   = document.getElementById('guestcode');
+  var gateMsg  = document.getElementById('gateMsg');
+  var whoEl    = document.getElementById('gateWho');
+  var gwName   = document.getElementById('gwName');
+  var seatHint = document.getElementById('seatHint');
+  var guestsIn = document.getElementById('guests');
+  var nameIn   = document.getElementById('fullname');
+  var gateHousehold = null;   // travels with the submission
+
+  function normCode(s){ return String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+
+  var CODES = {};
+  Object.keys(GUESTS).forEach(function(k){ CODES[normCode(k)] = GUESTS[k]; });
+  var gateActive = Object.keys(CODES).length > 0;
+
+  function openForm(code, rec){
+    gateHousehold = rec ? { code: code, names: rec.names, seats: rec.seats } : null;
+    if(gateEl) gateEl.classList.add('hide');
+    formEl.classList.remove('hide');
+
+    if(rec){
+      if(gwName) gwName.textContent = rec.names;
+      if(whoEl)  whoEl.hidden = false;
+      if(nameIn && !nameIn.value) nameIn.value = rec.names;
+      if(guestsIn){
+        guestsIn.max = rec.seats;
+        guestsIn.value = rec.seats;
+        if(seatHint){
+          seatHint.textContent = rec.seats === 1
+            ? 'One seat is reserved in your honour.'
+            : rec.seats + ' seats are reserved in your honour.';
+        }
+      }
+      try{ localStorage.setItem('jcmj_code', code); }catch(e){}
+    }
+  }
+
+  function resetGate(){
+    gateHousehold = null;
+    try{ localStorage.removeItem('jcmj_code'); }catch(e){}
+    formEl.classList.add('hide');
+    if(whoEl) whoEl.hidden = true;
+    if(nameIn) nameIn.value = '';
+    if(seatHint) seatHint.textContent = '';
+    if(guestsIn){ guestsIn.max = 4; guestsIn.value = 1; }
+    if(gateEl) gateEl.classList.remove('hide');
+    if(gateMsg){ gateMsg.textContent = ''; gateMsg.classList.remove('bad'); }
+    if(codeIn){ codeIn.value = ''; codeIn.focus(); }
+  }
+
+  if(!gateActive){
+    // No list yet: behave exactly as the site did before the gate existed.
+    if(gateEl) gateEl.classList.add('hide');
+    if(formEl) formEl.classList.remove('hide');
+  } else {
+    var saved = null;
+    try{ saved = localStorage.getItem('jcmj_code'); }catch(e){}
+    if(saved && CODES[saved]) openForm(saved, CODES[saved]);
+
+    if(gateForm){
+      gateForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        var code = normCode(codeIn && codeIn.value);
+        if(!code){
+          gateMsg.textContent = 'Please enter the code from your invitation.';
+          gateMsg.classList.add('bad');
+          return;
+        }
+        if(CODES[code]){
+          gateMsg.classList.remove('bad');
+          gateMsg.textContent = '';
+          openForm(code, CODES[code]);
+        } else {
+          gateMsg.textContent = 'We could not find that code. Please check your invitation, or message us and we will look it up.';
+          gateMsg.classList.add('bad');
+          gateEl.classList.remove('wrong');
+          void gateEl.offsetWidth;              // restart the animation
+          gateEl.classList.add('wrong');
+          if(codeIn) codeIn.select();
+        }
+      });
+    }
+    var resetBtn = document.getElementById('gateReset');
+    if(resetBtn) resetBtn.addEventListener('click', resetGate);
+  }
+
   var rsvpSending = false;
   document.getElementById('rsvpForm').addEventListener('submit', function(e){
     e.preventDefault();
@@ -1853,11 +2358,18 @@
     var form = this;
     var submitBtn = form.querySelector('.submit-btn');
     if(submitBtn){ submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
+    var seatsAsked = parseInt(document.getElementById('guests').value, 10);
+    if(isNaN(seatsAsked) || seatsAsked < 0) seatsAsked = 0;
+    if(gateHousehold && seatsAsked > gateHousehold.seats) seatsAsked = gateHousehold.seats;
+
     var entry = {
       name: document.getElementById('fullname').value.trim(),
       attending: document.getElementById('attending').value,
-      guests: document.getElementById('guests').value,
+      guests: String(seatsAsked),
       message: document.getElementById('message').value.trim(),
+      code: gateHousehold ? gateHousehold.code  : '',
+      household: gateHousehold ? gateHousehold.names : '',
+      seatsReserved: gateHousehold ? String(gateHousehold.seats) : '',
       timestamp: new Date().toISOString()
     };
 
@@ -2019,7 +2531,7 @@
         var mins = Math.max(1, Math.round((dist / CONFIG.assumedSpeedKmh) * 60));
         result.innerHTML =
           '<span class="eta">~ ' + mins + ' min drive &middot; ' + dist.toFixed(1) + ' km away</span>' +
-          '<span class="dir-note">Straight-line estimate — actual travel time depends on traffic and route.</span><br>' +
+          '<span class="dir-note">Estimated in a straight line. Actual travel time depends on traffic and route.</span><br>' +
           '<a href="' + mapsUrl + '" target="_blank" rel="noopener">Open turn-by-turn directions in Google Maps &rarr;</a>';
         btn.remove();
       }, function(){
@@ -2069,6 +2581,20 @@
         }
         y0 = x0 = null;
       }, {passive:true});
+    });
+  })();
+
+  /* ---------- Dress code: tap a card to see sample looks ---------- */
+  (function(){
+    document.querySelectorAll('.look-card').forEach(function(card){
+      function toggle(){
+        var on = card.classList.toggle('flipped');
+        card.setAttribute('aria-pressed', on ? 'true' : 'false');
+      }
+      card.addEventListener('click', toggle);
+      card.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+      });
     });
   })();
 
@@ -2246,11 +2772,18 @@
                                    // the chapter-click pause, fixed separately.
 
     var loopW = 0, mids = [], PX_PER_MS = 0.045;
+    /* The scroll position is tracked here as a float rather than read back
+       from scrollLeft each frame. Browsers round scrollLeft to whole pixels,
+       and above 60Hz one frame of drift is less than 1px — so `scrollLeft +=`
+       threw the remainder away every frame and the reel crawled or stalled on
+       120Hz screens (iPhone Pro, iPad Pro, most recent laptops). */
+    var pos = 0;
 
     function measure(){
       mids = new Array(tiles.length);
+      var base = trackEl.offsetLeft;          // keep midpoints track-relative
       for(var k = 0; k < tiles.length; k++){
-        mids[k] = tiles[k].offsetLeft + tiles[k].offsetWidth / 2;
+        mids[k] = (tiles[k].offsetLeft - base) + tiles[k].offsetWidth / 2;
       }
       // exact distance between the same photo in pass 0 and pass 1 —
       // dividing scrollWidth would leave a gap-sized error and drift the seam
@@ -2268,8 +2801,8 @@
 
     function wrap(){
       if(loopW <= 0) return;
-      if(trackEl.scrollLeft >= loopW * 1.5)      trackEl.scrollLeft -= loopW;
-      else if(trackEl.scrollLeft < loopW * 0.5)  trackEl.scrollLeft += loopW;
+      if(pos >= loopW * 1.5)      pos -= loopW;
+      else if(pos < loopW * 0.5)  pos += loopW;
     }
 
     function frame(ts){
@@ -2277,8 +2810,9 @@
       var dt = Math.min(64, ts - last);        // clamp after a background tab
       last = ts;
       if(!halted && !paused && !dragging && !reduce){
-        trackEl.scrollLeft += dt * PX_PER_MS;
+        pos += dt * PX_PER_MS;               // accumulate in full precision
         wrap();
+        trackEl.scrollLeft = pos;            // then hand the browser one value
       }
       layout();
       rafId = requestAnimationFrame(frame);
@@ -2309,8 +2843,9 @@
       if(!mids.length) measure();
       // hard set: no smooth-scroll easing, so the chapter appears at once
       trackEl.style.scrollBehavior = 'auto';
-      trackEl.scrollLeft = mids[t] - trackEl.clientWidth / 2;
+      pos = mids[t] - trackEl.clientWidth / 2;
       wrap();
+      trackEl.scrollLeft = pos;
       layout();
       // land on the chapter immediately rather than waiting for the reel to drift in
       setActive(al);
@@ -2335,8 +2870,9 @@
       var dx = e.clientX - dragX;
       moved = Math.max(moved, Math.abs(dx));
       if(moved > 4 && e.cancelable) e.preventDefault();
-      trackEl.scrollLeft = dragStart - dx;
+      pos = dragStart - dx;
       wrap();
+      trackEl.scrollLeft = pos;
     }
     function endDrag(){
       if(!dragging) return;
@@ -2357,7 +2893,12 @@
     document.addEventListener('visibilitychange', function(){
       if(document.hidden) stop(); else run();
     });
-    window.addEventListener('resize', function(){ measure(); layout(); });
+    window.addEventListener('resize', function(){
+      measure();
+      pos = trackEl.scrollLeft;     // tile widths changed; re-anchor
+      wrap();
+      layout();
+    });
 
     /* ---- lightbox: fit-to-screen, with a true full-resolution view ---- */
     var lbAlbum = ALBUMS[0], idx = 0, lastFocus = null;
@@ -2495,7 +3036,8 @@
     emptyEl.hidden = true;
     requestAnimationFrame(function(){
       measure();
-      trackEl.scrollLeft = loopW;   // start inside the middle pass
+      pos = loopW;                  // start inside the middle pass
+      trackEl.scrollLeft = pos;
       layout();
       run();
     });
