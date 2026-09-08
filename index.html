@@ -3312,6 +3312,60 @@
       if(contact) localStorage.setItem('jcmj_contact_' + code, JSON.stringify(contact));
     } catch(e){}
   }
+  /* The sheet is the guest list, not the copy baked into this page. Asking it
+     directly means a name added in the spreadsheet works the moment it is
+     saved, with no rebuild of this file and no redeploy of the script: the
+     endpoint already returns whatever rows carry that code.
+
+     The built-in list stays as a fallback for when the endpoint cannot be
+     reached, and as the instant answer for a code that is already known, so
+     the common case never waits on the network. */
+  function fetchParty(code, ms){
+    return new Promise(function(resolve){
+      if(!CONFIG.rsvpEndpoint || !window.fetch){ resolve(null); return; }
+      var settled = false;
+      var done = function(v){ if(!settled){ settled = true; resolve(v); } };
+      setTimeout(function(){ done(null); }, ms || 6000);   // never hang the gate
+      fetch(CONFIG.rsvpEndpoint + '?code=' + encodeURIComponent(code))
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if(!d || !d.ok || !d.party || !d.party.length){ done(null); return; }
+          done({
+            names:   d.party.map(function(p){ return p.name; }),
+            party:   d.party,
+            group:   'Guest'
+          });
+        })
+        .catch(function(){ done(null); });
+    });
+  }
+
+  /* Rebuilds the rows when the sheet turns out to hold more, or different,
+     people than the copy in this page. Anything already answered is carried
+     across so a guest mid-form does not lose their choices. */
+  function reconcile(code, server){
+    if(!server || !gateHousehold) return;
+    if(normCode(gateHousehold.code) !== normCode(code)) return;   // moved on
+    var same = server.names.length === gateHousehold.names.length &&
+               server.names.every(function(n, i){ return n === gateHousehold.names[i]; });
+    var keep = answers;
+    if(!same){
+      gateHousehold.names = server.names;
+      buildParty({ names: server.names });
+      server.names.forEach(function(n){ if(keep[n]) preselect(n, keep[n]); });
+    }
+    server.party.forEach(function(p){
+      if(p.confirmation && !answers[p.name]) preselect(p.name, p.confirmation);
+    });
+    var first = server.party[0] || {};
+    var pEl = document.getElementById('mainPhone');
+    var eEl = document.getElementById('mainEmail');
+    var mEl = document.getElementById('message');
+    if(pEl && first.phone && !pEl.value) pEl.value = first.phone;
+    if(eEl && first.email && !eEl.value) eEl.value = first.email;
+    if(mEl && first.message && !mEl.value) mEl.value = first.message;
+  }
+
   function savedContact(code){
     try { return JSON.parse(localStorage.getItem('jcmj_contact_' + code) || 'null'); }
     catch(e){ return null; }
@@ -3404,32 +3458,8 @@
         if(eEl && !eEl.value) eEl.value = con.email || '';
       }
 
-      /* 2. what the sheet actually holds, which wins. It means a reply sent on
-            a phone shows up when the same guest reopens the form on a laptop,
-            and that a correction the couple made by hand is not quietly
-            overwritten by a stale local copy. */
-      if(CONFIG.rsvpEndpoint){
-        fetch(CONFIG.rsvpEndpoint + '?code=' + encodeURIComponent(code))
-          .then(function(r){ return r.json(); })
-          .then(function(d){
-            if(!d || !d.ok || !d.party || gateHousehold === null) return;
-            if(normCode(gateHousehold.code) !== normCode(code)) return;  // moved on
-            d.party.forEach(function(p){
-              if(p.confirmation) preselect(p.name, p.confirmation);
-            });
-            /* The sheet also holds the household's contact details now, and it
-               outranks whatever this browser remembered: if the couple tidied
-               a number by hand, the guest should see the tidied one. */
-            var first = d.party[0] || {};
-            var pEl = document.getElementById('mainPhone');
-            var eEl = document.getElementById('mainEmail');
-            var mEl = document.getElementById('message');
-            if(pEl && first.phone)   pEl.value = first.phone;
-            if(eEl && first.email)   eEl.value = first.email;
-            if(mEl && first.message && !mEl.value) mEl.value = first.message;
-          })
-          .catch(function(){ /* keep whatever the browser remembered */ });
-      }
+      /* The sheet's own copy arrives via reconcile(), called by whoever opened
+         this form. Fetching again here would ask the same question twice. */
     }
   }
 
@@ -3456,7 +3486,20 @@
   } else {
     var saved = null;
     try{ saved = localStorage.getItem('jcmj_code'); }catch(e){}
-    if(saved && CODES[saved]) openForm(saved, CODES[saved]);
+    if(saved){
+      if(CODES[saved]){
+        openForm(saved, CODES[saved]);
+        fetchParty(saved).then(function(server){ reconcile(saved, server); });
+      } else {
+        // added to the sheet after this page was built
+        fetchParty(saved).then(function(server){
+          if(server && server.names.length){
+            openForm(saved, { names: server.names, group: server.group });
+            reconcile(saved, server);
+          }
+        });
+      }
+    }
 
     if(gateForm){
       gateForm.addEventListener('submit', function(e){
@@ -3467,11 +3510,7 @@
           gateMsg.classList.add('bad');
           return;
         }
-        if(CODES[code]){
-          gateMsg.classList.remove('bad');
-          gateMsg.textContent = '';
-          openForm(code, CODES[code]);
-        } else {
+        function refuse(){
           gateMsg.textContent = 'We could not find that code. Please check your invitation, or message us and we will look it up.';
           gateMsg.classList.add('bad');
           gateEl.classList.remove('wrong');
@@ -3479,6 +3518,33 @@
           gateEl.classList.add('wrong');
           if(codeIn) codeIn.select();
         }
+
+        if(CODES[code]){
+          // known already: open at once, then let the sheet correct it
+          gateMsg.classList.remove('bad');
+          gateMsg.textContent = '';
+          openForm(code, CODES[code]);
+          fetchParty(code).then(function(server){ reconcile(code, server); });
+          return;
+        }
+
+        /* Not in the copy baked into this page, which does not mean it is not
+           a guest: it may have been added to the sheet since. Ask before
+           refusing, and say what is happening rather than appearing to hang. */
+        var btn = gateForm.querySelector('.submit-btn');
+        gateMsg.classList.remove('bad');
+        gateMsg.textContent = 'Checking your code\u2026';
+        if(btn){ btn.disabled = true; }
+        fetchParty(code).then(function(server){
+          if(btn){ btn.disabled = false; }
+          gateMsg.textContent = '';
+          if(server && server.names.length){
+            openForm(code, { names: server.names, group: server.group });
+            reconcile(code, server);
+          } else {
+            refuse();
+          }
+        });
       });
     }
     var resetBtn = document.getElementById('gateReset');

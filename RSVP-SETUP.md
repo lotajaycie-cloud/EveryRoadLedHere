@@ -4,8 +4,9 @@ These are the steps that connect the RSVP form to your spreadsheet. They are
 kept here as a record of the setup, and for when the script needs changing
 later.
 
-**Status:** the endpoint is deployed and wired in. See *Where this got to*
-below for what was checked and the one setting still outstanding.
+**Status: confirmed working.** The script is deployed, running the current
+version, and wired into the site. See *Where this got to* for what was checked
+and the two things left to do.
 
 ---
 
@@ -128,6 +129,30 @@ will not show what was already sent.
 
 ---
 
+## Adding a guest later
+
+Add the name and their code to the spreadsheet. That is the whole job: no
+rebuild of `index.html`, no redeploy of the script, no push.
+
+The form asks the sheet for whoever holds the code that a guest types, so a
+name saved in the spreadsheet is live the moment you save it. Adding someone
+to an existing household works the same way; they appear on that code's form.
+
+Two details worth knowing:
+
+- **A code already in the page opens immediately**, then quietly corrects
+  itself from the sheet a moment later. Guests never wait on the network for
+  the eighty-eight households that existed when the page was built. A code the
+  page does not recognise shows "Checking your code…" while it asks.
+- **If the sheet cannot be reached**, the form falls back to the list built
+  into the page, so a guest is never stuck because Google is slow. The
+  consequence is that a *newly added* guest could not open the form during an
+  outage, where an existing one still could.
+
+The copy of the guest list inside `index.html` is now a fallback rather than
+the source of truth. It is still worth regenerating occasionally so the
+fallback does not drift far from the sheet, but nothing breaks if you do not.
+
 ## Guests changing their reply
 
 Plans change, so the thank you screen now offers **Change your reply**, and the
@@ -151,53 +176,52 @@ their old answer.
 
 ## Where this got to
 
-Two checks were run against the deployed URL.
+Three checks, each ruling something out.
 
-**First attempt** returned a Google sign-in page. That meant *Who has access*
-was not set to **Anyone**, so a guest's browser would follow the redirect, the
-post would never arrive, and the site would quietly store the answer locally
-and thank them anyway. A silent success.
+**One.** The URL returned a Google sign-in page. That meant *Who has access*
+was not **Anyone**, so a guest's browser would follow the redirect, the reply
+would never arrive, and the site would store it locally and thank them anyway.
+A silent success, which is the hardest kind of failure to notice.
 
-**Second attempt**, after that was changed, returned:
+**Two.** After that was changed it returned `{"ok":false,"error":"unauthorised"}`.
+Reachable without a login, which is the part guests need. That message is only
+about the reading key; the form never sends one.
+
+**Three.** After the redeploy, `?code=G401` returned:
 
 ```json
-{"ok":false,"error":"unauthorised"}
+{"ok":true,"code":"G401","party":[
+  {"name":"Raquel Verano-Lim","confirmation":"","phone":"","email":"","message":""},
+  {"name":"Jhep Lim","confirmation":"","phone":"","email":"","message":""}]}
 ```
 
-That is the right answer and the setup is working. The script is now reachable
-without a Google login, which is the part guests need. `unauthorised` refers
-only to the reading key, and **the RSVP form never sends a key** — only the
-dashboard does. In the script, `doPost` has no mention of `DASHBOARD_KEY` at
-all; only `doGet` checks it.
+Everything worth knowing is in that one response:
 
-So replies from the site should now be reaching column C.
+- `ok:true` and no login prompt, so access is right.
+- The correct household came back for that code, so the script is reading the
+  guest sheet and `GUEST_SHEET` matches the real tab.
+- `phone`, `email` and `message` are present as keys. Those exist only in the
+  current version of the script, so the deployment is running the latest code
+  and columns D, E and F will be written.
+- All values are empty, which is correct: nobody has replied yet.
 
-### The one thing still to set
+### The two things left
 
-`dashboard.html` has:
+**Set the dashboard key.** In `dashboard.html`, change
+`dashboardKey: 'change-this-secret-key'` to match `DASHBOARD_KEY` in the script.
+This only affects the dashboard you use; guests are unaffected.
 
-```js
-dashboardKey: 'change-this-secret-key',
-```
+**Prove the write.** Everything above tests reading. Nothing has been written to
+the sheet yet, because posting a test would put a row in your real guest data.
+On the live site, RSVP with **G452** (Carl Allen Lim, one person), fill in a
+number, and send. Then check his row:
 
-Change that to whatever you set `DASHBOARD_KEY` to in the Apps Script. They
-have to match, and that is the only thing the `unauthorised` message was about.
-It does not affect guests replying.
+| C | D | E | F |
+|---|---|---|---|
+| Yes or No | the number | the email | the message |
 
-### Proving it end to end
-
-Nobody has posted a real reply yet, so the write path is untested against your
-live sheet. Two minutes:
-
-1. Open the live site, RSVP, enter **G452** (Carl Allen Lim, one person).
-2. Choose either answer and send.
-3. In the spreadsheet, his row in **column C** should read `Yes` or `No`, and a
-   new **RSVP Log** tab should have appeared with a timestamped row.
-4. Clear column C afterwards so his real reply is not pre-filled.
-
-If column C stays blank but the log tab appears, look at the log's **Not
-matched** column: that names anyone whose row could not be found, almost always
-a trailing space in column A.
+and a new **RSVP Log** tab. Clear those cells afterwards so his real reply is
+not pre-filled.
 
 ---
 
