@@ -552,10 +552,17 @@
   .party-row.missing .party-name{color:#F8D0D3;}
   .party-row.missing .party-pick button{border-color:rgba(248,208,211,.6);}
 
-  @media(max-width:400px){
-    .party-name{font-size:17.5px; flex-basis:100%;}
+  /* "Regretfully Declines" is far too wide to sit beside a name on a phone,
+     so on anything narrower than a tablet the two choices take their own line
+     under the name and split it evenly. */
+  @media(max-width:620px){
+    .party-row{padding:13px 0;}
+    .party-name{flex-basis:100%; font-size:18px; margin-bottom:9px;}
     .party-pick{width:100%;}
-    .party-pick button{flex:1 1 50%; padding:0 6px;}
+    .party-pick button{flex:1 1 50%; padding:0 4px; font-size:9.5px; letter-spacing:1.2px;}
+  }
+  @media(max-width:360px){
+    .party-pick button{font-size:9px; letter-spacing:.8px;}
   }
 
   /* ===== RSVP guest code gate ===== */
@@ -2597,9 +2604,9 @@
      ═══════════════════════════════════════════════════════════════════════ */
 
   /* ═══════════════════════════════════════════════════════════════════════
-     GUEST LIST  —  generated from the couple's sheet: 139 people across 88
-     households. One entry per code; every name on that code gets its own
-     answer on the RSVP and its own row updated in column C.
+     GUEST LIST  —  generated from the couple's sheet: 142 people across 88
+     households, everyone with a code. One entry per code; every name on that
+     code gets its own answer on the RSVP and its own row updated in column C.
 
      Edit the sheet and regenerate rather than hand-editing here, so the two
      cannot drift apart. Matching ignores case, spaces, dashes and dots, so
@@ -2634,7 +2641,7 @@
     'TB204': { group:'Team Bride', names:['Ralf Sulague'] },
     'TB205': { group:'Team Bride', names:['Jewel Amante', 'Oyo Fajardo'] },
     'TB206': { group:'Team Bride', names:['Marla Baes', 'Waj Al Refai'] },
-    'FG301': { group:'Groom Family', names:['Rudolf Lota', 'Judy Pineda', 'Tetey', 'Totoy', 'Amarah'] },
+    'FG301': { group:'Groom Family', names:['Rudolf Lota', 'Judy Pineda', 'Tetey', 'Totoy', 'Amarah', 'Fatima Soriano', 'Romeo Soriano', 'Noly Lota'] },
     'FB301': { group:'Bride Family', names:['Malou Gutierrez', 'Cenon Gutierrez'] },
     'FB302': { group:'Bride Family', names:['Melvene Gutierrez'] },
     'FB303': { group:'Bride Family', names:['Cece Gutierrez'] },
@@ -3204,11 +3211,11 @@
       pick.setAttribute('role', 'group');
       pick.setAttribute('aria-label', 'Will ' + name + ' be joining us?');
 
-      [['Yes', 'Joyfully accepts', ''], ['No', 'Regretfully declines', 'no']].forEach(function(opt){
+      [['Yes', 'Joyfully Accepts', ''], ['No', 'Regretfully Declines', 'no']].forEach(function(opt){
         var b = document.createElement('button');
         b.type = 'button';
         b.className = opt[2];
-        b.textContent = opt[0] === 'Yes' ? 'Joyfully' : 'Regretfully';
+        b.textContent = opt[1];        // 'Joyfully accepts' / 'Regretfully declines'
         b.setAttribute('aria-pressed', 'false');
         b.setAttribute('aria-label', name + ' ' + opt[1]);
         b.addEventListener('click', function(){

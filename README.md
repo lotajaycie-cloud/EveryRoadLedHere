@@ -142,6 +142,8 @@ that code, and answers for each person separately.
 
 ### Setting up the backend
 
+Step by step, with the failure modes, is in **RSVP-SETUP.md**. In short:
+
 Open the guest sheet, **Extensions → Apps Script**, paste
 `backend/google-apps-script.gs`, set `DASHBOARD_KEY`, then **Deploy → New
 deployment → Web app** with *Execute as: Me* and *Who has access: Anyone*.
@@ -159,10 +161,6 @@ Edit the spreadsheet, then regenerate the `GUESTS` block in `index.html` rather
 than hand-editing it, so the two cannot drift apart.
 
 ### Two things worth knowing
-
-**Three people have no code.** Fatima Soriano, Romeo Soriano and Noly Lota have
-blank cells in column B, so they cannot open the form. Give them a code in the
-sheet and regenerate.
 
 **The list is readable in the page source.** Codes keep the form tidy and stop
 casual over-booking; they are not a secret. If that matters, the list can move
