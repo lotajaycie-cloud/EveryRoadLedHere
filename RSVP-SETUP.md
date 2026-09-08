@@ -1,12 +1,11 @@
 # Connecting the RSVP to your Google Sheet
 
-Right now the form works but the answers go nowhere: they are kept in each
-guest's own browser. Nothing is written to your sheet until you finish the
-seven steps below. It takes about ten minutes and you only do it once.
+These are the steps that connect the RSVP form to your spreadsheet. They are
+kept here as a record of the setup, and for when the script needs changing
+later.
 
-**Why it isn't working yet:** `index.html` has an empty `rsvpEndpoint`. That
-setting is the address the form posts to, and Google gives you that address at
-step 5.
+**Status:** the endpoint is deployed and wired in. See *Where this got to*
+below for what was checked and the one setting still outstanding.
 
 ---
 
@@ -98,6 +97,58 @@ Then look at your spreadsheet:
 - A new tab called **RSVP Log** should have appeared with a timestamped row.
 
 Set column C back to blank afterwards so the real reply is not pre-filled.
+
+---
+
+## Where this got to
+
+Two checks were run against the deployed URL.
+
+**First attempt** returned a Google sign-in page. That meant *Who has access*
+was not set to **Anyone**, so a guest's browser would follow the redirect, the
+post would never arrive, and the site would quietly store the answer locally
+and thank them anyway. A silent success.
+
+**Second attempt**, after that was changed, returned:
+
+```json
+{"ok":false,"error":"unauthorised"}
+```
+
+That is the right answer and the setup is working. The script is now reachable
+without a Google login, which is the part guests need. `unauthorised` refers
+only to the reading key, and **the RSVP form never sends a key** — only the
+dashboard does. In the script, `doPost` has no mention of `DASHBOARD_KEY` at
+all; only `doGet` checks it.
+
+So replies from the site should now be reaching column C.
+
+### The one thing still to set
+
+`dashboard.html` has:
+
+```js
+dashboardKey: 'change-this-secret-key',
+```
+
+Change that to whatever you set `DASHBOARD_KEY` to in the Apps Script. They
+have to match, and that is the only thing the `unauthorised` message was about.
+It does not affect guests replying.
+
+### Proving it end to end
+
+Nobody has posted a real reply yet, so the write path is untested against your
+live sheet. Two minutes:
+
+1. Open the live site, RSVP, enter **G452** (Carl Allen Lim, one person).
+2. Choose either answer and send.
+3. In the spreadsheet, his row in **column C** should read `Yes` or `No`, and a
+   new **RSVP Log** tab should have appeared with a timestamped row.
+4. Clear column C afterwards so his real reply is not pre-filled.
+
+If column C stays blank but the log tab appears, look at the log's **Not
+matched** column: that names anyone whose row could not be found, almost always
+a trailing space in column A.
 
 ---
 
