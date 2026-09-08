@@ -102,13 +102,26 @@ Set column C back to blank afterwards so the real reply is not pre-filled.
 
 ## ⚠️ The script changed — redeploy it
 
-Guests can now correct a reply, and that needed changes to the Apps Script.
-**The copy running in your sheet is the old one.** Paste the current
-`backend/google-apps-script.gs` over it, then:
+The guest sheet now takes six columns rather than three, and guests can correct
+a reply. Both needed changes to the Apps Script.
 
-**Deploy → Manage deployments → pencil → Version: New version → Deploy.**
+```
+A  Main Guest    B  Code     C  Confirmation
+D  Contact Number    E  Email    F  Message
+```
 
-The URL does not change. Until you do this, corrections will still overwrite
+Contact details are given once per household, so **every person on that code
+gets the same three values on their own row**. Each row is then complete by
+itself and you can sort or filter by any column without a guest losing their
+number. Headers for D, E and F are written automatically, but only into cells
+that are empty, so anything you have put there yourself is left alone.
+
+Paste the current `backend/google-apps-script.gs` over the copy in your sheet,
+then **Deploy → Manage deployments → pencil → Version: New version → Deploy.**
+
+Editing the existing deployment keeps the same URL. Creating a *new* deployment
+instead gives you a different URL, which then has to be pasted into the site
+again. Either works; the second is just more steps. Until you do this, corrections will still overwrite
 column C correctly, but the RSVP Log will gain a second row for that household
 instead of rewriting the first, and reopening the form on a different device
 will not show what was already sent.

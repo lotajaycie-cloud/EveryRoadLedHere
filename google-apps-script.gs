@@ -19,8 +19,15 @@
  *     dashboard.html as rsvpEndpoint, with the same DASHBOARD_KEY.
  *
  * The guest sheet is expected to be:
- *   column A  name        column B  code        column C  confirmation
- * with a header row somewhere above the data reading "Main Guest".
+ *   A  name     B  code      C  confirmation
+ *   D  contact  E  email     F  message
+ * with a header row somewhere above the data reading "Main Guest". Headers for
+ * D, E and F are added automatically if those cells are empty.
+ *
+ * The contact details are given once per household, so every person on that
+ * code gets the same three values on their own row. That way each row is
+ * complete on its own and the sheet can be sorted or filtered by any column
+ * without a guest losing their contact details.
  * ============================================================================
  */
 
@@ -29,6 +36,7 @@ var LOG_SHEET     = 'RSVP Log';             // created automatically
 var DASHBOARD_KEY = 'change-this-secret-key';
 
 var COL_NAME = 1, COL_CODE = 2, COL_CONFIRM = 3;
+var COL_PHONE = 4, COL_EMAIL = 5, COL_MESSAGE = 6;
 
 
 function doPost(e) {
@@ -43,12 +51,22 @@ function doPost(e) {
     var values = sheet.getDataRange().getValues();
     var written = 0, notFound = [];
 
+    var phone = String(data.phone || '').trim();
+    var email = String(data.email || '').trim();
+    var note  = String(data.message || '').trim();
+
+    ensureHeaders_(sheet, values);
+
     for (var r = 0; r < responses.length; r++) {
       var name = String(responses[r].name || '').trim();
       var answer = responses[r].attending === 'Yes' ? 'Yes' : 'No';
       var row = findRow_(values, name, code);
       if (row > 0) {
-        sheet.getRange(row, COL_CONFIRM).setValue(answer);
+        // C through F in one write: four separate setValue calls per guest
+        // would be four round trips, and an eight person household would make
+        // thirty two of them.
+        sheet.getRange(row, COL_CONFIRM, 1, 4)
+             .setValues([[answer, phone, email, note]]);
         written++;
       } else {
         notFound.push(name);
@@ -63,6 +81,24 @@ function doPost(e) {
   } finally {
     lock.releaseLock();
   }
+}
+
+
+/**
+ * Names column D, E and F on the header row, but only where the cell is empty,
+ * so anything the couple have put there themselves is left alone.
+ */
+function ensureHeaders_(sheet, values) {
+  var h = headerRow_(values);            // 1-based row under which data starts
+  if (h < 1) return;
+  var want = ['Contact Number', 'Email', 'Message'];
+  var cur = sheet.getRange(h, COL_PHONE, 1, 3).getValues()[0];
+  var out = [], changed = false;
+  for (var i = 0; i < 3; i++) {
+    if (String(cur[i] || '').trim() === '') { out.push(want[i]); changed = true; }
+    else out.push(cur[i]);
+  }
+  if (changed) sheet.getRange(h, COL_PHONE, 1, 3).setValues([out]);
 }
 
 
@@ -161,7 +197,10 @@ function doGet(e) {
       if (normCode_(rows[n][COL_CODE - 1]) === want && String(rows[n][COL_NAME - 1] || '').trim()) {
         party.push({
           name: String(rows[n][COL_NAME - 1]).trim(),
-          confirmation: String(rows[n][COL_CONFIRM - 1] || '').trim()
+          confirmation: String(rows[n][COL_CONFIRM - 1] || '').trim(),
+          phone: String(rows[n][COL_PHONE - 1] || '').trim(),
+          email: String(rows[n][COL_EMAIL - 1] || '').trim(),
+          message: String(rows[n][COL_MESSAGE - 1] || '').trim()
         });
       }
     }

@@ -2839,7 +2839,7 @@
     // included google-apps-script.gs.txt file for the backend code and
     // setup steps). Until you do, RSVPs are saved locally in the browser
     // as a demo fallback so the form still works while you're testing.
-    rsvpEndpoint: 'https://script.google.com/macros/s/AKfycbxFb3KGNh76yhgzZ2OfYT0SnpbpCWvAdV-S5q7NXkh1iBNsAHRTsPSbbs4pF-UbpU8pDg/exec',
+    rsvpEndpoint: 'https://script.google.com/macros/s/AKfycbzNJqm1T3XSRLfw-Ey4n--fKNWV-6xwhr2YrJGhBKZMXzpbG_7oz0Aq-oyeJnXinn3a3A/exec',
 
     // Paste a normal YouTube or Vimeo share/watch link once your prenup
     // video is finished — it's auto-converted to an embeddable URL.
@@ -3417,6 +3417,16 @@
             d.party.forEach(function(p){
               if(p.confirmation) preselect(p.name, p.confirmation);
             });
+            /* The sheet also holds the household's contact details now, and it
+               outranks whatever this browser remembered: if the couple tidied
+               a number by hand, the guest should see the tidied one. */
+            var first = d.party[0] || {};
+            var pEl = document.getElementById('mainPhone');
+            var eEl = document.getElementById('mainEmail');
+            var mEl = document.getElementById('message');
+            if(pEl && first.phone)   pEl.value = first.phone;
+            if(eEl && first.email)   eEl.value = first.email;
+            if(mEl && first.message && !mEl.value) mEl.value = first.message;
           })
           .catch(function(){ /* keep whatever the browser remembered */ });
       }
