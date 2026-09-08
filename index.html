@@ -521,6 +521,14 @@
     color:var(--champagne); margin-bottom:14px; opacity:.95;
   }
   .party{margin-bottom:24px;}
+  .contact{
+    padding-top:20px; margin-bottom:4px;
+    border-top:1px solid rgba(255,255,255,.16);
+  }
+  .field label .opt{
+    text-transform:none; letter-spacing:0; font-size:11px;
+    opacity:.6; margin-left:5px;
+  }
   .party-row{
     display:flex; align-items:center; justify-content:space-between; gap:12px;
     padding:11px 0; border-bottom:1px solid rgba(255,255,255,.16);
@@ -644,6 +652,17 @@
   }
   .thankyou.show{display:block;}
   .thankyou p{color:rgba(255,255,255,.9);}
+  /* Plans change. Without this a guest who has replied has no way back to the
+     form at all, and would have to message the couple to correct a mistake. */
+  .ty-edit{
+    margin-top:22px; min-height:44px; padding:0 20px; cursor:pointer;
+    background:transparent; color:var(--champagne);
+    border:1px solid rgba(255,255,255,.38); border-radius:3px;
+    font-family:'Jost', sans-serif; font-weight:300;
+    font-size:11px; letter-spacing:2.2px; text-transform:uppercase;
+    transition:background .2s ease, border-color .2s ease;
+  }
+  .ty-edit:hover{background:rgba(255,255,255,.12); border-color:#fff;}
   .rsvp-form.hide{display:none;}
 
   /* Gift / Registry */
@@ -1682,6 +1701,47 @@
     .venue-time{font-size:22px;}
   }
 
+  /* ---- the QR codes, folded away until asked for ----
+     Two large payment codes sitting open under the copy would make the section
+     read as a request rather than an offer, so each is behind its own button
+     and opens with a height transition. Height is animated rather than
+     display toggled so it eases instead of jumping. */
+  .qr{margin-top:18px; text-align:left;}
+  .qr-btn{
+    display:inline-flex; align-items:center; gap:10px;
+    min-height:44px; padding:0 16px; cursor:pointer;
+    background:transparent; border:1px solid var(--blush); border-radius:3px;
+    font-family:'Jost', sans-serif; font-weight:300;
+    font-size:10.5px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--burgundy);
+    transition:background .25s ease, border-color .25s ease;
+  }
+  .qr-btn:hover{background:var(--champagne); border-color:var(--burgundy);}
+  .qr-mark{
+    font-size:15px; line-height:1; transition:transform .35s cubic-bezier(.2,.8,.2,1);
+  }
+  .qr-btn[aria-expanded="true"] .qr-mark{transform:rotate(135deg);}
+  .qr-btn[aria-expanded="true"]{background:var(--champagne); border-color:var(--burgundy);}
+
+  .qr-panel{
+    max-height:0; overflow:hidden; opacity:0;
+    transition:max-height .55s cubic-bezier(.2,.8,.2,1), opacity .4s ease, margin-top .55s ease;
+  }
+  .qr.open .qr-panel{max-height:640px; opacity:1; margin-top:16px;}
+  .qr-panel img{
+    display:block; width:100%; max-width:330px; height:auto; margin:0 auto;
+    border:1px solid var(--blush); border-radius:6px;
+    transform:scale(.96);
+    transition:transform .55s cubic-bezier(.2,.8,.2,1);
+  }
+  .qr.open .qr-panel img{transform:scale(1);}
+  @media(prefers-reduced-motion:reduce){
+    .qr-panel, .qr-panel img, .qr-mark{transition:none;}
+  }
+  @media(max-width:600px){
+    .qr-panel img{max-width:300px;}
+  }
+
   /* ---- three of them, running the length of the day ----
      Line weights match the gift plates so the two sets read as one hand. */
   .tl-dogs{max-width:340px; margin:30px auto 4px;}
@@ -2295,7 +2355,7 @@
             </div>
             <div class="look-kicker">Formal &middot; sage &amp; taupes</div>
             <h3>Gentlemen</h3>
-            <p>Light and muted shades are what we love most. Think of the softer sages, sands and taupes shown here. Wear yours as a formal suit, or as a long sleeve shirt with trousers. Both look right on the day.</p>
+            <p>Wear yours as a formal suit, or as a long sleeve shirt with trousers. Both look right on the day.</p>
             <div class="look-cue">Tap to view sample looks &rarr;</div>
           </div>
           <div class="look-face look-back">
@@ -2313,12 +2373,12 @@
               <div class="pal-swatch"><div class="pal-chip" style="background:#F8D0D3"></div><div class="pal-name">Ophelia Rose</div></div>
               <div class="pal-swatch"><div class="pal-chip" style="background:#B7959B"></div><div class="pal-name">Smoky Pink</div></div>
               <div class="pal-swatch"><div class="pal-chip" style="background:#A5738A"></div><div class="pal-name">Dusty Orchid</div></div>
-              <div class="pal-swatch"><div class="pal-chip" style="background:#C0C9B4"></div><div class="pal-name">Muted Sage</div></div>
               <div class="pal-swatch"><div class="pal-chip" style="background:#A7AE74"></div><div class="pal-name">Light Olive</div></div>
+              <div class="pal-swatch"><div class="pal-chip" style="background:#C0C9B4"></div><div class="pal-name">Muted Sage</div></div>
             </div>
-            <div class="look-kicker">Floor length &middot; sage &amp; mauves</div>
+            <div class="look-kicker">Floor length &middot; mauve &amp; olives</div>
             <h3>Ladies</h3>
-            <p>Light and muted shades are preferred. Soft roses, dusty mauves and pale sages rather than anything deep or bright. Floor length, and the silhouette is entirely yours.</p>
+            <p>Floor length, and the silhouette is entirely yours.</p>
             <div class="look-cue">Tap to view sample looks &rarr;</div>
           </div>
           <div class="look-face look-back">
@@ -2338,7 +2398,7 @@
       </div>
     </div>
 
-    <div class="attire-bar"><span style="background:#F8D0D3"></span><span style="background:#B7959B"></span><span style="background:#A5738A"></span><span style="background:#C0C9B4"></span><span style="background:#A7AE74"></span><span style="background:#A8B5A2"></span><span style="background:#8F9F8C"></span><span style="background:#C9B8A6"></span></div>
+    <div class="attire-bar"><span style="background:#F8D0D3"></span><span style="background:#B7959B"></span><span style="background:#A5738A"></span><span style="background:#A7AE74"></span><span style="background:#C0C9B4"></span><span style="background:#A8B5A2"></span><span style="background:#8F9F8C"></span><span style="background:#C9B8A6"></span></div>
   </div>
 </section>
 
@@ -2375,6 +2435,21 @@
       <p class="party-lead" id="partyLead"></p>
       <div class="party" id="partyList"></div>
 
+      <!-- One contact for the household rather than per person: the couple
+           need a way to reach the party, not eight ways. -->
+      <div class="contact">
+        <div class="field">
+          <label for="mainPhone">Main Contact Number</label>
+          <input type="tel" id="mainPhone" inputmode="tel" autocomplete="tel"
+                 placeholder="e.g. 0917 123 4567">
+        </div>
+        <div class="field">
+          <label for="mainEmail">Email Address <span class="opt">optional</span></label>
+          <input type="email" id="mainEmail" inputmode="email" autocomplete="email"
+                 placeholder="e.g. name@email.com">
+        </div>
+      </div>
+
       <div class="field">
         <label for="message">Message for the Couple (optional)</label>
         <textarea id="message" placeholder="Leave a note for JC &amp; MJ"></textarea>
@@ -2390,6 +2465,7 @@
       </svg>
       <h3 style="font-family:'Cormorant Garamond',serif; font-weight:300; font-size:26px; margin-bottom:10px;">Thank You!</h3>
       <p>Your RSVP has been noted. We can't wait to celebrate with you.</p>
+      <button type="button" class="ty-edit" id="rsvpEdit">Change your reply</button>
     </div>
   </div>
 </section>
@@ -2500,6 +2576,16 @@
           <h3>A Place We'll Call Home</h3>
           <p>We dream of having a little place that is truly ours, where ordinary days become our favorite memories, where friends and family always have a place at the table, and where we can watch our life together grow.</p>
           <span class="fund-tag">For our dream home fund</span>
+          <div class="qr">
+            <button type="button" class="qr-btn" aria-expanded="false">
+              <span class="qr-label">Show BPI QR code</span>
+              <span class="qr-mark" aria-hidden="true">+</span>
+            </button>
+            <div class="qr-panel">
+              <img loading="lazy" src="images/gift-bpi.jpg" alt="BPI InstaPay QR code for the account nicknamed House">
+            </div>
+          </div>
+
         </div>
         <div class="fund-card">
           <div class="fund-sketch" aria-hidden="true">
@@ -2537,6 +2623,16 @@
           <h3>Somewhere We've Never Been</h3>
           <p>We also dream of beginning our marriage with a journey we'll never forget. We'd love to spend our honeymoon in Turkey, exploring somewhere new, taking our time, trying things for the first time, and simply enjoying being newlyweds.</p>
           <span class="fund-tag">For our Turkey honeymoon fund</span>
+          <div class="qr">
+            <button type="button" class="qr-btn" aria-expanded="false">
+              <span class="qr-label">Show Maya QR code</span>
+              <span class="qr-mark" aria-hidden="true">+</span>
+            </button>
+            <div class="qr-panel">
+              <img loading="lazy" src="images/gift-maya.jpg" alt="Maya QR code for Marian Joice Gutierrez, @mjo.ice">
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -3195,6 +3291,43 @@
   /* Builds one row per person on the code. Each answers for themselves, so a
      family of five can come as three without the couple having to work out
      which three. */
+  /* What this household last sent from this browser. The sheet is the real
+     record; this is only so the form reopens showing what they chose rather
+     than blank, which would read as if nothing had been saved. */
+  function savedAnswers(code){
+    try {
+      var all = JSON.parse(localStorage.getItem('jcmj_answers') || '{}');
+      return all[code] || null;
+    } catch(e){ return null; }
+  }
+  function rememberAnswers(code, map, contact){
+    try {
+      var all = JSON.parse(localStorage.getItem('jcmj_answers') || '{}');
+      all[code] = map;
+      localStorage.setItem('jcmj_answers', JSON.stringify(all));
+      if(contact) localStorage.setItem('jcmj_contact_' + code, JSON.stringify(contact));
+    } catch(e){}
+  }
+  function savedContact(code){
+    try { return JSON.parse(localStorage.getItem('jcmj_contact_' + code) || 'null'); }
+    catch(e){ return null; }
+  }
+
+  /* Marks a person's row without the guest having to tap it, used when
+     restoring a previous reply. */
+  function preselect(name, value){
+    var rows = partyEl.children;
+    for(var i = 0; i < rows.length; i++){
+      var nm = rows[i].querySelector('.party-name');
+      if(nm && nm.textContent === name){
+        var want = (String(value).toLowerCase().charAt(0) === 'y') ? 0 : 1;
+        var btns = rows[i].querySelectorAll('.party-pick button');
+        if(btns[want]) btns[want].click();
+        return;
+      }
+    }
+  }
+
   function buildParty(rec){
     answers = {};
     partyEl.innerHTML = '';
@@ -3253,6 +3386,36 @@
       if(whoEl) whoEl.hidden = false;
       buildParty(rec);
       try{ localStorage.setItem('jcmj_code', code); }catch(e){}
+
+      // 1. what this browser remembers, so the form is never blank on a return
+      var prev = savedAnswers(code);
+      if(prev){
+        rec.names.forEach(function(n){ if(prev[n]) preselect(n, prev[n]); });
+      }
+      var con = savedContact(code);
+      if(con){
+        var pEl = document.getElementById('mainPhone');
+        var eEl = document.getElementById('mainEmail');
+        if(pEl && !pEl.value) pEl.value = con.phone || '';
+        if(eEl && !eEl.value) eEl.value = con.email || '';
+      }
+
+      /* 2. what the sheet actually holds, which wins. It means a reply sent on
+            a phone shows up when the same guest reopens the form on a laptop,
+            and that a correction the couple made by hand is not quietly
+            overwritten by a stale local copy. */
+      if(CONFIG.rsvpEndpoint){
+        fetch(CONFIG.rsvpEndpoint + '?code=' + encodeURIComponent(code))
+          .then(function(r){ return r.json(); })
+          .then(function(d){
+            if(!d || !d.ok || !d.party || gateHousehold === null) return;
+            if(normCode(gateHousehold.code) !== normCode(code)) return;  // moved on
+            d.party.forEach(function(p){
+              if(p.confirmation) preselect(p.name, p.confirmation);
+            });
+          })
+          .catch(function(){ /* keep whatever the browser remembered */ });
+      }
     }
   }
 
@@ -3264,6 +3427,8 @@
     answers = {};
     if(partyEl) partyEl.innerHTML = '';
     if(partyLead) partyLead.textContent = '';
+    var pEl = document.getElementById('mainPhone'); if(pEl) pEl.value = '';
+    var eEl = document.getElementById('mainEmail'); if(eEl) eEl.value = '';
     if(partyMsg){ partyMsg.textContent = ''; partyMsg.classList.remove('bad'); }
     if(gateEl) gateEl.classList.remove('hide');
     if(gateMsg){ gateMsg.textContent = ''; gateMsg.classList.remove('bad'); }
@@ -3304,6 +3469,19 @@
     }
     var resetBtn = document.getElementById('gateReset');
     if(resetBtn) resetBtn.addEventListener('click', resetGate);
+
+    /* Back from the thank you to the form, with the previous answers still
+       selected. Sending again overwrites column C and rewrites that
+       household's row in the log, so the sheet ends up with the correction
+       rather than two contradictory entries. */
+    var editBtn = document.getElementById('rsvpEdit');
+    if(editBtn) editBtn.addEventListener('click', function(){
+      var ty = document.getElementById('thankyou');
+      if(ty) ty.classList.remove('show');
+      formEl.classList.remove('hide');
+      if(partyMsg){ partyMsg.textContent = ''; partyMsg.classList.remove('bad'); }
+      formEl.scrollIntoView({block:'center'});
+    });
   }
 
   var rsvpSending = false;
@@ -3322,6 +3500,21 @@
       var name = people[n];
       if(name && !answers[name]){ missing.push(name); row.classList.add('missing'); }
     });
+    var phoneEl = document.getElementById('mainPhone');
+    var phone = phoneEl ? phoneEl.value.trim() : '';
+    // 7 digits is the shortest real Philippine landline; enough to catch a
+    // slip without refusing an unusual format
+    var phoneOk = (phone.replace(/[^0-9]/g, '').length >= 7);
+
+    if(!missing.length && !phoneOk){
+      if(partyMsg){
+        partyMsg.textContent = 'Please leave a contact number so we can reach you.';
+        partyMsg.classList.add('bad');
+      }
+      if(phoneEl){ phoneEl.focus(); phoneEl.scrollIntoView({block:'center'}); }
+      return;
+    }
+
     if(missing.length){
       if(partyMsg){
         partyMsg.textContent = missing.length === 1
@@ -3348,12 +3541,16 @@
       responses: responses,
       attending: String(coming),
       partySize: String(people.length),
+      phone:     document.getElementById('mainPhone').value.trim(),
+      email:     document.getElementById('mainEmail').value.trim(),
       message:   document.getElementById('message').value.trim(),
       timestamp: new Date().toISOString()
     };
 
     function reveal(){
       rsvpSending = false;
+      if(gateHousehold) rememberAnswers(gateHousehold.code, answers, {phone: entry.phone, email: entry.email});
+      if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = 'Send RSVP'; }
       form.classList.add('hide');
       var ty = document.getElementById('thankyou');
       var line = ty.querySelector('p');
@@ -3571,6 +3768,23 @@
     });
   })();
 
+
+
+  /* ---------- gift QR codes ---------- */
+  (function(){
+    document.querySelectorAll('.qr').forEach(function(box){
+      var btn = box.querySelector('.qr-btn');
+      var lab = box.querySelector('.qr-label');
+      if(!btn) return;
+      var shown = lab ? lab.textContent : '';
+      var hidden = shown.replace(/^Show/, 'Hide');
+      btn.addEventListener('click', function(){
+        var open = box.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if(lab) lab.textContent = open ? hidden : shown;
+      });
+    });
+  })();
 
   /* ---------- Prenup reel: one continuous ribbon through every chapter ---------- */
   (function(){

@@ -100,6 +100,42 @@ Set column C back to blank afterwards so the real reply is not pre-filled.
 
 ---
 
+## ⚠️ The script changed — redeploy it
+
+Guests can now correct a reply, and that needed changes to the Apps Script.
+**The copy running in your sheet is the old one.** Paste the current
+`backend/google-apps-script.gs` over it, then:
+
+**Deploy → Manage deployments → pencil → Version: New version → Deploy.**
+
+The URL does not change. Until you do this, corrections will still overwrite
+column C correctly, but the RSVP Log will gain a second row for that household
+instead of rewriting the first, and reopening the form on a different device
+will not show what was already sent.
+
+---
+
+## Guests changing their reply
+
+Plans change, so the thank you screen now offers **Change your reply**, and the
+form reopens with their previous answers already selected.
+
+What happens on the second send:
+
+- **Column C** is overwritten for each person. It always holds the latest
+  answer, never a duplicate.
+- **The RSVP Log** rewrites that household's existing row rather than appending
+  a new one, so the log reads as current truth. A **Revisions** count and a
+  **First replied** date keep the part of the history that matters.
+- The form asks the sheet what it already holds when a guest reopens it, so a
+  reply sent on a phone appears when they return on a laptop, and a correction
+  you make by hand in the sheet is not overwritten by a stale copy in their
+  browser.
+
+This means **you can safely edit column C yourself**. If you correct someone by
+hand and they later reopen the form, they will see your correction rather than
+their old answer.
+
 ## Where this got to
 
 Two checks were run against the deployed URL.

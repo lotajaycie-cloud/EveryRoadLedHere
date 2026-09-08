@@ -2,7 +2,8 @@
  * JC & MJ — RSVP backend
  * ============================================================================
  * Writes each guest's answer into column C of the guest list, on that guest's
- * own row, and keeps a dated log of every submission on a second tab.
+ * own row, and keeps one row per household on an RSVP Log tab, rewritten in
+ * place when a guest changes their mind so the log always reads true.
  *
  * SETUP
  *  1. Open the guest list spreadsheet.
@@ -91,36 +92,83 @@ function normCode_(v) {
 }
 
 
+/**
+ * One row per household, rewritten in place when a guest changes their mind,
+ * so the log always shows what is currently true rather than a pile of
+ * superseded answers. The revision count and the first-replied date keep the
+ * history that matters without keeping every version of it.
+ */
 function logSubmission_(data, written, notFound) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var log = ss.getSheetByName(LOG_SHEET);
   if (!log) {
     log = ss.insertSheet(LOG_SHEET);
-    log.appendRow(['Timestamp', 'Code', 'Group', 'Party', 'Attending',
-                   'Answers', 'Message', 'Rows updated', 'Not matched']);
+    log.appendRow(['Code', 'Group', 'Party', 'Attending', 'Answers', 'Message',
+                   'First replied', 'Last updated', 'Revisions',
+                   'Rows updated', 'Not matched']);
     log.setFrozenRows(1);
   }
+
   var answers = (data.responses || []).map(function (r) {
     return r.name + ': ' + r.attending;
   }).join('; ');
 
-  log.appendRow([
-    new Date(),
-    data.code || '',
-    data.group || '',
-    data.partySize || '',
-    data.attending || '',
-    answers,
-    data.message || '',
-    written,
-    notFound.join('; ')
-  ]);
+  var code = String(data.code || '').trim();
+  var now = new Date();
+
+  // find an existing row for this code
+  var values = log.getDataRange().getValues();
+  var target = -1;
+  for (var i = 1; i < values.length; i++) {
+    if (normCode_(values[i][0]) === normCode_(code)) { target = i + 1; break; }
+  }
+
+  if (target > 0) {
+    var firstReplied = values[target - 1][6] || now;
+    var revisions = Number(values[target - 1][8] || 0) + 1;
+    log.getRange(target, 1, 1, 11).setValues([[
+      code, data.group || '', data.partySize || '', data.attending || '',
+      answers, data.message || '', firstReplied, now, revisions,
+      written, notFound.join('; ')
+    ]]);
+  } else {
+    log.appendRow([code, data.group || '', data.partySize || '',
+                   data.attending || '', answers, data.message || '',
+                   now, now, 0, written, notFound.join('; ')]);
+  }
 }
 
 
-/** Read-only feed for dashboard.html. */
+/**
+ * Two jobs.
+ *
+ *   ?code=G401   returns just that household's current answers, no key. It is
+ *                what the site asks for when a guest reopens the form, so the
+ *                sheet stays the single source of truth and an edit made on a
+ *                phone shows up on a laptop. It reveals nothing a holder of
+ *                that code could not already set.
+ *
+ *   ?key=...     returns the whole list, for dashboard.html.
+ */
 function doGet(e) {
-  var key = e && e.parameter ? e.parameter.key : '';
+  var p = (e && e.parameter) ? e.parameter : {};
+
+  if (p.code) {
+    var want = normCode_(p.code);
+    var rows = guestSheet_().getDataRange().getValues();
+    var party = [];
+    for (var n = 0; n < rows.length; n++) {
+      if (normCode_(rows[n][COL_CODE - 1]) === want && String(rows[n][COL_NAME - 1] || '').trim()) {
+        party.push({
+          name: String(rows[n][COL_NAME - 1]).trim(),
+          confirmation: String(rows[n][COL_CONFIRM - 1] || '').trim()
+        });
+      }
+    }
+    return json_({ ok: true, code: p.code, party: party });
+  }
+
+  var key = p.key || '';
   if (!key || key !== DASHBOARD_KEY) {
     return json_({ ok: false, error: 'unauthorised' });
   }
