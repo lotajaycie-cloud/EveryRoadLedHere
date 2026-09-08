@@ -122,40 +122,51 @@ button is disabled while sending, so a double tap cannot post twice.
 
 ---
 
-## Guest codes
+## Guest codes and the RSVP
 
-Each invitation carries a short code. A guest types it into the RSVP and the
-form opens with their household's name filled in and the guest number capped at
-the seats you actually reserved, which is what stops a party of two arriving as
-five.
+The guest list is generated from your spreadsheet: **139 people across 88
+households**. A guest types the code from their invitation, sees everyone on
+that code, and answers for each person separately.
 
-Edit the list near the top of the `<script>` block in `index.html`:
+### How a reply travels
 
-```js
-var GUESTS = {
-  'JCMJ01': { names: 'The Sample Family',      seats: 4 },
-  'JCMJ02': { names: 'Juan & Maria Dela Cruz', seats: 2 },
-  'JCMJ03': { names: 'Ana Reyes',              seats: 1 }
-};
-```
+1. Guest enters their code, e.g. `G401`. Matching ignores case, spaces, dashes
+   and dots, so `g401`, `G 401` and `G-401` all work.
+2. The form lists every name on that code, each with **Joyfully** / **Regretfully**.
+3. All of them must be answered. A blank is treated as a mistake, not a no.
+4. On send, the Apps Script writes **Yes** or **No** into **column C** of that
+   person's own row, matched on name *and* code so two guests sharing a name in
+   different households cannot overwrite each other.
+5. Every submission is also appended to an **RSVP Log** tab with a timestamp,
+   the message, and anything that failed to match.
 
-One line per household. The key is the code printed on that household's
-invitation. Matching ignores case, spaces, dashes and dots, so `jcmj 01` and
-`JCMJ-01` both open the same record.
+### Setting up the backend
 
-Three things worth knowing:
+Open the guest sheet, **Extensions → Apps Script**, paste
+`backend/google-apps-script.gs`, set `DASHBOARD_KEY`, then **Deploy → New
+deployment → Web app** with *Execute as: Me* and *Who has access: Anyone*.
+Copy the `/exec` URL into `index.html` as `CONFIG.rsvpEndpoint`.
 
-- **Empty list means no gate.** Delete every entry and the RSVP behaves exactly
-  as it did before, so nothing breaks while you are still building the list.
-- **A code is a courtesy, not a lock.** The list sits in the page source, so
-  anyone curious can read it. Keep private notes out of the `names` field.
-- **The code travels to the sheet.** Three extra columns are recorded with each
-  reply: Guest Code, Household, and Seats Reserved. If your sheet already has
-  the old five headers, add these three to the right of Message, or delete the
-  header row and let the script rebuild it.
+Check `GUEST_SHEET` at the top of the script matches the tab holding the list.
+It falls back to the first tab if the name is wrong.
 
-Once a guest passes the gate their code is remembered in that browser, so
-returning to the page does not ask again. The "Not you?" link clears it.
+Until that URL is set, replies are kept in the guest's own browser so the form
+still works for testing, but you cannot read them.
+
+### Changing the guest list
+
+Edit the spreadsheet, then regenerate the `GUESTS` block in `index.html` rather
+than hand-editing it, so the two cannot drift apart.
+
+### Two things worth knowing
+
+**Three people have no code.** Fatima Soriano, Romeo Soriano and Noly Lota have
+blank cells in column B, so they cannot open the form. Give them a code in the
+sheet and regenerate.
+
+**The list is readable in the page source.** Codes keep the form tidy and stop
+casual over-booking; they are not a secret. If that matters, the list can move
+behind the Apps Script so a code returns only its own household.
 
 ## Editing the site
 

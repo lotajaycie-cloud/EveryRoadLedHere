@@ -1,101 +1,169 @@
 /**
- * JC & MJ — RSVP backend (Google Apps Script)
- * ---------------------------------------------------------------
- * This turns a Google Sheet into a free, no-hosting-required backend
- * for the RSVP form on wedding_site.html, and the data source for
- * dashboard.html.
+ * JC & MJ — RSVP backend
+ * ============================================================================
+ * Writes each guest's answer into column C of the guest list, on that guest's
+ * own row, and keeps a dated log of every submission on a second tab.
  *
- * SETUP (about 5 minutes):
- * 1. Go to https://sheets.google.com and create a new blank spreadsheet.
- *    Name it anything, e.g. "JC & MJ RSVPs".
- * 2. In the sheet, go to Extensions > Apps Script.
- * 3. Delete the placeholder code in Code.gs and paste this entire file.
- * 4. Change DASHBOARD_KEY below to your own secret string (anything —
- *    just don't leave it as the default).
- * 5. Click Deploy > New deployment.
- *      - Click the gear icon next to "Select type" and choose "Web app".
- *      - Description: anything.
- *      - Execute as: Me.
- *      - Who has access: Anyone.
- *      - Click Deploy, and authorize the script when prompted.
- * 6. Copy the "Web app URL" you're given (ends in /exec).
- * 7. Paste that URL into:
- *      - CONFIG.rsvpEndpoint in wedding_site.html
- *      - CONFIG.rsvpEndpoint in dashboard.html
- * 8. Paste the SAME DASHBOARD_KEY value into CONFIG.dashboardKey in
- *    dashboard.html.
- * 9. Open your Sheet any time to see raw responses, or use dashboard.html
- *    for the styled view with stats, search, sort, and CSV export.
+ * SETUP
+ *  1. Open the guest list spreadsheet.
+ *  2. Extensions -> Apps Script. Delete anything already there and paste this.
+ *  3. Check GUEST_SHEET below matches the tab holding the guest list. If the
+ *     tab is called something other than Sheet1, change it.
+ *  4. Change DASHBOARD_KEY to a secret of your own.
+ *  5. Deploy -> New deployment -> Web app.
+ *       Execute as:      Me
+ *       Who has access:  Anyone
+ *     Authorise when prompted, then copy the /exec URL.
+ *  6. Paste that URL into index.html as CONFIG.rsvpEndpoint, and into
+ *     dashboard.html as rsvpEndpoint, with the same DASHBOARD_KEY.
  *
- * If you ever change the script, you must create a NEW deployment
- * version (Deploy > Manage deployments > edit > New version) for the
- * changes to take effect on the existing URL.
- * ---------------------------------------------------------------
+ * The guest sheet is expected to be:
+ *   column A  name        column B  code        column C  confirmation
+ * with a header row somewhere above the data reading "Main Guest".
+ * ============================================================================
  */
 
-var SHEET_NAME = 'RSVPs';
-
-// Change this to your own secret before deploying. Anyone who knows this
-// key can read the full response list via the URL, so keep it private.
+var GUEST_SHEET   = 'Sheet1';               // the tab holding the guest list
+var LOG_SHEET     = 'RSVP Log';             // created automatically
 var DASHBOARD_KEY = 'change-this-secret-key';
 
+var COL_NAME = 1, COL_CODE = 2, COL_CONFIRM = 3;
+
+
 function doPost(e) {
-  var sheet = getSheet_();
-  var data = JSON.parse(e.postData.contents);
-  sheet.appendRow([
-    data.timestamp || new Date().toISOString(),
-    data.name || '',
-    data.attending || '',
-    data.guests || '',
-    data.message || '',
-    data.code || '',
-    data.household || '',
-    data.seatsReserved || ''
-  ]);
-  return ContentService
-    .createTextOutput(JSON.stringify({ status: 'ok' }))
-    .setMimeType(ContentService.MimeType.JSON);
-}
+  var lock = LockService.getScriptLock();
+  lock.waitLock(30000);                     // two guests answering at once
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var responses = data.responses || [];
+    var code = String(data.code || '').trim();
 
-function doGet(e) {
-  var key = e.parameter.key;
-  if (!key || key !== DASHBOARD_KEY) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ error: 'Unauthorized' }))
-      .setMimeType(ContentService.MimeType.JSON);
+    var sheet = guestSheet_();
+    var values = sheet.getDataRange().getValues();
+    var written = 0, notFound = [];
+
+    for (var r = 0; r < responses.length; r++) {
+      var name = String(responses[r].name || '').trim();
+      var answer = responses[r].attending === 'Yes' ? 'Yes' : 'No';
+      var row = findRow_(values, name, code);
+      if (row > 0) {
+        sheet.getRange(row, COL_CONFIRM).setValue(answer);
+        written++;
+      } else {
+        notFound.push(name);
+      }
+    }
+
+    logSubmission_(data, written, notFound);
+
+    return json_({ ok: true, written: written, notFound: notFound });
+  } catch (err) {
+    return json_({ ok: false, error: String(err) });
+  } finally {
+    lock.releaseLock();
   }
-
-  var sheet = getSheet_();
-  var values = sheet.getDataRange().getValues();
-  values.shift(); // drop header row
-
-  var out = values
-    .filter(function (row) { return row.join('') !== ''; })
-    .map(function (row) {
-      return {
-        timestamp: row[0],
-        name: row[1],
-        attending: row[2],
-        guests: row[3],
-        message: row[4],
-        code: row[5],
-        household: row[6],
-        seatsReserved: row[7]
-      };
-    });
-
-  return ContentService
-    .createTextOutput(JSON.stringify(out))
-    .setMimeType(ContentService.MimeType.JSON);
 }
 
-function getSheet_() {
+
+/**
+ * Matches on name AND code so two guests who share a name in different
+ * households cannot overwrite each other. Comparison is case and space
+ * insensitive because a sheet collects stray spaces over time.
+ */
+function findRow_(values, name, code) {
+  var wantName = norm_(name);
+  var wantCode = normCode_(code);
+  for (var i = 0; i < values.length; i++) {
+    if (norm_(values[i][COL_NAME - 1]) === wantName &&
+        normCode_(values[i][COL_CODE - 1]) === wantCode) {
+      return i + 1;                          // sheet rows are 1-based
+    }
+  }
+  return -1;
+}
+
+function norm_(v) {
+  return String(v == null ? '' : v).replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+function normCode_(v) {
+  return String(v == null ? '' : v).toUpperCase().replace(/[^A-Z0-9]/g, '');
+}
+
+
+function logSubmission_(data, written, notFound) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(SHEET_NAME);
-  if (!sheet) {
-    sheet = ss.insertSheet(SHEET_NAME);
-    sheet.appendRow(['Timestamp', 'Name', 'Attending', 'Guests', 'Message', 'Guest Code', 'Household', 'Seats Reserved']);
-    sheet.setFrozenRows(1);
+  var log = ss.getSheetByName(LOG_SHEET);
+  if (!log) {
+    log = ss.insertSheet(LOG_SHEET);
+    log.appendRow(['Timestamp', 'Code', 'Group', 'Party', 'Attending',
+                   'Answers', 'Message', 'Rows updated', 'Not matched']);
+    log.setFrozenRows(1);
   }
+  var answers = (data.responses || []).map(function (r) {
+    return r.name + ': ' + r.attending;
+  }).join('; ');
+
+  log.appendRow([
+    new Date(),
+    data.code || '',
+    data.group || '',
+    data.partySize || '',
+    data.attending || '',
+    answers,
+    data.message || '',
+    written,
+    notFound.join('; ')
+  ]);
+}
+
+
+/** Read-only feed for dashboard.html. */
+function doGet(e) {
+  var key = e && e.parameter ? e.parameter.key : '';
+  if (!key || key !== DASHBOARD_KEY) {
+    return json_({ ok: false, error: 'unauthorised' });
+  }
+
+  var values = guestSheet_().getDataRange().getValues();
+  var start = headerRow_(values);
+  var out = [], yes = 0, no = 0, pending = 0;
+
+  for (var i = start; i < values.length; i++) {
+    var name = String(values[i][COL_NAME - 1] || '').trim();
+    var code = String(values[i][COL_CODE - 1] || '').trim();
+    if (!name) continue;
+    var conf = String(values[i][COL_CONFIRM - 1] || '').trim();
+    if (/^y/i.test(conf)) yes++;
+    else if (/^n/i.test(conf)) no++;
+    else pending++;
+    out.push({ name: name, code: code, confirmation: conf });
+  }
+
+  return json_({ ok: true, total: out.length, yes: yes, no: no,
+                 pending: pending, guests: out });
+}
+
+
+/** The guest rows begin under the row whose first cell reads "Main Guest". */
+function headerRow_(values) {
+  for (var i = 0; i < values.length; i++) {
+    if (norm_(values[i][COL_NAME - 1]) === 'main guest') return i + 1;
+  }
+  return 0;
+}
+
+
+function guestSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(GUEST_SHEET);
+  if (!sheet) sheet = ss.getSheets()[0];     // fall back to the first tab
   return sheet;
+}
+
+
+function json_(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
 }

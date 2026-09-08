@@ -513,6 +513,51 @@
   .rsvp .section-sub strong{color:#fff; font-weight:400; letter-spacing:.2px;}
   .rsvp .divider{background:linear-gradient(to right, transparent, var(--champagne), transparent);}
   .rsvp .divider::after{background:var(--champagne); box-shadow:0 0 0 5px rgba(26,28,16,.8);}
+  /* ---- one row per guest ----
+     A segmented pair rather than a dropdown: on a phone it is one tap instead
+     of three, and both answers are visible so neither is the quiet default. */
+  .party-lead{
+    font-size:12px; letter-spacing:1.5px; text-transform:uppercase;
+    color:var(--champagne); margin-bottom:14px; opacity:.95;
+  }
+  .party{margin-bottom:24px;}
+  .party-row{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:11px 0; border-bottom:1px solid rgba(255,255,255,.16);
+    flex-wrap:wrap;
+  }
+  .party-row:last-child{border-bottom:none;}
+  .party-name{
+    font-family:'Cormorant Garamond', serif; font-weight:300;
+    font-size:19px; color:#fff; line-height:1.3; flex:1 1 9em; min-width:0;
+  }
+  .party-pick{display:flex; flex:0 0 auto; gap:0;}
+  .party-pick button{
+    font-family:'Jost', sans-serif; font-weight:300;
+    font-size:10px; letter-spacing:1.6px; text-transform:uppercase;
+    padding:0 13px; min-height:44px; cursor:pointer;
+    background:rgba(255,255,255,.07); color:rgba(255,255,255,.82);
+    border:1px solid rgba(255,255,255,.28);
+    transition:background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .party-pick button:first-child{border-radius:3px 0 0 3px;}
+  .party-pick button:last-child{border-radius:0 3px 3px 0; border-left:none;}
+  .party-pick button[aria-pressed="true"]{
+    background:var(--olive); border-color:var(--olive); color:#fff;
+  }
+  .party-pick button.no[aria-pressed="true"]{
+    background:var(--burgundy); border-color:var(--burgundy);
+  }
+  .party-row.unanswered{ }
+  .party-row.missing .party-name{color:#F8D0D3;}
+  .party-row.missing .party-pick button{border-color:rgba(248,208,211,.6);}
+
+  @media(max-width:400px){
+    .party-name{font-size:17.5px; flex-basis:100%;}
+    .party-pick{width:100%;}
+    .party-pick button{flex:1 1 50%; padding:0 6px;}
+  }
+
   /* ===== RSVP guest code gate ===== */
   .rsvp-gate{
     max-width:560px; margin:0 auto; padding:44px; border-radius:4px;
@@ -2304,7 +2349,7 @@
           <label for="guestcode">Guest Code</label>
           <input type="text" id="guestcode" inputmode="latin" autocomplete="off"
                  autocapitalize="characters" spellcheck="false" maxlength="16"
-                 placeholder="e.g. JCMJ01" aria-describedby="gateMsg">
+                 placeholder="e.g. G401" aria-describedby="gateMsg">
         </div>
         <button type="submit" class="submit-btn">Continue</button>
         <p class="gate-msg" id="gateMsg" role="status" aria-live="polite"></p>
@@ -2317,29 +2362,18 @@
         <span class="gw-name" id="gwName"></span>
         <button type="button" class="gw-swap" id="gateReset">Not you?</button>
       </div>
-      <div class="field">
-        <label for="fullname">Full Name</label>
-        <input type="text" id="fullname" required placeholder="Your name">
-      </div>
-      <div class="row2">
-        <div class="field">
-          <label for="attending">Will you attend?</label>
-          <select id="attending">
-            <option value="joyfully-accept">Joyfully Accepts</option>
-            <option value="regretfully-decline">Regretfully Declines</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="guests">Number of Guests</label>
-          <input type="number" id="guests" min="0" max="4" value="1">
-          <span class="seat-hint" id="seatHint"></span>
-        </div>
-      </div>
+
+      <!-- One row per person on the code, each answering for themselves, so
+           the couple get a headcount rather than a number to interpret. -->
+      <p class="party-lead" id="partyLead"></p>
+      <div class="party" id="partyList"></div>
+
       <div class="field">
         <label for="message">Message for the Couple (optional)</label>
-        <textarea id="message" placeholder="Leave a note for JC & MJ"></textarea>
+        <textarea id="message" placeholder="Leave a note for JC &amp; MJ"></textarea>
       </div>
       <button type="submit" class="submit-btn">Send RSVP</button>
+      <p class="gate-msg" id="partyMsg" role="status" aria-live="polite"></p>
       <p class="rsvp-note">Kindly respond by October 15, 2026</p>
     </form>
     <div class="thankyou" id="thankyou">
@@ -2548,28 +2582,121 @@
      CONFIG — edit these values for your own wedding
      ========================================================= */
 
-  /* ═══════════════════════════════════════════════════════════════════
-     GUEST LIST  —  this is the only part you edit to set up guest codes.
 
-     One line per household. The key is the code you print on that
-     household's invitation; it is matched case-insensitively and spaces,
-     dashes and dots are ignored, so "jcmj 01" and "JCMJ-01" both work.
+  /* ═══════════════════════════════════════════════════════════════════════
+     GUEST LIST  —  generated from the couple's sheet, 139 people in 88
+     households. One entry per code; every name on that code gets its own
+     answer on the RSVP and its own row updated in column C.
 
-         names : shown as a greeting and pre-filled into the name field
-         seats : how many people that household may bring, total
+     To change it, edit the sheet and regenerate rather than hand-editing
+     here, so the two cannot drift apart. Matching ignores case, spaces,
+     dashes and dots, so "g401", "G 401" and "G-401" all open the same party.
 
-     Codes are a courtesy, not a lock. They keep the form tidy and stop
-     casual over-booking; anyone determined can still read this list in
-     the page source. Do not put anything private in here.
+     Note this list is readable in the page source. Codes keep the form tidy
+     and stop casual over-booking; they are not a secret.
+     ═══════════════════════════════════════════════════════════════════════ */
 
-     WHILE THIS LIST IS EMPTY the gate hides itself and the form behaves
-     exactly as it did before, so the site keeps working until you are
-     ready. Delete the three samples and add your own when the list is set.
-     ═══════════════════════════════════════════════════════════════════ */
+  /* ═══════════════════════════════════════════════════════════════════════
+     GUEST LIST  —  generated from the couple's sheet: 139 people across 88
+     households. One entry per code; every name on that code gets its own
+     answer on the RSVP and its own row updated in column C.
+
+     Edit the sheet and regenerate rather than hand-editing here, so the two
+     cannot drift apart. Matching ignores case, spaces, dashes and dots, so
+     g401, G 401 and G-401 all open the same party.
+
+     This list is readable in the page source. The codes keep the form tidy
+     and stop casual over-booking; they are not a secret.
+     ═══════════════════════════════════════════════════════════════════════ */
   var GUESTS = {
-    'JCMJ01': { names: 'The Sample Family',      seats: 4 },
-    'JCMJ02': { names: 'Juan & Maria Dela Cruz', seats: 2 },
-    'JCMJ03': { names: 'Ana Reyes',              seats: 1 }
+    'O001': { group:'Officiant', names:['Fr Stephen Mifsud'] },
+    'P101': { group:'Principal Sponsor', names:['Ninang Cynthia Ferrer', 'Ninong Arnold Ferrer'] },
+    'P102': { group:'Principal Sponsor', names:['Ninang Joanne Ducut', 'Ninong Alvin Ducut'] },
+    'P103': { group:'Principal Sponsor', names:['Ninong Edgar Semira'] },
+    'P104': { group:'Principal Sponsor', names:['Tita Teresita Abalajon'] },
+    'P105': { group:'Principal Sponsor', names:['Ninang Charlotte De Castro', 'Ninong Melvin De Castro', 'Gianna De Castro'] },
+    'P106': { group:'Principal Sponsor', names:['Ninong Capt. Jun Villanueva', 'Ninang Cheryl Villanueva'] },
+    'P107': { group:'Principal Sponsor', names:['Ninang Arlene Plata', 'Ninong Nick Plata'] },
+    'P108': { group:'Principal Sponsor', names:['Ninang Liza Porras', 'Ninong Dionisio Poras'] },
+    'P109': { group:'Principal Sponsor', names:['Ninang Grace Malabanan', 'Ninong Son Malabanan'] },
+    'P110': { group:'Principal Sponsor', names:['Ninong Macky Lim', 'Ninang Carmela Tanjutco-Lim'] },
+    'P111': { group:'Principal Sponsor', names:['Ninong Jonathan Acenas'] },
+    'P112': { group:'Principal Sponsor', names:['Ninong Lito Espejo'] },
+    'TG201': { group:'Team Groom', names:['Jade Christian Taca'] },
+    'TG202': { group:'Team Groom', names:['King Carlos'] },
+    'TG203': { group:'Team Groom', names:['Ronald Pangilinan', 'Cadz Guanseng'] },
+    'TG204': { group:'Team Groom', names:['Randy Oliverio', 'Revelyn Oliverio'] },
+    'TG205': { group:'Team Groom', names:['Jay Gapero', 'Wheng Gapero'] },
+    'TG206': { group:'Team Groom', names:['Gerard Arguelles'] },
+    'TB201': { group:'Team Bride', names:['AJ Rivera'] },
+    'TB202': { group:'Team Bride', names:['Paul Alcantara'] },
+    'TB203': { group:'Team Bride', names:['GJ Culala'] },
+    'TB204': { group:'Team Bride', names:['Ralf Sulague'] },
+    'TB205': { group:'Team Bride', names:['Jewel Amante', 'Oyo Fajardo'] },
+    'TB206': { group:'Team Bride', names:['Marla Baes', 'Waj Al Refai'] },
+    'FG301': { group:'Groom Family', names:['Rudolf Lota', 'Judy Pineda', 'Tetey', 'Totoy', 'Amarah'] },
+    'FB301': { group:'Bride Family', names:['Malou Gutierrez', 'Cenon Gutierrez'] },
+    'FB302': { group:'Bride Family', names:['Melvene Gutierrez'] },
+    'FB303': { group:'Bride Family', names:['Cece Gutierrez'] },
+    'FB304': { group:'Bride Family', names:['Lee Gutierrez'] },
+    'FB305': { group:'Bride Family', names:['Aaron Nicasio'] },
+    'FB306': { group:'Bride Family', names:['Meriam Arellano', 'Godfrey Arellano', 'Callie Arellano', 'Chanel Arellano'] },
+    'FB307': { group:'Bride Family', names:['Marites Castillo', 'Erning Castillo', 'Mara Castillo', 'Irish Castillo', 'Irene Castillo'] },
+    'FB308': { group:'Bride Family', names:['Jonil Castillo', 'Mia Castillo', 'Jace Castillo'] },
+    'FB309': { group:'Bride Family', names:['Marivic Ambas', 'Maeshan Ambas', 'Jimson Ambas'] },
+    'G401': { group:'Guest', names:['Raquel Verano-Lim', 'Jhep Lim'] },
+    'G402': { group:'Guest', names:['Erick Tolentino'] },
+    'G403': { group:'Guest', names:['Hazel Barcelona'] },
+    'G404': { group:'Guest', names:['Fr Marco Cabatuando'] },
+    'G405': { group:'Guest', names:['Emman Guerrero', 'Nancy Guerrero'] },
+    'G406': { group:'Guest', names:['Laiza Jacob'] },
+    'G407': { group:'Guest', names:['Zat Santos-Jacob'] },
+    'G408': { group:'Guest', names:['Sally Bolivar'] },
+    'G409': { group:'Guest', names:['Bullet Siongco', 'Pao Soliven'] },
+    'G410': { group:'Guest', names:['Ja San Diego-Tiopengco'] },
+    'G411': { group:'Guest', names:['Charm De Guzman'] },
+    'G412': { group:'Guest', names:['Bea Astilla'] },
+    'G413': { group:'Guest', names:['Megs Pineda'] },
+    'G414': { group:'Guest', names:['Roan Pili'] },
+    'G415': { group:'Guest', names:['Joyce Espanola'] },
+    'G416': { group:'Guest', names:['Noel Fortaleza', 'Leony Fortaleza'] },
+    'G417': { group:'Guest', names:['Angel Garduque-Quemquem', 'Frank Quemquem'] },
+    'G418': { group:'Guest', names:['Khalai Martinez-Lovete', 'Jay Lovete'] },
+    'G419': { group:'Guest', names:['Ela Bustamante', 'Ruther Bergonia'] },
+    'G420': { group:'Guest', names:['CJ Mapas', 'Fred Bazar'] },
+    'G421': { group:'Guest', names:['Janice Laynes', 'Carlz Capal'] },
+    'G422': { group:'Guest', names:['Andy Paler', 'Glenda Gianan'] },
+    'G423': { group:'Guest', names:['Jhe Valera', 'Joan Brillantes'] },
+    'G424': { group:'Guest', names:['JP Galangera'] },
+    'G425': { group:'Guest', names:['Giulio Obviar'] },
+    'G426': { group:'Guest', names:['Marc Macalinao'] },
+    'G427': { group:'Guest', names:['Kim Ada'] },
+    'G428': { group:'Guest', names:['Kim Vidal'] },
+    'G429': { group:'Guest', names:['Maureen Jimenez', 'Lanz Jimenez'] },
+    'G430': { group:'Guest', names:['Toni Siccion', 'Rich Siccion'] },
+    'G431': { group:'Guest', names:['Nic San Luis-Abad'] },
+    'G432': { group:'Guest', names:['Sarah Reem Hesham'] },
+    'G433': { group:'Guest', names:['Elwissa Olaguer', 'Rydo Olaguer'] },
+    'G434': { group:'Guest', names:['Bea Balbin'] },
+    'G435': { group:'Guest', names:['Sherry Gonzales'] },
+    'G436': { group:'Guest', names:['Jaro Rombaoa'] },
+    'G437': { group:'Guest', names:['Pattrick Lim', 'Audrey Lim'] },
+    'G438': { group:'Guest', names:['George See', 'Neri Zamora-See'] },
+    'G439': { group:'Guest', names:['Brielle Quirino-Pascual', 'Nat Pascual'] },
+    'G440': { group:'Guest', names:['Maan Stefanidis', 'Tolis Stefanidis'] },
+    'G441': { group:'Guest', names:['Jade Ebreo'] },
+    'G442': { group:'Guest', names:['Coleen Macabare'] },
+    'G443': { group:'Guest', names:['Faustine Beloso'] },
+    'G444': { group:'Guest', names:['Yel Mauricio', 'Ekie Mauricio'] },
+    'G445': { group:'Guest', names:['Rose Ann Malabriga', 'Glenn Malabriga'] },
+    'G446': { group:'Guest', names:['Lia Isla', 'Bryan Isla'] },
+    'G447': { group:'Guest', names:['Cha Agno'] },
+    'G448': { group:'Guest', names:['Aly Comia'] },
+    'G449': { group:'Guest', names:['Kat Garcia'] },
+    'G450': { group:'Guest', names:['Ann Baual'] },
+    'G451': { group:'Guest', names:['Alex Dondie Hernandez'] },
+    'G452': { group:'Guest', names:['Carl Allen Lim'] },
+    'G453': { group:'Guest', names:['George Wang III'] }
   };
 
   var CONFIG = {
@@ -3045,10 +3172,12 @@
   var gateMsg  = document.getElementById('gateMsg');
   var whoEl    = document.getElementById('gateWho');
   var gwName   = document.getElementById('gwName');
-  var seatHint = document.getElementById('seatHint');
-  var guestsIn = document.getElementById('guests');
-  var nameIn   = document.getElementById('fullname');
+  var partyEl   = document.getElementById('partyList');
+  var partyLead = document.getElementById('partyLead');
+  var partyMsg  = document.getElementById('partyMsg');
   var gateHousehold = null;   // travels with the submission
+  var answers = {};           // name -> 'Yes' | 'No'
+
 
   function normCode(s){ return String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
 
@@ -3056,24 +3185,66 @@
   Object.keys(GUESTS).forEach(function(k){ CODES[normCode(k)] = GUESTS[k]; });
   var gateActive = Object.keys(CODES).length > 0;
 
+  /* Builds one row per person on the code. Each answers for themselves, so a
+     family of five can come as three without the couple having to work out
+     which three. */
+  function buildParty(rec){
+    answers = {};
+    partyEl.innerHTML = '';
+    rec.names.forEach(function(name, n){
+      var row = document.createElement('div');
+      row.className = 'party-row';
+
+      var nm = document.createElement('span');
+      nm.className = 'party-name';
+      nm.textContent = name;
+
+      var pick = document.createElement('div');
+      pick.className = 'party-pick';
+      pick.setAttribute('role', 'group');
+      pick.setAttribute('aria-label', 'Will ' + name + ' be joining us?');
+
+      [['Yes', 'Joyfully accepts', ''], ['No', 'Regretfully declines', 'no']].forEach(function(opt){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = opt[2];
+        b.textContent = opt[0] === 'Yes' ? 'Joyfully' : 'Regretfully';
+        b.setAttribute('aria-pressed', 'false');
+        b.setAttribute('aria-label', name + ' ' + opt[1]);
+        b.addEventListener('click', function(){
+          answers[name] = opt[0];
+          Array.prototype.forEach.call(pick.children, function(sib){
+            sib.setAttribute('aria-pressed', sib === b ? 'true' : 'false');
+          });
+          row.classList.remove('missing');
+          if(partyMsg){ partyMsg.textContent = ''; partyMsg.classList.remove('bad'); }
+        });
+        pick.appendChild(b);
+      });
+
+      row.appendChild(nm);
+      row.appendChild(pick);
+      partyEl.appendChild(row);
+    });
+
+    if(partyLead){
+      partyLead.textContent = rec.names.length === 1
+        ? 'Please let us know if you can join us'
+        : 'Please answer for each of your party of ' + rec.names.length;
+    }
+  }
+
   function openForm(code, rec){
-    gateHousehold = rec ? { code: code, names: rec.names, seats: rec.seats } : null;
+    gateHousehold = rec ? { code: code, names: rec.names, group: rec.group } : null;
     if(gateEl) gateEl.classList.add('hide');
     formEl.classList.remove('hide');
 
     if(rec){
-      if(gwName) gwName.textContent = rec.names;
-      if(whoEl)  whoEl.hidden = false;
-      if(nameIn && !nameIn.value) nameIn.value = rec.names;
-      if(guestsIn){
-        guestsIn.max = rec.seats;
-        guestsIn.value = rec.seats;
-        if(seatHint){
-          seatHint.textContent = rec.seats === 1
-            ? 'One seat is reserved in your honour.'
-            : rec.seats + ' seats are reserved in your honour.';
-        }
-      }
+      if(gwName) gwName.textContent = rec.names.length > 2
+        ? rec.names[0] + ' and ' + (rec.names.length - 1) + ' others'
+        : rec.names.join(' & ');
+      if(whoEl) whoEl.hidden = false;
+      buildParty(rec);
       try{ localStorage.setItem('jcmj_code', code); }catch(e){}
     }
   }
@@ -3083,9 +3254,10 @@
     try{ localStorage.removeItem('jcmj_code'); }catch(e){}
     formEl.classList.add('hide');
     if(whoEl) whoEl.hidden = true;
-    if(nameIn) nameIn.value = '';
-    if(seatHint) seatHint.textContent = '';
-    if(guestsIn){ guestsIn.max = 4; guestsIn.value = 1; }
+    answers = {};
+    if(partyEl) partyEl.innerHTML = '';
+    if(partyLead) partyLead.textContent = '';
+    if(partyMsg){ partyMsg.textContent = ''; partyMsg.classList.remove('bad'); }
     if(gateEl) gateEl.classList.remove('hide');
     if(gateMsg){ gateMsg.textContent = ''; gateMsg.classList.remove('bad'); }
     if(codeIn){ codeIn.value = ''; codeIn.focus(); }
@@ -3131,29 +3303,61 @@
   document.getElementById('rsvpForm').addEventListener('submit', function(e){
     e.preventDefault();
     if(rsvpSending) return;              // guard against a double tap
-    rsvpSending = true;
     var form = this;
     var submitBtn = form.querySelector('.submit-btn');
+
+    /* Everyone on the code has to be answered for. Anything unanswered is
+       marked rather than silently sent as a no, because a blank is a mistake
+       and a decline is a decision. */
+    var people = (gateHousehold && gateHousehold.names) ? gateHousehold.names : [];
+    var missing = [];
+    Array.prototype.forEach.call(partyEl.children, function(row, n){
+      var name = people[n];
+      if(name && !answers[name]){ missing.push(name); row.classList.add('missing'); }
+    });
+    if(missing.length){
+      if(partyMsg){
+        partyMsg.textContent = missing.length === 1
+          ? 'Please answer for ' + missing[0] + '.'
+          : 'Please answer for all ' + people.length + ' of your party.';
+        partyMsg.classList.add('bad');
+      }
+      var first = partyEl.querySelector('.party-row.missing');
+      if(first && first.scrollIntoView) first.scrollIntoView({block:'center'});
+      return;
+    }
+
+    rsvpSending = true;
     if(submitBtn){ submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
-    var seatsAsked = parseInt(document.getElementById('guests').value, 10);
-    if(isNaN(seatsAsked) || seatsAsked < 0) seatsAsked = 0;
-    if(gateHousehold && seatsAsked > gateHousehold.seats) seatsAsked = gateHousehold.seats;
+
+    var responses = people.map(function(name){
+      return { name: name, attending: answers[name] };   // 'Yes' or 'No'
+    });
+    var coming = responses.filter(function(r){ return r.attending === 'Yes'; }).length;
 
     var entry = {
-      name: document.getElementById('fullname').value.trim(),
-      attending: document.getElementById('attending').value,
-      guests: String(seatsAsked),
-      message: document.getElementById('message').value.trim(),
-      code: gateHousehold ? gateHousehold.code  : '',
-      household: gateHousehold ? gateHousehold.names : '',
-      seatsReserved: gateHousehold ? String(gateHousehold.seats) : '',
+      code:      gateHousehold ? gateHousehold.code : '',
+      group:     gateHousehold ? gateHousehold.group : '',
+      responses: responses,
+      attending: String(coming),
+      partySize: String(people.length),
+      message:   document.getElementById('message').value.trim(),
       timestamp: new Date().toISOString()
     };
 
     function reveal(){
       rsvpSending = false;
       form.classList.add('hide');
-      document.getElementById('thankyou').classList.add('show');
+      var ty = document.getElementById('thankyou');
+      var line = ty.querySelector('p');
+      if(line){
+        line.textContent = coming === 0
+          ? 'Thank you for letting us know. You will be missed.'
+          : (coming === people.length
+              ? 'Your RSVP has been noted. We cannot wait to celebrate with you.'
+              : 'Your RSVP has been noted for ' + coming + ' of ' + people.length + '. We cannot wait to celebrate.');
+      }
+      ty.classList.add('show');
     }
 
     if(CONFIG.rsvpEndpoint){
@@ -3163,7 +3367,7 @@
         headers: {'Content-Type': 'text/plain;charset=utf-8'},
         body: JSON.stringify(entry)
       }).then(reveal).catch(function(){
-        // Network/CORS hiccup — keep the guest's response instead of losing it.
+        // Network or CORS hiccup: keep the answer rather than lose it.
         saveRsvpLocally(entry);
         reveal();
       });
