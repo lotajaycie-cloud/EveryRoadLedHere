@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="description" content="Song list and program for Jaycie and Marian's wedding, December 8, 2026.">
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>Jaycie & Marian Wedding Music</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&display=swap">
+<style>
+/* Layout: the invitation suite on screen — a wine nuptials-card masthead with an embossed frame, an off-white front-card page, sage arch "details card" call-outs; the song list reads like an order of service, the program like a run sheet. */
+:root {
+  --paper: #ECE6DD; --card: #F5F1EA; --ink: #45202A; --wine: #5A1C2C; --muted: #7C6661; --rule: #D5CABC; --rule-strong: #BCAE9D;
+  --stock: #6B2134; --ivory: #F1E3D3; --olive: #3F4423; --sage: #C3C4A1; --sage-ink: #3F4423;
+  --wine-soft: rgba(90, 28, 44, .08); --sage-soft: rgba(63, 68, 35, .12); --gold: #7E5F16; --gold-soft: rgba(126, 95, 22, .12);
+  --script: "Pinyon Script", "Snell Roundhand", "Apple Chancery", cursive;
+  --serif: "EB Garamond", Garamond, "Cormorant Garamond", "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #1C0C11; --card: #28131A; --ink: #F1E3D3; --wine: #E8B8C2; --muted: #C3ABA6; --rule: #43262E; --rule-strong: #5C3741;
+  --stock: #6B2134; --ivory: #F1E3D3; --olive: #C9CBA6; --sage: #3B3F22; --sage-ink: #DCDDC0;
+  --wine-soft: rgba(232, 184, 194, .12); --sage-soft: rgba(201, 203, 166, .16); --gold: #DDBE72; --gold-soft: rgba(221, 190, 114, .14); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #1C0C11; --card: #28131A; --ink: #F1E3D3; --wine: #E8B8C2; --muted: #C3ABA6; --rule: #43262E; --rule-strong: #5C3741;
+  --stock: #6B2134; --ivory: #F1E3D3; --olive: #C9CBA6; --sage: #3B3F22; --sage-ink: #DCDDC0;
+  --wine-soft: rgba(232, 184, 194, .12); --sage-soft: rgba(201, 203, 166, .16); --gold: #DDBE72; --gold-soft: rgba(221, 190, 114, .14); color-scheme: dark }
+
+body { background: var(--paper); color: var(--ink); font: 17px/1.5 var(--serif); font-variant-numeric: lining-nums; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.wrap { max-width: 940px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+button, input { font: inherit; color: inherit; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--wine); outline-offset: 2px; border-radius: 4px; }
+.caps { font-size: .74rem; letter-spacing: .22em; text-transform: uppercase; }
+
+/* Masthead: the wine nuptials card */
+.mast { background: var(--stock); color: var(--ivory); }
+.mast .wrap { padding-block: 22px; }
+.frame { position: relative; text-align: center; padding: 30px 18px 28px; border: 1px solid rgba(241, 227, 211, .38); border-radius: 6px; box-shadow: inset 0 0 0 5px var(--stock), inset 0 0 0 6px rgba(241, 227, 211, .2); display: grid; gap: 6px; justify-items: center; }
+.sprig { width: 132px; height: 30px; color: var(--ivory); opacity: .9; }
+.kicker { opacity: .85; }
+.names { font: 400 clamp(3.1rem, 9vw, 4.8rem)/1 var(--script); margin: 6px 0 0; text-wrap: balance; }
+.date { font-size: .95rem; letter-spacing: .34em; margin-top: 4px; }
+.venue { font-style: italic; font-size: 1rem; opacity: .9; text-wrap: balance; max-width: 46ch; }
+.doc-title { display: none; }
+
+/* Sticky tab bar */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 10px 16px; flex-wrap: wrap; padding-block: 8px; }
+.tabs { display: inline-flex; gap: 22px; }
+.tab { border: 0; background: none; padding: 10px 0 8px; cursor: pointer; color: var(--muted); border-bottom: 1.5px solid transparent; font-size: .8rem; letter-spacing: .22em; text-transform: uppercase; }
+.tab[aria-selected="true"] { color: var(--wine); border-bottom-color: var(--wine); }
+.dl { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.dl-label { color: var(--muted); font-size: .68rem; }
+.btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--wine); background: transparent; color: var(--wine); border-radius: 999px; padding: 5px 14px 6px; cursor: pointer; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; }
+.btn:hover { background: var(--wine); color: var(--paper); }
+.btn[aria-busy="true"] { opacity: .55; cursor: progress; }
+.btn svg { width: 13px; height: 13px; }
+.no-dl .dl [data-file] { display: none; }
+.dl-note { display: none; font-size: .88rem; font-style: italic; color: var(--muted); }
+.no-dl .dl-note { display: inline; }
+
+main { padding-block: 26px 56px; }
+.view[hidden], .dl[hidden] { display: none !important; }
+.intro { max-width: 60ch; color: var(--muted); font-style: italic; margin: 0 auto 22px; text-align: center; font-size: 1.05rem; text-wrap: balance; }
+
+/* Song list controls */
+.controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-bottom: 12px; }
+.search { flex: 1 1 240px; min-width: 0; position: relative; }
+.search input { width: 100%; box-sizing: border-box; padding: 9px 12px 9px 36px; border: 1px solid var(--rule-strong); border-radius: 999px; background: var(--card); font-size: 1rem; }
+.search input::placeholder { color: var(--muted); font-style: italic; }
+.search svg { position: absolute; left: 13px; top: 50%; translate: 0 -50%; width: 15px; height: 15px; color: var(--muted); }
+.toggle { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; font-size: .95rem; }
+.toggle input { appearance: none; width: 36px; height: 20px; border-radius: 999px; background: var(--rule-strong); position: relative; cursor: pointer; transition: background .2s; margin: 0; flex: none; }
+.toggle input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--card); transition: translate .2s; }
+.toggle input:checked { background: var(--olive); }
+.toggle input:checked::after { translate: 16px 0; }
+.jump { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 4px 0 8px; }
+.jump b { font-weight: 500; color: var(--olive); }
+.jump button { border: 0; background: none; padding: 2px 0; cursor: pointer; color: var(--wine); font-style: italic; font-size: 1rem; text-decoration: underline; text-decoration-color: var(--rule-strong); text-underline-offset: 3px; }
+.legend { display: none; flex-wrap: wrap; gap: 8px 12px; margin: 6px 0 4px; }
+.show-check .legend { display: flex; }
+
+/* Part and section heads */
+.part-head { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 42px 0 6px; color: var(--olive); }
+.part-head h2 { margin: 0; font-weight: 500; }
+.part-head svg { width: 54px; height: 14px; }
+.part-head svg.flip { transform: scaleX(-1); }
+.sec { margin-top: 22px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 16px; padding-bottom: 6px; border-bottom: 1px solid var(--wine); scroll-margin-top: 76px; }
+.sec-head h3, .ph h3 { font: 400 2.5rem/1.05 var(--script); color: var(--wine); margin: 0; }
+.sec-time { color: var(--olive); }
+.sec-sub { color: var(--muted); font-style: italic; }
+.sec-count { margin-left: auto; color: var(--muted); }
+
+/* The sage arch: the invitation's details card */
+.arch { margin: 18px auto 6px; max-width: 400px; text-align: center; background: var(--sage); color: var(--sage-ink); border-radius: 200px 200px 10px 10px / 92px 92px 10px 10px; padding: 40px 26px 22px; display: grid; gap: 6px; justify-items: center; }
+.arch .t1 { font: 400 1.9rem/1 var(--script); }
+.arch p { margin: 0; font-style: italic; max-width: 32ch; }
+.arch a { display: inline-flex; gap: 6px; align-items: center; margin-top: 6px; padding: 6px 16px 7px; border-radius: 999px; border: 1px solid currentColor; text-decoration: none; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; }
+.arch a:hover { background: var(--sage-ink); color: var(--sage); }
+.arch .url { display: none; font-size: .8rem; }
+
+/* Song rows */
+.rows { list-style: none; margin: 0; padding: 0; }
+.row { display: grid; grid-template-columns: 2rem minmax(0, 1fr) minmax(0, .95fr); gap: 2px 18px; padding: 13px 0; border-bottom: 1px solid var(--rule); align-items: start; }
+.num { color: var(--muted); font-size: .95rem; padding-top: 4px; font-variant-numeric: lining-nums tabular-nums; }
+.who { display: block; color: var(--olive); font-size: .66rem; margin-bottom: 1px; }
+.song { font-size: 1.3rem; font-weight: 500; line-height: 1.2; }
+.artist { color: var(--muted); font-style: italic; }
+.note { font-size: .98rem; padding-top: 4px; }
+.row.cont .song { font-weight: 400; font-style: italic; color: var(--muted); }
+.listen { display: flex; gap: 14px; margin-top: 4px; }
+.listen a { color: var(--wine); font-size: .64rem; letter-spacing: .2em; text-transform: uppercase; text-decoration: underline; text-decoration-color: var(--rule-strong); text-underline-offset: 3px; }
+.listen a:hover { text-decoration-color: var(--wine); }
+.chip { display: none; margin-top: 6px; font-size: .62rem; letter-spacing: .16em; text-transform: uppercase; padding: 2px 9px 3px; border-radius: 999px; width: fit-content; }
+.show-check .chip { display: block; }
+.chip.yes, .legend .yes { color: var(--olive); background: var(--sage-soft); }
+.chip.ask, .legend .ask { color: var(--wine); background: var(--wine-soft); }
+.chip.pick, .legend .pick { color: var(--gold); background: var(--gold-soft); }
+.legend span { padding: 3px 10px; border-radius: 999px; font-size: .9rem; }
+.empty { padding: 28px 0; color: var(--muted); font-style: italic; text-align: center; }
+
+/* Program */
+.timeline { background: var(--card); border: 1px solid var(--rule-strong); border-radius: 6px; box-shadow: inset 0 0 0 4px var(--card), inset 0 0 0 5px var(--rule); padding: 22px 22px 14px; margin-bottom: 8px; }
+.tl-title { font-style: italic; font-size: 1.2rem; margin: 0 0 14px; text-align: center; text-wrap: balance; color: var(--wine); }
+.tl-grid { display: grid; grid-template-columns: minmax(0, 12rem) minmax(0, 1fr); column-gap: 14px; }
+.tl-ticks, .tl-track { position: relative; }
+.tl-ticks { height: 22px; font-size: .8rem; color: var(--muted); }
+.tl-ticks span { position: absolute; translate: -50% 0; white-space: nowrap; }
+.tl-label { font-size: .95rem; padding: 5px 0; display: flex; justify-content: space-between; gap: 8px; min-width: 0; }
+.tl-label em { color: var(--muted); white-space: nowrap; font-size: .88rem; }
+.tl-track { border-left: 1px solid var(--rule); }
+.tl-bar { position: absolute; top: 9px; height: 13px; border-radius: 7px; background: var(--wine-soft); border: 1px solid var(--rule-strong); box-sizing: border-box; min-width: 6px; }
+.tl-row { display: contents; }
+.tl-row.fw .tl-label { color: var(--wine); font-weight: 600; }
+.tl-row.fw .tl-bar { background: var(--wine); border-color: var(--wine); }
+.tl-gridline { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--rule); }
+.tl-sunset { position: absolute; top: 0; bottom: 0; border-left: 1px dashed var(--olive); }
+.tl-foot { font-size: .88rem; font-style: italic; color: var(--olive); margin-top: 6px; text-align: center; }
+
+.ph { margin: 40px 0 6px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 16px; padding-bottom: 6px; border-bottom: 1px solid var(--wine); }
+.plead { color: var(--muted); font-style: italic; max-width: 64ch; margin: 10px 0 4px; }
+.run { list-style: none; margin: 0; padding: 0; }
+.run li { display: grid; grid-template-columns: 3.4rem minmax(0, 1.15fr) minmax(0, 1fr); gap: 2px 18px; padding: 11px 0; border-bottom: 1px solid var(--rule); align-items: start; }
+.t { font-weight: 600; color: var(--wine); font-variant-numeric: lining-nums tabular-nums; }
+.m { font-weight: 500; }
+.mu { font-style: italic; color: var(--olive); font-size: .97rem; }
+.n { font-size: .95rem; color: var(--muted); }
+.run li.fw .m { color: var(--wine); font-weight: 600; }
+.ref-inline { font-size: .95rem; }
+.ref-inline a { color: var(--wine); }
+.cues { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 10px; }
+.cues li { display: grid; grid-template-columns: 3.4rem minmax(0, 1fr); gap: 18px; }
+.fw-note { margin-top: 14px; font-style: italic; color: var(--muted); }
+
+footer { border-top: 1px solid var(--rule); padding-block: 22px 34px; color: var(--muted); text-align: center; display: grid; gap: 4px; }
+footer .tag { font: 400 1.8rem/1 var(--script); color: var(--wine); }
+
+.toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); translate: -50% 0; background: var(--wine); color: var(--paper); padding: 9px 18px; border-radius: 999px; font-size: .95rem; opacity: 0; pointer-events: none; transition: opacity .2s; max-width: calc(100% - 32px); }
+.toast.on { opacity: 1; }
+
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .frame { padding: 24px 12px 22px; }
+  .row { grid-template-columns: 1.7rem minmax(0, 1fr); }
+  .row .note { grid-column: 2; padding-top: 2px; }
+  .run li { grid-template-columns: 3rem minmax(0, 1fr); }
+  .run .n { grid-column: 2; }
+  .tl-grid { grid-template-columns: minmax(0, 7.6rem) minmax(0, 1fr); }
+  .tl-label em { display: none; }
+  .tl-ticks span.odd { display: none; }
+  .bar .wrap { justify-content: center; }
+  .sec-head h3, .ph h3 { font-size: 2.2rem; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* PDF render mode (produces the downloadable PDFs) */
+html.pdf .bar, html.pdf .controls, html.pdf .jump, html.pdf .legend, html.pdf footer, html.pdf .toast, html.pdf .listen, html.pdf .arch a { display: none !important; }
+html.pdf .arch .url { display: block; }
+html.pdf body { font-size: 14px; background: #fff; }
+html.pdf .wrap { max-width: none; padding: 0; }
+html.pdf .mast .wrap { padding: 0; }
+html.pdf .frame { padding: 22px 18px 20px; }
+html.pdf .names { font-size: 3.4rem; }
+html.pdf .doc-title { display: block; margin-top: 4px; }
+html.pdf main { padding-block: 8px 0; }
+html.pdf .intro { display: none; }
+html.pdf .row, html.pdf .run li, html.pdf .cues li, html.pdf .arch, html.pdf .timeline { break-inside: avoid; }
+html.pdf .sec-head, html.pdf .ph, html.pdf .part-head { break-after: avoid; }
+html.pdf .row, html.pdf .run li { padding: 7px 0; }
+html.pdf .song { font-size: 1.15rem; }
+html.pdf .part-head { margin-top: 26px; }
+</style>
+</head>
+<body>
+
+
+<header class="mast">
+  <div class="wrap">
+    <div class="frame">
+      <svg class="sprig" viewBox="0 0 132 30" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+        <path d="M8 22 C 40 13, 82 11, 124 15"/>
+        <g fill="currentColor" fill-opacity=".9" stroke="none">
+          <ellipse cx="26" cy="14" rx="7.5" ry="2.3" transform="rotate(-24 26 14)"/>
+          <ellipse cx="33" cy="22.5" rx="7.5" ry="2.3" transform="rotate(20 33 22.5)"/>
+          <ellipse cx="55" cy="10" rx="7.5" ry="2.3" transform="rotate(-20 55 10)"/>
+          <ellipse cx="62" cy="18.5" rx="7.5" ry="2.3" transform="rotate(22 62 18.5)"/>
+          <ellipse cx="85" cy="9" rx="7.5" ry="2.3" transform="rotate(-16 85 9)"/>
+          <ellipse cx="92" cy="17.5" rx="7.5" ry="2.3" transform="rotate(24 92 17.5)"/>
+          <circle cx="110" cy="10" r="3.1"/><circle cx="105" cy="20" r="2.6" fill-opacity=".7"/>
+        </g>
+      </svg>
+      <div class="kicker caps">The music &amp; program of the wedding of</div>
+      <h1 class="names">Jaycie &amp; Marian</h1>
+      <div class="date" id="date"></div>
+      <div class="venue" id="venue"></div>
+      <div class="doc-title caps" id="doc-title"></div>
+    </div>
+  </div>
+</header>
+
+<nav class="bar" aria-label="Views">
+  <div class="wrap">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-songs" aria-controls="view-songs" aria-selected="true" data-view="songs">Song list</button>
+      <button class="tab" role="tab" id="tab-program" aria-controls="view-program" aria-selected="false" data-view="program">Program</button>
+    </div>
+    <div class="dl" id="dl-songs">
+      <span class="dl-label caps">Download</span>
+      <button class="btn" type="button" data-file="files/jm-song-list.pdf" data-direct="/music/files/jm-song-list.pdf" data-name="Jaycie & Marian - Song List.pdf"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 2v8m0 0 3-3m-3 3L5 7M3 13h10" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
+      <button class="btn" type="button" data-file="embed:xlsx" data-direct="/music/files/jm-song-list.xlsx" data-name="Jaycie & Marian - Song List.xlsx"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 2v8m0 0 3-3m-3 3L5 7M3 13h10" stroke-linecap="round" stroke-linejoin="round"/></svg>Excel</button>
+      <span class="dl-note">Open this page in Claude to download the files.</span>
+    </div>
+    <div class="dl" id="dl-program" hidden>
+      <span class="dl-label caps">Download</span>
+      <button class="btn" type="button" data-file="files/jm-program.pdf" data-direct="/music/files/jm-program.pdf" data-name="Jaycie & Marian - Program.pdf"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 2v8m0 0 3-3m-3 3L5 7M3 13h10" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
+      <button class="btn" type="button" data-file="embed:docx" data-direct="/music/files/jm-program.docx" data-name="Jaycie & Marian - Program.docx"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 2v8m0 0 3-3m-3 3L5 7M3 13h10" stroke-linecap="round" stroke-linejoin="round"/></svg>Word</button>
+      <span class="dl-note">Open this page in Claude to download the files.</span>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section class="view" id="view-songs" role="tabpanel" aria-labelledby="tab-songs">
+    <p class="intro">Every song from the processional to the after party, in the order it plays. Performed by GSeven Band, with saxophone and violin for cocktails. Tap Spotify or YouTube under a song to hear it.</p>
+    <div class="controls">
+      <label class="search" for="q"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3" stroke-linecap="round"/></svg><input id="q" type="search" placeholder="Find a song, artist or moment" autocomplete="off"></label>
+      <label class="toggle" for="check"><input id="check" type="checkbox" role="switch"><span>Show GSeven repertoire check</span></label>
+    </div>
+    <div class="jump" id="jump"></div>
+    <div class="legend" id="legend"></div>
+    <div id="song-list-body"></div>
+  </section>
+
+  <section class="view" id="view-program" role="tabpanel" aria-labelledby="tab-program" hidden>
+    <p class="intro">The run of the day, from call time at the chapel to the last song. Times are targets; Father Stephen sets the pace of the Mass.</p>
+    <div id="program-body"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="tag" id="tag"></div>
+  <div>Music by GSeven Band · Updated November 12, 2026</div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const DATA = {"couple": "Jaycie & Marian", "date": "Tuesday, December 8, 2026", "venues": "Our Lady of Guadalupe Chapel · Lower Beach Club, Club Punta Fuego · Nasugbu, Batangas", "band": "GSeven Band", "songs": [{"name": "Processional", "full": "Processional", "part": "Ceremony", "time": "3:00 PM", "sub": "Our Lady of Guadalupe Chapel", "rows": [{"section": "Processional", "moment": "Priest and altar servers", "song": "Purihin ang Panginoon", "artist": "GSeven vocalist", "note": "Sung. Also the Mass entrance song", "status": "yes", "cont": false, "n": 1, "listen": "Purihin ang Panginoon"}, {"section": "Processional", "moment": "Transition", "song": "Keyboard & violin bridge", "artist": "", "note": "Carries the hymn into Palagi while the groom and his parents line up", "status": null, "cont": true, "n": "—", "listen": null}, {"section": "Processional", "moment": "Groom with parents", "song": "Palagi", "artist": "TJ Monterde", "note": "Instrumental only (keyboard & violin): chorus", "status": "yes", "cont": false, "n": 2, "listen": "Palagi TJ Monterde"}, {"section": "Processional", "moment": "Best Man", "song": "Palagi (cont.)", "artist": "TJ Monterde", "note": "Instrumental only (keyboard & violin): same chorus continues", "status": null, "cont": true, "n": 3, "listen": null}, {"section": "Processional", "moment": "Principal sponsors (8 pairs)", "song": "Araw-Araw", "artist": "Ben&Ben", "note": "Instrumental only (keyboard & violin): about 1½ min at roughly 10 s per pair, verse into two choruses", "status": "yes", "cont": false, "n": 4, "listen": "Araw-Araw Ben&Ben"}, {"section": "Processional", "moment": "Groomsmen and bridesmaids", "song": "Forevermore", "artist": "Side A", "note": "Instrumental only (keyboard & violin): chorus", "status": "yes", "cont": false, "n": 5, "listen": "Forevermore Side A"}, {"section": "Processional", "moment": "Secondary sponsors (candle, veil, cord)", "song": "Forevermore (cont.)", "artist": "Side A", "note": "Instrumental only (keyboard & violin): chorus repeat", "status": null, "cont": true, "n": 6, "listen": null}, {"section": "Processional", "moment": "Bible, coin and ring bearers", "song": "Ikaw", "artist": "Yeng Constantino", "note": "Instrumental, keyboard only: chorus", "status": "yes", "cont": false, "n": 7, "listen": "Ikaw Yeng Constantino"}, {"section": "Processional", "moment": "Flower girls", "song": "Ikaw (cont.)", "artist": "Yeng Constantino", "note": "Instrumental, keyboard only: chorus continues", "status": null, "cont": true, "n": 8, "listen": null}, {"section": "Processional", "moment": "Maid of Honor", "song": "Ikaw (cont.)", "artist": "Yeng Constantino", "note": "Last chorus line, then let it fade", "status": null, "cont": true, "n": 9, "listen": null}, {"section": "Processional", "moment": "Bride with parents", "song": "Tahanan", "artist": "El Manu", "note": "Instrumental, keyboard only: 10–20 s lead-in; doors open on the build and the chorus hits as she starts walking", "status": "yes", "cont": false, "n": 10, "listen": "Tahanan El Manu"}]}, {"name": "Mass", "full": "Mass", "part": "Ceremony", "time": "3:12 PM", "sub": "Nuptial Mass", "rows": [{"section": "Mass", "moment": null, "song": "Gloria", "artist": "GSeven", "note": "Setting to confirm with GSeven", "status": "pick", "cont": false, "n": 1, "listen": null}, {"section": "Mass", "moment": "Responsorial Psalm", "song": "Psalm of the day", "artist": "Cantor", "note": "Follows the readings Father Stephen confirms", "status": "ask", "cont": false, "n": 2, "listen": null}, {"section": "Mass", "moment": null, "song": "Alleluia", "artist": "Ryan Cayabyab", "note": "Before the Gospel", "status": "yes", "cont": false, "n": 3, "listen": "Alleluia Ryan Cayabyab"}, {"section": "Mass", "moment": "Rite of marriage", "song": "Soft instrumental", "artist": "", "note": "Piece to confirm; plays under the vows, rings, arrhae, veil, cord and candle", "status": "pick", "cont": false, "n": 4, "listen": null}, {"section": "Mass", "moment": "Offertory", "song": "Lord I Offer My Life", "artist": "", "note": null, "status": "yes", "cont": false, "n": 5, "listen": "Lord I Offer My Life Catholic song"}, {"section": "Mass", "moment": null, "song": "Holy, Holy", "artist": "", "note": "Setting to confirm; the same one carries the Great Amen and Lamb of God", "status": "pick", "cont": false, "n": 6, "listen": null}, {"section": "Mass", "moment": null, "song": "Great Amen", "artist": "", "note": "Same setting as the Holy", "status": "pick", "cont": false, "n": 7, "listen": null}, {"section": "Mass", "moment": null, "song": "Our Father (Old Version)", "artist": "", "note": "The nuptial blessing follows", "status": "yes", "cont": false, "n": 8, "listen": "Our Father old version Catholic song"}, {"section": "Mass", "moment": null, "song": "Lamb of God", "artist": "", "note": "Same setting as the Holy", "status": "pick", "cont": false, "n": 9, "listen": null}, {"section": "Mass", "moment": "Communion", "song": "Anima Christi", "artist": "", "note": null, "status": "yes", "cont": false, "n": 10, "listen": "Anima Christi Catholic song"}]}, {"name": "After Mass", "full": "After Mass", "part": "Ceremony", "time": "4:20 PM", "sub": "The kiss, signing and pictorial", "rows": [{"section": "After Mass", "moment": "Kiss the bride", "song": "Bawat Daan", "artist": "Ebe Dancel", "note": "After the final blessing; start the song on the kiss", "status": "yes", "cont": false, "n": 1, "listen": "Bawat Daan Ebe Dancel"}, {"section": "After Mass", "moment": "Contract signing", "song": "Bawat Daan (cont.)", "artist": "Ebe Dancel", "note": "Keep it playing; the signing runs several minutes", "status": null, "cont": true, "n": 2, "listen": null}, {"section": "After Mass", "moment": "Pictorial", "song": "Palagi", "artist": "TJ Monterde", "note": null, "status": "yes", "cont": false, "n": 3, "listen": "Palagi TJ Monterde"}, {"section": "After Mass", "moment": "Pictorial", "song": "Tahanan", "artist": "El Manu", "note": null, "status": "yes", "cont": false, "n": 4, "listen": "Tahanan El Manu"}, {"section": "After Mass", "moment": "Pictorial", "song": "Kumpas", "artist": "Moira Dela Torre", "note": null, "status": "yes", "cont": false, "n": 5, "listen": "Kumpas Moira Dela Torre"}, {"section": "After Mass", "moment": "Pictorial", "song": "Kahit Maputi Na ang Buhok Ko", "artist": "Rey Valera", "note": "Time it to the parents' and grandparents' photos", "status": "yes", "cont": false, "n": 6, "listen": "Kahit Maputi Na ang Buhok Ko Rey Valera"}, {"section": "After Mass", "moment": "Pictorial", "song": "Babalik Sa'yo", "artist": "Moira Dela Torre", "note": null, "status": "yes", "cont": false, "n": 7, "listen": "Babalik Sa'yo Moira Dela Torre"}]}, {"name": "Cocktails", "full": "Cocktails (Sax & Violin)", "part": "Reception", "time": "5:30 PM", "sub": "Saxophone and violin", "rows": [{"section": "Cocktails (Sax & Violin)", "moment": null, "song": "When I Met You", "artist": "APO Hiking Society", "note": null, "status": "yes", "cont": false, "n": 1, "listen": "When I Met You APO Hiking Society"}, {"section": "Cocktails (Sax & Violin)", "moment": null, "song": "Fly Me to the Moon", "artist": "Frank Sinatra", "note": null, "status": "yes", "cont": false, "n": 2, "listen": "Fly Me to the Moon Frank Sinatra"}, {"section": "Cocktails (Sax & Violin)", "moment": null, "song": "Lovely Day", "artist": "Bill Withers", "note": null, "status": "ask", "cont": false, "n": 3, "listen": "Lovely Day Bill Withers"}, {"section": "Cocktails (Sax & Violin)", "moment": null, "song": "So Easy (To Fall in Love)", "artist": "Olivia Dean", "note": null, "status": "yes", "cont": false, "n": 4, "listen": "So Easy To Fall in Love Olivia Dean"}, {"section": "Cocktails (Sax & Violin)", "moment": null, "song": "The Way You Look Tonight", "artist": "Frank Sinatra", "note": null, "status": "yes", "cont": false, "n": 5, "listen": "The Way You Look Tonight Frank Sinatra"}, {"section": "Cocktails (Sax & Violin)", "moment": null, "song": "L-O-V-E", "artist": "Nat King Cole", "note": null, "status": "yes", "cont": false, "n": 6, "listen": "L-O-V-E Nat King Cole"}, {"section": "Cocktails (Sax & Violin)", "moment": null, "song": "10,000 Hours", "artist": "Dan + Shay & Justin Bieber", "note": null, "status": "yes", "cont": false, "n": 7, "listen": "10,000 Hours Dan + Shay Justin Bieber"}, {"section": "Cocktails (Sax & Violin)", "moment": null, "song": "Overjoyed", "artist": "Stevie Wonder", "note": null, "status": "yes", "cont": false, "n": 8, "listen": "Overjoyed Stevie Wonder"}, {"section": "Cocktails (Sax & Violin)", "moment": null, "song": "Just the Two of Us", "artist": "Grover Washington Jr. feat. Bill Withers", "note": null, "status": "yes", "cont": false, "n": 9, "listen": "Just the Two of Us Grover Washington Jr Bill Withers"}, {"section": "Cocktails (Sax & Violin)", "moment": null, "song": "She's the One", "artist": "Robbie Williams", "note": null, "status": "ask", "cont": false, "n": 10, "listen": "She's the One Robbie Williams"}]}, {"name": "Arrival", "full": "Arrival", "part": "Reception", "time": "6:30 PM", "sub": "Guests take their seats in the hall", "rows": [{"section": "Arrival", "moment": null, "song": "Marilag", "artist": "Dionela", "note": null, "status": "yes", "cont": false, "n": 1, "listen": "Marilag Dionela"}, {"section": "Arrival", "moment": null, "song": "Dati", "artist": "Sam Concepcion & Tippy Dos Santos (feat. Quest)", "note": null, "status": "yes", "cont": false, "n": 2, "listen": "Dati Sam Concepcion Tippy Dos Santos"}, {"section": "Arrival", "moment": null, "song": "Ikaw Lamang", "artist": "Version to confirm", "note": "Upbeat arrangement", "status": "yes", "cont": false, "n": 3, "listen": "Ikaw Lamang"}, {"section": "Arrival", "moment": null, "song": "Dilaw", "artist": "Maki", "note": null, "status": "yes", "cont": false, "n": 4, "listen": "Dilaw Maki"}, {"section": "Arrival", "moment": null, "song": "Ikot", "artist": "Over October", "note": null, "status": "ask", "cont": false, "n": 5, "listen": "Ikot Over October"}, {"section": "Arrival", "moment": null, "song": "Time After Time", "artist": "Cyndi Lauper", "note": "Upbeat arrangement", "status": "yes", "cont": false, "n": 6, "listen": "Time After Time Cyndi Lauper"}, {"section": "Arrival", "moment": null, "song": "True Colors", "artist": "Cyndi Lauper", "note": "Upbeat arrangement", "status": "yes", "cont": false, "n": 7, "listen": "True Colors Cyndi Lauper"}, {"section": "Arrival", "moment": null, "song": "Tadhana", "artist": "Up Dharma Down", "note": null, "status": "yes", "cont": false, "n": 8, "listen": "Tadhana Up Dharma Down"}, {"section": "Arrival", "moment": null, "song": "Rainbow", "artist": "South Border", "note": "Upbeat arrangement", "status": "yes", "cont": false, "n": 9, "listen": "Rainbow South Border"}, {"section": "Arrival", "moment": null, "song": "Tingin", "artist": "Cup of Joe & Janine Teñoso", "note": null, "status": "yes", "cont": false, "n": 10, "listen": "Tingin Cup of Joe & Janine Teñoso"}]}, {"name": "Dinner", "full": "Dinner", "part": "Reception", "time": "7:15 PM", "sub": "Duets and ballads", "rows": [{"section": "Dinner", "moment": null, "song": "The Search Is Over", "artist": "Survivor", "note": null, "status": "ask", "cont": false, "n": 1, "listen": "The Search Is Over Survivor"}, {"section": "Dinner", "moment": null, "song": "Born For You", "artist": "David Pomeranz", "note": null, "status": "yes", "cont": false, "n": 2, "listen": "Born For You David Pomeranz"}, {"section": "Dinner", "moment": null, "song": "The Closer I Get to You", "artist": "Roberta Flack & Donny Hathaway", "note": null, "status": "yes", "cont": false, "n": 3, "listen": "The Closer I Get to You Roberta Flack & Donny Hathaway"}, {"section": "Dinner", "moment": null, "song": "Stuck with U", "artist": "Ariana Grande & Justin Bieber", "note": null, "status": "yes", "cont": false, "n": 4, "listen": "Stuck with U Ariana Grande & Justin Bieber"}, {"section": "Dinner", "moment": null, "song": "A Whole New World", "artist": "Aladdin (Disney)", "note": null, "status": "yes", "cont": false, "n": 5, "listen": "A Whole New World Aladdin"}, {"section": "Dinner", "moment": null, "song": "I Finally Found Someone", "artist": "Barbra Streisand & Bryan Adams", "note": null, "status": "yes", "cont": false, "n": 6, "listen": "I Finally Found Someone Barbra Streisand & Bryan Adams"}, {"section": "Dinner", "moment": null, "song": "Balisong", "artist": "Amiel Sol & Shanne Dandan (original: Rivermaya)", "note": null, "status": "ask", "cont": false, "n": 7, "listen": "Balisong Amiel Sol Shanne Dandan"}, {"section": "Dinner", "moment": null, "song": "Pasalubong", "artist": "Moira & Ben&Ben", "note": null, "status": "ask", "cont": false, "n": 8, "listen": "Pasalubong Moira Ben&Ben"}, {"section": "Dinner", "moment": null, "song": "Make It With You", "artist": "Ben&Ben (cover of Bread)", "note": null, "status": "yes", "cont": false, "n": 9, "listen": "Make It With You Ben&Ben"}, {"section": "Dinner", "moment": null, "song": "Ordinary", "artist": "Alex Warren", "note": null, "status": "yes", "cont": false, "n": 10, "listen": "Ordinary Alex Warren"}]}, {"name": "After Party", "full": "After Party", "part": "Reception", "time": "9:20 PM", "sub": "After the fireworks", "rows": [{"section": "After Party", "moment": null, "song": "Shake It Off", "artist": "Taylor Swift", "note": null, "status": "yes", "cont": false, "n": 1, "listen": "Shake It Off Taylor Swift"}, {"section": "After Party", "moment": null, "song": "Uptown Funk", "artist": "Mark Ronson feat. Bruno Mars", "note": null, "status": "yes", "cont": false, "n": 2, "listen": "Uptown Funk Mark Ronson feat. Bruno Mars"}, {"section": "After Party", "moment": null, "song": "Levitating", "artist": "Dua Lipa", "note": null, "status": "yes", "cont": false, "n": 3, "listen": "Levitating Dua Lipa"}, {"section": "After Party", "moment": null, "song": "Espresso", "artist": "Sabrina Carpenter", "note": null, "status": "yes", "cont": false, "n": 4, "listen": "Espresso Sabrina Carpenter"}, {"section": "After Party", "moment": null, "song": "APT.", "artist": "ROSÉ & Bruno Mars", "note": null, "status": "yes", "cont": false, "n": 5, "listen": "APT. ROSÉ & Bruno Mars"}, {"section": "After Party", "moment": null, "song": "Man I Need", "artist": "Olivia Dean", "note": null, "status": "yes", "cont": false, "n": 6, "listen": "Man I Need Olivia Dean"}, {"section": "After Party", "moment": null, "song": "Shut Up and Dance", "artist": "Walk the Moon", "note": null, "status": "yes", "cont": false, "n": 7, "listen": "Shut Up and Dance Walk the Moon"}, {"section": "After Party", "moment": null, "song": "September", "artist": "Earth, Wind & Fire", "note": null, "status": "yes", "cont": false, "n": 8, "listen": "September Earth, Wind & Fire"}, {"section": "After Party", "moment": null, "song": "I Wanna Dance with Somebody", "artist": "Whitney Houston", "note": null, "status": "yes", "cont": false, "n": 9, "listen": "I Wanna Dance with Somebody Whitney Houston"}, {"section": "After Party", "moment": null, "song": "Dancing Queen", "artist": "ABBA", "note": null, "status": "yes", "cont": false, "n": 10, "listen": "Dancing Queen ABBA"}, {"section": "After Party", "moment": null, "song": "Sumayaw Sumunod", "artist": "VST & Company", "note": null, "status": "yes", "cont": false, "n": 11, "listen": "Sumayaw Sumunod VST & Company"}]}], "program": {"parts": [{"name": "Ceremony", "span": "2:30–4:30 PM", "lead": "At Our Lady of Guadalupe Chapel. Times assume a nuptial Mass of about 75 minutes; Father Stephen sets the real pace.", "rows": [["2:00", "Entourage call time at the chapel", "—", "Line up in processional order; the coordinator does a final head count"], ["2:30", "Guests arrive", "Soft prelude instrumentals", "The processional songs are saved for the processional"], ["3:00", "Processional, priest to bride", "Purihin ang Panginoon → Palagi → Araw-Araw → Forevermore → Ikaw → Tahanan", "About 12 minutes for 10 entrances, including 8 sponsor pairs"], ["3:12", "Greeting, Gloria and Liturgy of the Word", "Gloria · Responsorial Psalm · Alleluia (Ryan Cayabyab)", ""], ["3:35", "Homily", "—", ""], ["3:45", "Rite of marriage: vows, rings, arrhae, veil, cord and candle", "Soft instrumental", "Secondary sponsors come up on cue"], ["4:00", "Liturgy of the Eucharist", "Lord I Offer My Life · Holy · Great Amen", ""], ["4:10", "Our Father, nuptial blessing, Lamb of God, Communion", "Our Father (old version) · Anima Christi", ""], ["4:20", "Final blessing, the kiss, contract signing", "Bawat Daan, from the kiss through the signing", "Sponsors and witnesses sign at the table"]]}, {"name": "Pictorial and cocktails", "span": "4:30–6:30 PM", "lead": "Group photos first, then the last half hour before sunset belongs to the couple. Sunset is about 5:30 PM and it's dark by about 5:50.", "rows": [["4:30", "Family and entourage photos at the altar", "Palagi · Tahanan · Kumpas · Kahit Maputi Na ang Buhok Ko · Babalik Sa'yo", "Kahit Maputi Na ang Buhok Ko plays for the parents' and grandparents' photos"], ["4:50", "Guests not in the photos go to the cocktail area", "Sax & violin", "Drinks open early for them"], ["5:00", "Golden-hour portraits of the couple on the beach", "—", "Best light from 5:00 to 5:30"], ["5:30", "Cocktails; Jaycie and Marian join at about 5:40", "Sax & violin set", "The couple greets guests here, so there's no receiving line"], ["6:25", "Guests are called into the hall", "—", ""]]}, {"name": "Reception", "span": "6:30 PM onward", "lead": "At the Lower Beach Club, Club Punta Fuego. The program centres on the couple's story: two videos, messages from the people closest to them, and a cake and wine toast. One game, played by the couple while guests watch, and nobody is called up to dance or sing.", "rows": [["6:30", "Doors open; guests take their seats", "Arrival set · LED wall: prenup-chapter loops", "The band trims the set once everyone is seated"], ["6:50", "Host welcome", "—", "Two minutes"], ["6:55", "Entrance: both sets of parents, the bridesmaids and groomsmen, then Jaycie and Marian", "Upbeat cut for the entourage; Sa Bawat Sandali for the couple (to confirm)", "Pairs walk in briskly, so the moment builds to the couple"], ["7:05", "Acknowledging the sponsors", "Soft instrumental", "The host names the 8 principal sponsor pairs and the secondary sponsors; each stands as named"], ["7:10", "Prayer before meals", "—", "Led by a grandparent or principal sponsor"], ["7:15", "Dinner, with photo op and table visits", "Dinner set: duets and ballads", "The couple stops at each table for a few words and a photo"], ["7:55", "Growing-up video, then prenup video", "On the LED wall", ""], ["8:05", "Game 1", "—", "A game the couple plays while guests watch"], ["8:15", "Messages from the Best Man, the Maid of Honor, then a friend from each table", "—", "3 minutes each for the Best Man and Maid of Honor; about 1 minute per table"], ["8:35", "Messages from both sets of parents", "—", ""], ["8:45", "Cake and wine toast", "Sax & violin, soft", "A few words of thanks from the couple, the cake, then everyone raises a glass"], ["8:55", "First dance", "First-dance song (to confirm)", ""], ["9:00", "Guests head outside", "Soft walk-out instrumental", ""], ["9:05", "Fireworks", "Recorded track synced to the show", "See the fireworks cues below"], ["9:15", "Final blessing from Father Stephen", "—", "At the viewing area, with everyone together"], ["9:20", "After party", "After-party set, opening with Shake It Off", "The dance floor is open"], ["10:00", "Last song and send-off", "—", "End time to confirm with the venue"]]}], "fireworks": [["9:00", "The host invites everyone outside. Doors open, the path is lit, and seats are reserved for elders at the front of the viewing area."], ["9:02", "Jaycie and Marian stand at the front, facing the display. One photographer takes the wide shot of the couple against the sky; a second shoots the guests' faces."], ["9:05", "The lights dim and the show starts, synced to a recorded track on the outdoor speakers."], ["9:15", "After the final burst, Father Stephen gives the final blessing while everyone is together."], ["9:20", "The band opens the after party with Shake It Off as guests walk back in."]], "fireworks_note": "The rain-or-wind call is made by 7:30 PM, with a fallback slot or a shorter show.", "timeline": [["Guests arrive, chapel", "14:30", "15:00"], ["Ceremony and Mass", "15:00", "16:30"], ["Pictorial and portraits", "16:30", "17:30"], ["Cocktails", "17:30", "18:30"], ["Reception program", "18:30", "21:00"], ["Fireworks", "21:05", "21:15"], ["Final blessing", "21:15", "21:20"], ["After party", "21:20", "22:00"]]}, "date_short": "12 · 08 · 26", "hashtag": "#JCandMJ2026", "reference": {"url": "https://www.facebook.com/share/v/1Cvx1vkBSw/", "label": "Reference video for the entourage and bridal march", "where": "Facebook"}};
+const EMBED = {};
+const STANDALONE = true;
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const STATUS = { yes: "On GSeven's list", ask: "Ask GSeven", pick: "To confirm" };
+const SPRIG = `<svg viewBox="0 0 54 14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><path d="M2 8 C 18 5, 34 5, 52 7"/><g fill="currentColor" stroke="none"><ellipse cx="14" cy="5.2" rx="4.6" ry="1.5" transform="rotate(-22 14 5.2)"/><ellipse cx="19" cy="10" rx="4.6" ry="1.5" transform="rotate(20 19 10)"/><ellipse cx="32" cy="4.4" rx="4.6" ry="1.5" transform="rotate(-18 32 4.4)"/><ellipse cx="37" cy="9.4" rx="4.6" ry="1.5" transform="rotate(22 37 9.4)"/></g></svg>`;
+const ARROW = `<svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M4 2h6v6M10 2 3 9" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+$("#date").textContent = DATA.date_short;
+$("#venue").textContent = DATA.venues;
+$("#tag").textContent = DATA.hashtag;
+
+function slug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-"); }
+const partHead = p => `<div class="part-head">${SPRIG}<h2 class="caps">${esc(p)}</h2>${SPRIG.replace("<svg ", '<svg class="flip" ')}</div>`;
+function listen(q) {
+  if (!q) return "";
+  const e = encodeURIComponent(q);
+  return `<span class="listen"><a href="https://open.spotify.com/search/${e}" target="_blank" rel="noopener">Spotify</a><a href="https://www.youtube.com/results?search_query=${e}" target="_blank" rel="noopener">YouTube</a></span>`;
+}
+const refCard = () => `<aside class="arch" aria-label="Bridal march reference"><span class="caps">Entourage &amp; bridal march</span><span class="t1">Reference</span><p>The arrangement and feel to follow for the entourage and the bride's walk.</p><a href="${esc(DATA.reference.url)}" target="_blank" rel="noopener">Watch on Facebook ${ARROW}</a><span class="url">${esc(DATA.reference.url)}</span></aside>`;
+
+/* ---------- Song list ---------- */
+function renderSongs() {
+  const q = $("#q").value.trim().toLowerCase();
+  let html = "", part = "", shown = 0;
+  for (const s of DATA.songs) {
+    const rows = s.rows.filter(r => !q || [r.song, r.artist, r.moment, r.note].join(" ").toLowerCase().includes(q));
+    if (!rows.length) continue;
+    if (s.part !== part) { part = s.part; html += partHead(part); }
+    const count = s.rows.filter(r => r.status).length;
+    html += `<section class="sec" aria-labelledby="h-${slug(s.name)}"><div class="sec-head" id="sec-${slug(s.name)}"><h3 id="h-${slug(s.name)}">${esc(s.name)}</h3><span class="sec-time caps">${esc(s.time)}</span><span class="sec-sub">${esc(s.sub)}</span><span class="sec-count caps">${count} ${count === 1 ? "song" : "songs"}</span></div>`;
+    if (s.name === "Processional" && !q) html += refCard();
+    html += `<ol class="rows">`;
+    for (const r of rows) {
+      shown++;
+      html += `<li class="row${r.cont ? " cont" : ""}"><span class="num">${esc(r.n)}</span><div>${r.moment ? `<span class="who caps">${esc(r.moment)}</span>` : ""}<div class="song">${esc(r.song)}</div>${r.artist ? `<div class="artist">${esc(r.artist)}</div>` : ""}${listen(r.listen)}${r.status ? `<span class="chip ${r.status}">${STATUS[r.status]}</span>` : ""}</div><div class="note">${esc(r.note || "")}</div></li>`;
+    }
+    html += `</ol></section>`;
+  }
+  $("#song-list-body").innerHTML = shown ? html : `<p class="empty">No songs match “${esc(q)}”. Try a title, an artist, or a moment such as “Bride”.</p>`;
+}
+function renderJump() {
+  const groups = {};
+  for (const s of DATA.songs) (groups[s.part] ||= []).push(s.name);
+  $("#jump").innerHTML = Object.entries(groups).map(([p, names]) => `<b class="caps">${esc(p)}</b>${names.map(n => `<button type="button" data-jump="${slug(n)}">${esc(n)}</button>`).join("")}`).join("");
+  const all = DATA.songs.flatMap(s => s.rows).filter(r => r.status);
+  const c = k => all.filter(r => r.status === k).length;
+  $("#legend").innerHTML = `<span class="yes">${c("yes")} on GSeven's list</span><span class="ask">${c("ask")} to ask GSeven about</span><span class="pick">${c("pick")} still to confirm</span>`;
+}
+$("#jump").addEventListener("click", e => {
+  const b = e.target.closest("[data-jump]"); if (!b) return;
+  if ($("#q").value) { $("#q").value = ""; renderSongs(); }
+  $("#sec-" + b.dataset.jump)?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+});
+$("#q").addEventListener("input", renderSongs);
+const check = $("#check");
+try { check.checked = localStorage.getItem("jm-check") === "1"; } catch (e) {}
+const applyCheck = () => document.body.classList.toggle("show-check", check.checked);
+check.addEventListener("change", () => { applyCheck(); try { localStorage.setItem("jm-check", check.checked ? "1" : "0"); } catch (e) {} });
+
+/* ---------- Program ---------- */
+function renderProgram() {
+  const P = DATA.program;
+  const m = s => +s.slice(0, 2) * 60 + +s.slice(3, 5), lo = m("14:00"), hi = m("22:00");
+  const pct = s => ((m(s) - lo) / (hi - lo) * 100).toFixed(3) + "%";
+  const fmt = s => `${(+s.slice(0, 2)) % 12 || 12}:${s.slice(3, 5)}`;
+  const hours = Array.from({ length: 9 }, (_, i) => `${14 + i}:00`);
+  const grid = hours.map(h => `<span class="tl-gridline" style="left:${pct(h)}"></span>`).join("") + `<span class="tl-sunset" style="left:${pct("17:30")}"></span>`;
+  let html = `<div class="timeline"><p class="tl-title">The fireworks at 9:05 close the program while every guest is still there</p><div class="tl-grid"><div></div><div class="tl-ticks">${hours.map((h, i) => `<span class="${i % 2 ? "odd" : ""}" style="left:${pct(h)}">${(+h.slice(0, 2)) % 12} PM</span>`).join("")}</div>`;
+  for (const [name, a, b] of P.timeline) {
+    html += `<div class="tl-row${name === "Fireworks" ? " fw" : ""}"><div class="tl-label"><span>${esc(name)}</span><em>${fmt(a)}–${fmt(b)}</em></div><div class="tl-track">${grid}<span class="tl-bar" style="left:${pct(a)};width:calc(${pct(b)} - ${pct(a)})"></span></div></div>`;
+  }
+  html += `</div><p class="tl-foot">Dashed line: sunset, about 5:30 PM</p></div>`;
+  for (const part of P.parts) {
+    html += `<div class="ph"><h3>${esc(part.name)}</h3><span class="sec-time caps">${esc(part.span)}</span></div><p class="plead">${esc(part.lead)}</p><ol class="run">`;
+    for (const [t, mo, mu, n] of part.rows) {
+      const ref = mo.startsWith("Processional") ? `<div class="ref-inline"><a href="${esc(DATA.reference.url)}" target="_blank" rel="noopener">Bridal march reference video</a></div>` : "";
+      html += `<li${mo === "Fireworks" ? ' class="fw"' : ""}><span class="t">${esc(t)}</span><div><div class="m">${esc(mo)}</div>${mu && mu !== "—" ? `<div class="mu">${esc(mu)}</div>` : ""}</div><div class="n">${esc(n || "")}${ref}</div></li>`;
+    }
+    html += `</ol>`;
+  }
+  html += `<div class="ph"><h3>Fireworks</h3><span class="sec-time caps">9:00–9:20 PM</span></div><ol class="cues">${P.fireworks.map(([t, s]) => `<li><span class="t">${esc(t)}</span><span>${esc(s)}</span></li>`).join("")}</ol><p class="fw-note">${esc(P.fireworks_note)}</p>`;
+  $("#program-body").innerHTML = html;
+}
+
+/* ---------- Views ---------- */
+function setView(v) {
+  if (v !== "songs" && v !== "program") v = "songs";
+  for (const t of document.querySelectorAll(".tab")) t.setAttribute("aria-selected", String(t.dataset.view === v));
+  $("#view-songs").hidden = v !== "songs"; $("#view-program").hidden = v !== "program";
+  $("#dl-songs").hidden = v !== "songs"; $("#dl-program").hidden = v !== "program";
+  $("#doc-title").textContent = v === "songs" ? "Song list" : "Program of the day";
+}
+document.querySelector(".tabs").addEventListener("click", e => {
+  const t = e.target.closest(".tab"); if (!t) return;
+  if (location.hash !== "#" + t.dataset.view) location.hash = t.dataset.view; else setView(t.dataset.view);
+});
+document.querySelector(".tabs").addEventListener("keydown", e => {
+  if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+  const next = $(".tab[aria-selected='false']"); next.focus(); next.click();
+});
+addEventListener("hashchange", () => setView(location.hash.slice(1)));
+
+/* ---------- Downloads ---------- */
+let downloads = null;
+const toastEl = $("#toast"); let toastTimer;
+function toast(msg) { toastEl.textContent = msg; toastEl.classList.add("on"); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove("on"), 3200); }
+function noDownloads() { document.documentElement.classList.add("no-dl"); }
+(async () => {
+  if (STANDALONE) return;
+  try { downloads = window.claude && window.claude.use ? await window.claude.use("downloads") : null; } catch (e) { downloads = null; }
+  if (!downloads) noDownloads();
+})();
+document.addEventListener("click", async e => {
+  const btn = e.target.closest("[data-file]"); if (!btn || btn.getAttribute("aria-busy") === "true") return;
+  if (STANDALONE) { const a = document.createElement("a"); a.href = btn.dataset.direct; a.download = btn.dataset.name; document.body.append(a); a.click(); a.remove(); return; }
+  if (!downloads) { toast("Downloads open when this page is viewed in Claude."); return; }
+  btn.setAttribute("aria-busy", "true");
+  try {
+    let data;
+    if (btn.dataset.file.startsWith("embed:")) {
+      const b64 = EMBED[btn.dataset.file.slice(6)];
+      data = Uint8Array.from(atob(b64), ch => ch.charCodeAt(0));
+    } else {
+      const res = await fetch(btn.dataset.file);
+      if (!res.ok) throw { code: "fetch" };
+      data = await res.blob();
+    }
+    const result = await downloads.save({ filename: btn.dataset.name, data });
+    if (result && result.status === "saved") toast(`Saved ${btn.dataset.name}`);
+  } catch (err) {
+    const c = err && err.code;
+    if (c === "declined") { /* the viewer said no */ }
+    else if (c === "rate_limited") toast("Another download is waiting for your answer. Try again in a moment.");
+    else if (["unavailable", "not_granted", "capability_disabled", "capability_removed"].includes(c)) { noDownloads(); toast("Downloads aren't available in this view."); }
+    else toast("That file couldn't be prepared. Try again in a moment.");
+  } finally { btn.removeAttribute("aria-busy"); }
+});
+
+renderJump(); renderSongs(); renderProgram(); applyCheck();
+setView(location.hash.slice(1));
+</script>
+
+</body>
+</html>
