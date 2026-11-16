@@ -12,6 +12,13 @@
       ]
     },
     {
+      "source": "/music/sw.js",
+      "headers": [
+        { "key": "Service-Worker-Allowed", "value": "/music" },
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    },
+    {
       "source": "/(.*)\\.html",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }

@@ -1,0 +1,33 @@
+{
+  "id": "/music",
+  "name": "Jaycie & Marian: Wedding Program",
+  "short_name": "JM Wedding",
+  "description": "The program of the day and GSeven Band's song list for Jaycie and Marian's wedding, December 8, 2026.",
+  "start_url": "/music",
+  "scope": "/music",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#6B2134",
+  "theme_color": "#6B2134",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/music/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/music/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/music/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
