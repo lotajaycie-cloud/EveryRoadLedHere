@@ -2,7 +2,7 @@
   "id": "/music",
   "name": "Jaycie & Marian: Wedding Program",
   "short_name": "JM Wedding",
-  "description": "The program of the day and GSeven Band's song list for Jaycie and Marian's wedding, December 8, 2026.",
+  "description": "The program of the day, GSeven Band's song list and the seating plan for Jaycie and Marian's wedding, December 8, 2026.",
   "start_url": "/music",
   "scope": "/music",
   "display": "standalone",
