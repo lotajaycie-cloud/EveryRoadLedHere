@@ -1,5 +1,5 @@
 // JM Wedding: offline cache for the program and song list. Generated; do not edit by hand.
-const CACHE = "jm-wedding-c8dcee4da5";
+const CACHE = "jm-wedding-a68432b42c";
 const SCOPE = "/music";
 const CORE = ["/music", "/music/files/jm-song-list.pdf", "/music/files/jm-song-list.xlsx", "/music/files/jm-program.pdf", "/music/files/jm-program.docx", "/music/files/jm-seating.pdf", "/music/files/jm-seating.png", "/music/files/jm-seating.xlsx", "/music/icons/apple-touch-icon.png", "/music/icons/icon-192.png", "/music/icons/icon-512.png", "/music/icons/icon-maskable-512.png", "/music/icons/favicon-32.png", "/music/manifest.webmanifest"];
 self.addEventListener("install", e => {
